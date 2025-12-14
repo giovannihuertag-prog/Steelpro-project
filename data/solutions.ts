@@ -164,57 +164,125 @@ export const solutions: Solution[] = [
         imageAlt: 'Planta de trituración móvil',
     },
 
-    // --- SECCIÓN C: ACEROS INDUSTRIALES (NUEVA ESTRUCTURA) ---
+    // --- SECCIÓN C: ACEROS Y METALES INDUSTRIALES (MATERIALES AUTORIZADOS) ---
     {
-        id: 'wear-resistant-steel',
+        id: 'hollow-bar-1518',
         category: 'steel',
-        brand: 'STEELPRO',
-        name: 'Aceros Anti-Desgaste (AR)',
-        icon: ShieldCheckIcon,
-        description: 'Placas de acero de alta dureza (400 - 600 HBW) diseñadas para resistir la abrasión severa y el impacto en maquinaria minera. Material esencial para el revestimiento de tolvas, cucharones de excavadoras y chutes de transferencia.',
-        shortDescription: 'Placas AR400/AR500 para blindaje de maquinaria.',
+        brand: 'GRADO MAQUINARIA',
+        name: 'Acero 1518 (Barra Hueca)',
+        icon: CubeTransparentIcon,
+        description: 'Acero al carbono-manganeso de mecanizado optimizado. Su formato tubular sin costura reduce drásticamente los tiempos de maquinado y el desperdicio de material en la fabricación de piezas cilíndricas. Ofrece una excelente soldabilidad y cementación.',
+        shortDescription: 'Barra hueca sin costura para bujes y camisas.',
         features: [
-            'Dureza: 400 HBW / 500 HBW',
-            'Espesores: 6mm a 100mm',
-            'Aplicación: Revestimiento de Cucharones',
-            'Servicio: Corte y dimensionado CNC'
+            'Grado: SAE 1518 (Bajo Carbono / Alto Manganeso)',
+            'Formato: Barra Hueca sin costura',
+            'Propiedades: Excelente soldabilidad y cementación',
+            'Aplicaciones: Bujes, cilindros, camisas, separadores'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?q=80&w=2836&auto=format&fit=crop',
-        imageAlt: 'Placas de acero anti-desgaste',
+        imageAlt: 'Barra hueca de acero 1518',
     },
     {
-        id: 'grinding-media',
+        id: 'carbon-plate-a36',
         category: 'steel',
-        brand: 'STEELPRO',
-        name: 'Bolas de Molienda',
-        icon: CubeTransparentIcon,
-        description: 'Medios de molienda forjados y fundidos de alto cromo para molinos SAG y de bolas. Optimizados para maximizar la eficiencia de conminución y reducir el consumo por tonelada de mineral procesado en plantas concentradoras.',
-        shortDescription: 'Insumos críticos para molienda minera.',
-        features: [
-            'Diámetros: 1" a 6"',
-            'Dureza Volumétrica: 60 - 65 HRC',
-            'Material: Acero Aleado Alto Carbono',
-            'Garantía: Tasa de rotura < 1%'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1615818451845-93c6ae1636c7?q=80&w=2750&auto=format&fit=crop', // Abstract metallic spheres
-        imageAlt: 'Bolas de acero para molinos mineros',
-    },
-    {
-        id: 'structural-steel',
-        category: 'steel',
-        brand: 'STEELPRO',
-        name: 'Perfiles Estructurales',
+        brand: 'ACERO AL CARBÓN',
+        name: 'Placa Estructural A36',
         icon: ServerStackIcon,
-        description: 'Vigas IPR, IPS y perfiles tubulares de grado estructural para la construcción de naves industriales y soporte de maquinaria pesada. Acero certificado bajo normas ASTM para garantizar la integridad sísmica y de carga.',
-        shortDescription: 'Vigas y perfiles para infraestructura.',
+        description: 'El estándar de oro en la construcción y manufactura general. Placa de acero de bajo carbono con un equilibrio óptimo entre resistencia, conformabilidad y soldabilidad. Ideal para bases de maquinaria, placas de anclaje y estructuras soldadas.',
+        shortDescription: 'Placa estructural estándar para bases y soportes.',
         features: [
-            'Normas: ASTM A992 / A572-50',
-            'Perfiles: IPR, IPS, HSS',
-            'Largo: Stock en 6m y 12m',
-            'Certificación: Calidad metalúrgica (Mill Test)'
+            'Grado: ASTM A36',
+            'Formato: Placa (Lámina caliente)',
+            'Fluencia: 36,000 PSI (mínimo)',
+            'Aplicaciones: Bases de equipos, estructuras, placas base'
         ],
-        imageUrl: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Estructuras de acero industrial',
+        imageUrl: 'https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Placa de acero A36 industrial',
+    },
+    {
+        id: 'cast-iron-bar',
+        category: 'steel',
+        brand: 'HIERRO COLADO',
+        name: 'Hierro Gris y Nodular',
+        icon: ShieldCheckIcon,
+        description: 'Barras de fundición continua libres de porosidad. El hierro gris (Clase 40) ofrece una maquinabilidad superior y excelente amortiguación de vibraciones. El hierro nodular (65-45-12) aporta mayor ductilidad y resistencia al impacto para componentes sometidos a estrés.',
+        shortDescription: 'Barra sólida de fundición continua.',
+        features: [
+            'Grados: Hierro Gris Clase 40 / Nodular 65-45-12',
+            'Formato: Barra Sólida',
+            'Ventaja: Estructura densa, grano fino, sin porosidad',
+            'Aplicaciones: Poleas, volantes, guías de deslizamiento'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1615818451845-93c6ae1636c7?q=80&w=2750&auto=format&fit=crop',
+        imageAlt: 'Barra de hierro colado textura',
+    },
+    {
+        id: 'stainless-series-300',
+        category: 'steel',
+        brand: 'INOXIDABLES SERIE 300',
+        name: 'Inoxidables Austeníticos',
+        icon: AnalysisIcon,
+        description: 'Aceros inoxidables no magnéticos de alta resistencia a la corrosión. Ideales para la industria alimentaria, química y marina. Mantenemos stock en grados especializados para maquinabilidad (303), uso general (304) y ambientes corrosivos severos (316L).',
+        shortDescription: 'Barra sólida: 303, 304, 316L.',
+        features: [
+            '303: Azufre añadido para maquinado rápido (fittings)',
+            '304: El estándar industrial (sanitario/general)',
+            '316L: Bajo carbono con Molibdeno (marino/químico)',
+            'Formato: Barra Sólida (Redonda/Hexagonal)'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1595843477810-53a5666df75f?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Barras de acero inoxidable brillante',
+    },
+    {
+        id: 'stainless-series-400',
+        category: 'steel',
+        brand: 'INOXIDABLES SERIE 400',
+        name: 'Inoxidables Martensíticos',
+        icon: ShieldCheckIcon,
+        description: 'Aceros inoxidables magnéticos tratables térmicamente para alcanzar alta dureza. Seleccionados para aplicaciones que requieren resistencia al desgaste y capacidad de corte. Desde grados de fácil maquinado hasta grados de cuchillería.',
+        shortDescription: 'Barra sólida: 410, 416, 420.',
+        features: [
+            '410: Propósito general, tratable térmicamente (bombas)',
+            '416: Alta maquinabilidad (sujetadores/válvulas)',
+            '420: Alta dureza "Grado Cuchillería" (moldes/herramentales)',
+            'Propiedad: Magnéticos y templables'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1454873019514-306478985c90?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Piezas mecanizadas de acero serie 400',
+    },
+    {
+        id: 'aluminum-engineering',
+        category: 'steel',
+        brand: 'ALUMINIO DE INGENIERÍA',
+        name: 'Aluminios 6061 y 7075',
+        icon: CubeTransparentIcon,
+        description: 'Aleaciones ligeras de alto desempeño. El 6061 T6 es el "caballo de batalla" estructural con excelente resistencia a la corrosión. El 7075 T6 ofrece una resistencia mecánica comparable a muchos aceros, ideal para componentes aeroespaciales y de alta fatiga.',
+        shortDescription: 'Grados aeroespaciales y estructurales.',
+        features: [
+            '6061 T6: Estructural, soldable, versátil',
+            '7075 T6: Ultra-alta resistencia (Zinc como aleante)',
+            'Formato: Placa y Barra Redonda',
+            'Aplicaciones: Moldes de soplado, componentes robóticos'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1616787687259-3a3350149021?q=80&w=2874&auto=format&fit=crop',
+        imageAlt: 'Aluminio industrial mecanizado',
+    },
+    {
+        id: 'non-ferrous-metals',
+        category: 'steel',
+        brand: 'METALES NO FERROSOS',
+        name: 'Bronce, Cobre y Latón',
+        icon: TraceabilityIcon,
+        description: 'Metales rojos y amarillos seleccionados por sus propiedades de conductividad y antifricción. Materiales esenciales para transmisión eléctrica, componentes de desgaste (bujes) y aplicaciones decorativas o de valvulería.',
+        shortDescription: 'Aleaciones de Cobre para conducción y desgaste.',
+        features: [
+            'Bronce (SAE 660/64): Alta carga, antifricción (bujes)',
+            'Cobre: Electrolítico, alta conductividad térmica/eléctrica',
+            'Latón: Excelente maquinabilidad (fittings/conexiones)',
+            'Formato: Barras Sólidas y Bujes (Bronce)'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1622340274291-766b96583925?q=80&w=2938&auto=format&fit=crop',
+        imageAlt: 'Barras de cobre y bronce industrial',
     },
 ];
 
@@ -242,14 +310,14 @@ export const categoryMetaData = {
         ]
     },
     steel: {
-        title: "Aceros Técnicos",
-        subtitle: "Suministro Industrial Certificado",
-        heroImage: "https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop", // Industrial Steel Mill
-        description: "El eslabón crítico en su cadena de mantenimiento y construcción. Proveemos aceros anti-desgaste para blindaje de equipos y estructuras certificadas para grandes claros industriales.",
+        title: "Aceros y Metales",
+        subtitle: "Inventario Técnico Selecto",
+        heroImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop",
+        description: "En SteelPro no saturamos con catálogos infinitos. Seleccionamos únicamente los materiales que resuelven problemas críticos de ingeniería: resistencia al desgaste, maquinabilidad optimizada y certificaciones estructurales.",
         stats: [
-            { label: "Dureza Máx", value: "600 HBW" },
-            { label: "Stock", value: "+5000 Ton" },
-            { label: "Corte", value: "Plasma/Oxi" },
+            { label: "Grados", value: "Certificados" },
+            { label: "Inoxidables", value: "300 / 400" },
+            { label: "Corte", value: "A Medida" },
         ]
     }
 };
