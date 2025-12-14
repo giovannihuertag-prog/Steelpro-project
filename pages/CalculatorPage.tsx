@@ -141,70 +141,81 @@ const CalculatorPage: React.FC = () => {
         // 3. Validate Dimensions
         let isValidDims = true;
         
-        // Specific checks
-        if (shape === 'hollow') {
-            // ID must be > 0 and < OD
-            if (dimensions.dim2 >= dimensions.dim1) {
+        // General check for length
+        if (!dimensions.length || dimensions.length <= 0) isValidDims = false;
+
+        // Shape specific dimension checks
+        if (shape === 'solid_round' || shape === 'solid_square') {
+             if (!dimensions.dim1 || dimensions.dim1 <= 0) isValidDims = false;
+        } else if (shape === 'hollow') {
+             if (!dimensions.dim1 || dimensions.dim1 <= 0) isValidDims = false; // OD
+             if (!dimensions.dim2 || dimensions.dim2 <= 0) isValidDims = false; // ID
+             
+             // Check if ID >= OD (Logic Error) - Only if both values are provided
+             if (dimensions.dim1 > 0 && dimensions.dim2 > 0 && dimensions.dim2 >= dimensions.dim1) {
                 setFormError(language === 'es' ? '⚠️ Error de Geometría: El diámetro interior (ID) debe ser menor al exterior (OD).' : '⚠️ Geometry Error: Inner diameter (ID) must be less than outer diameter (OD).');
                 return;
             }
-            if (!dimensions.dim2 || dimensions.dim2 <= 0) isValidDims = false;
-        } else {
-            // For other shapes, ensure main dimensions are positive
-             if (!dimensions.dim1 || dimensions.dim1 <= 0) isValidDims = false;
+        } else if (shape === 'plate') {
+             if (!dimensions.dim1 || dimensions.dim1 <= 0) isValidDims = false; // Thickness
+             if (!dimensions.dim2 || dimensions.dim2 <= 0) isValidDims = false; // Width
         }
-
-        if (shape === 'plate') {
-            // Width must be > 0
-            if (!dimensions.dim2 || dimensions.dim2 <= 0) isValidDims = false;
-        }
-
-        if (!dimensions.length || dimensions.length <= 0) isValidDims = false;
 
         if (!isValidDims) {
             setFormError(language === 'es' ? '⚠️ Verifique las dimensiones (valores positivos requeridos).' : '⚠️ Check dimensions (positive values required).');
             return;
         }
 
-        // Calculation Logic
+        // Calculation Logic - Refined for Clarity and Precision
         let vol = 0;
         let weight = 0;
+        const density = system === 'metric' ? DENSITIES_METRIC[material] : DENSITIES_IMPERIAL[material];
 
         if (system === 'metric') {
-             // Métrico: Entradas en mm -> convertir a metros. Largo en mm -> metros.
-             // Densidad en kg/m3
-             const d1 = dimensions.dim1 / 1000;
-             const d2 = dimensions.dim2 / 1000;
-             const L = dimensions.length / 1000; 
-             const density = DENSITIES_METRIC[material];
+             // Metric Input: mm -> Output: m
+             const L_m = dimensions.length / 1000;
 
-             switch (shape) {
-                case 'solid_round': vol = Math.PI * Math.pow(d1 / 2, 2) * L; break;
-                case 'solid_square': vol = d1 * d1 * L; break;
-                case 'hollow': vol = Math.PI * (Math.pow(d1 / 2, 2) - Math.pow(d2 / 2, 2)) * L; break;
-                case 'plate': vol = d1 * d2 * L; break; // thickness * width * length
+             if (shape === 'solid_round') {
+                 const radius_m = (dimensions.dim1 / 1000) / 2;
+                 vol = Math.PI * Math.pow(radius_m, 2) * L_m;
+             } else if (shape === 'solid_square') {
+                 const side_m = dimensions.dim1 / 1000;
+                 vol = side_m * side_m * L_m;
+             } else if (shape === 'hollow') {
+                 const od_m = dimensions.dim1 / 1000;
+                 const id_m = dimensions.dim2 / 1000;
+                 vol = Math.PI * (Math.pow(od_m / 2, 2) - Math.pow(id_m / 2, 2)) * L_m;
+             } else if (shape === 'plate') {
+                 // Explicit variables for clarity
+                 const thickness_m = dimensions.dim1 / 1000;
+                 const width_m = dimensions.dim2 / 1000;
+                 vol = thickness_m * width_m * L_m;
              }
+
              weight = vol * density;
              setResult({ volume: vol, weight, unitW: 'kg', unitV: 'm³' });
 
         } else {
-            // Imperial
-            // Entradas de sección (diámetro, ancho, espesor) en Pulgadas (in) -> convertir a Pies (ft)
-            // Entrada de Largo en Pies (ft) -> se mantiene en Pies
-            // Densidad en lbs/ft3
-            
-            const d1_ft = dimensions.dim1 / 12; // in -> ft
-            const d2_ft = dimensions.dim2 / 12; // in -> ft
-            const L_ft = dimensions.length;     // ft -> ft
-            
-            switch (shape) {
-                case 'solid_round': vol = Math.PI * Math.pow(d1_ft / 2, 2) * L_ft; break;
-                case 'solid_square': vol = d1_ft * d1_ft * L_ft; break;
-                case 'hollow': vol = Math.PI * (Math.pow(d1_ft / 2, 2) - Math.pow(d2_ft / 2, 2)) * L_ft; break;
-                case 'plate': vol = d1_ft * d2_ft * L_ft; break; // thickness(ft) * width(ft) * length(ft)
+            // Imperial Input: in (section), ft (length) -> Output: ft
+            const L_ft = dimensions.length;
+
+            if (shape === 'solid_round') {
+                 const radius_ft = (dimensions.dim1 / 12) / 2;
+                 vol = Math.PI * Math.pow(radius_ft, 2) * L_ft;
+            } else if (shape === 'solid_square') {
+                 const side_ft = dimensions.dim1 / 12;
+                 vol = side_ft * side_ft * L_ft;
+            } else if (shape === 'hollow') {
+                 const od_ft = dimensions.dim1 / 12;
+                 const id_ft = dimensions.dim2 / 12;
+                 vol = Math.PI * (Math.pow(od_ft / 2, 2) - Math.pow(id_ft / 2, 2)) * L_ft;
+            } else if (shape === 'plate') {
+                 // Explicit variables for clarity
+                 const thickness_ft = dimensions.dim1 / 12; // inches to feet
+                 const width_ft = dimensions.dim2 / 12;     // inches to feet
+                 vol = thickness_ft * width_ft * L_ft;
             }
             
-            const density = DENSITIES_IMPERIAL[material];
             weight = vol * density;
             setResult({ volume: vol, weight, unitW: 'lbs', unitV: 'ft³' });
         }
@@ -242,24 +253,38 @@ const CalculatorPage: React.FC = () => {
         if (!shape) return null;
 
         const isImperial = system === 'imperial';
-        const unitSection = isImperial ? 'pulg (in)' : 'mm';
-        const unitLength = isImperial ? 'pies (ft)' : 'mm'; 
+        
+        // Labels (Units displayed in label)
+        const labelUnitSection = isImperial ? '(in)' : '(mm)';
+        const labelUnitLength = isImperial ? '(ft)' : '(mm)';
 
-        const inputClass = "w-full bg-black border border-white/10 p-2 text-white focus:border-yellow-500 outline-none transition-colors";
+        // Placeholders (Specific format examples)
+        const phSection = isImperial ? '0.00 in' : '0.00 mm';
+        const phLength = isImperial ? '0.00 ft' : '0.00 mm'; // Explicitly showing ft vs mm
+
+        const baseInputClass = "w-full bg-black border p-2 text-white outline-none transition-colors";
+        const normalInputClass = `${baseInputClass} border-white/10 focus:border-yellow-500`;
+        // Primary input gets a distinct look: slightly lighter border or background accent
+        const primaryInputClass = `${baseInputClass} border-yellow-500/30 bg-yellow-500/5 focus:border-yellow-500 focus:bg-black`;
+        
         const labelClass = "block text-xs uppercase text-zinc-500 mb-2 font-bold";
+        const primaryLabelClass = "block text-xs uppercase text-yellow-500 mb-2 font-bold flex items-center gap-1";
 
         return (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 animate-fade-in mt-8 p-6 bg-zinc-900 border border-white/5 rounded-sm">
                 {shape === 'solid_round' && (
                     <>
                         <div>
-                            <label className={labelClass}>{t('calc.diameter')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
-                            <input type="number" className={inputClass} 
+                            <label className={primaryLabelClass}>
+                                <span className="material-symbols-outlined text-[14px]">circle</span>
+                                {t('calc.diameter')} <span className="text-zinc-600 font-normal ml-auto">{labelUnitSection}</span>
+                            </label>
+                            <input type="number" className={primaryInputClass} placeholder={phSection}
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div className="sm:col-span-2">
-                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
-                            <input type="number" className={inputClass} 
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">{labelUnitLength}</span></label>
+                            <input type="number" className={normalInputClass} placeholder={phLength}
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -267,13 +292,16 @@ const CalculatorPage: React.FC = () => {
                 {shape === 'solid_square' && (
                     <>
                         <div>
-                            <label className={labelClass}>{t('calc.side')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
-                            <input type="number" className={inputClass} 
+                            <label className={primaryLabelClass}>
+                                <span className="material-symbols-outlined text-[14px]">square</span>
+                                {t('calc.side')} <span className="text-zinc-600 font-normal ml-auto">{labelUnitSection}</span>
+                            </label>
+                            <input type="number" className={primaryInputClass} placeholder={phSection}
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div className="sm:col-span-2">
-                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
-                            <input type="number" className={inputClass} 
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">{labelUnitLength}</span></label>
+                            <input type="number" className={normalInputClass} placeholder={phLength}
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -281,18 +309,19 @@ const CalculatorPage: React.FC = () => {
                 {shape === 'hollow' && (
                     <>
                         <div>
-                            <label className={labelClass}>
-                                {t('calc.outer_diam')} <span className="text-yellow-500 font-black">OD</span> <span className="text-zinc-600 font-normal">({unitSection})</span>
+                            <label className={primaryLabelClass}>
+                                <span className="material-symbols-outlined text-[14px]">radio_button_unchecked</span>
+                                {t('calc.outer_diam')} <span className="text-zinc-600 font-normal ml-auto">{labelUnitSection}</span>
                             </label>
-                            <input type="number" className={inputClass} placeholder="0.00"
+                            <input type="number" className={primaryInputClass} placeholder={phSection}
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div>
                             <label className={labelClass}>
-                                {t('calc.inner_diam')} <span className="text-yellow-500 font-black">ID</span> <span className="text-zinc-600 font-normal">({unitSection})</span>
+                                {t('calc.inner_diam')} <span className="text-zinc-600 font-normal">{labelUnitSection}</span>
                             </label>
                             <div className="relative">
-                                <input type="number" placeholder="0.00"
+                                <input type="number" placeholder={phSection}
                                     className={`w-full bg-black border p-2 text-white outline-none transition-colors ${
                                         dimensions.dim1 > 0 && dimensions.dim2 >= dimensions.dim1 
                                         ? 'border-red-500 focus:border-red-500 text-red-100' 
@@ -314,8 +343,8 @@ const CalculatorPage: React.FC = () => {
                             )}
                         </div>
                         <div>
-                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
-                            <input type="number" className={inputClass} placeholder="0.00"
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">{labelUnitLength}</span></label>
+                            <input type="number" className={normalInputClass} placeholder={phLength}
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -323,18 +352,21 @@ const CalculatorPage: React.FC = () => {
                 {shape === 'plate' && (
                     <>
                          <div>
-                            <label className={labelClass}>{t('calc.thickness')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
-                            <input type="number" className={inputClass} 
+                            <label className={primaryLabelClass}>
+                                <span className="material-symbols-outlined text-[14px]">space_dashboard</span>
+                                {t('calc.thickness')} <span className="text-zinc-600 font-normal ml-auto">{labelUnitSection}</span>
+                            </label>
+                            <input type="number" className={primaryInputClass} placeholder={phSection}
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div>
-                            <label className={labelClass}>{t('calc.width')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
-                            <input type="number" className={inputClass} 
+                            <label className={labelClass}>{t('calc.width')} <span className="text-zinc-600 font-normal">{labelUnitSection}</span></label>
+                            <input type="number" className={normalInputClass} placeholder={phSection}
                                 value={dimensions.dim2 || ''} onChange={e => {setDimensions({...dimensions, dim2: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div>
-                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
-                            <input type="number" className={inputClass} 
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">{labelUnitLength}</span></label>
+                            <input type="number" className={normalInputClass} placeholder={phLength}
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -567,7 +599,7 @@ const CalculatorPage: React.FC = () => {
                                         {/* Tooltip */}
                                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max bg-zinc-900 border border-white/20 p-2 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
                                             <p className="text-[10px] text-yellow-500 font-bold uppercase text-center mb-1 border-b border-white/10 pb-1">
-                                                {language === 'es' ? 'Densidad' : 'Density'}
+                                                Densidad
                                             </p>
                                             <div className="flex gap-3 text-[9px] text-zinc-400">
                                                 <div className="text-center">

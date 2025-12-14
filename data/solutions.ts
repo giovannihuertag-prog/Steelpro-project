@@ -171,7 +171,7 @@ export const solutions: Solution[] = [
         brand: 'GRADO MAQUINARIA',
         name: 'Acero 1518 (Barra Hueca)',
         icon: CubeTransparentIcon,
-        description: 'Acero al carbono-manganeso de mecanizado optimizado. Su formato tubular sin costura reduce drásticamente los tiempos de maquinado y el desperdicio de material en la fabricación de piezas cilíndricas. Ofrece una excelente soldabilidad y cementación.',
+        description: 'Acero al carbono-manganeso de mecanizado optimizado. Su formato tubular sin costura reduce drásticamente los tiempos de maquinado y el desperdicio de material en la fabricación de piezas cilíndricas. Ofrece excelente soldabilidad y cementación.',
         shortDescription: 'Barra hueca sin costura para bujes y camisas.',
         features: [
             'Grado: SAE 1518 (Bajo Carbono / Alto Manganeso)',
@@ -317,6 +317,23 @@ export const solutions: Solution[] = [
         ],
         imageUrl: 'https://images.unsplash.com/photo-1536409597658-5d2729a6f3e1?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Componentes de aluminio 7075 de alta precisión',
+    },
+    {
+        id: 'aluminum-1050',
+        category: 'steel',
+        brand: 'ALUMINIO 1050',
+        name: 'Aluminio 1050 (Alta Pureza)',
+        icon: CubeTransparentIcon,
+        description: 'Aleación de aluminio comercialmente puro con excelente resistencia a la corrosión y alta conductividad térmica y eléctrica. Debido a su alta ductilidad y acabado brillante, es la elección preferida para la industria química, reflectores de iluminación y trabajos de chapa fina.',
+        shortDescription: 'Aluminio puro: alta ductilidad y corrosión.',
+        features: [
+            'Pureza: 99.5% Al (mínimo)',
+            'Conductividad: 61.5% IACS',
+            'Propiedades: Alta ductilidad, no tratable térmicamente',
+            'Aplicaciones: Industria química, reflectores, señalética'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1595843477810-53a5666df75f?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Lámina de aluminio 1050',
     },
     {
         id: 'non-ferrous-metals',
