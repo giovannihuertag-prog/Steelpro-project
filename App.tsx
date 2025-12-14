@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import SolutionsPage from './pages/SolutionsPage';
+import AIChatBot from './components/AIChatBot';
 
 const App: React.FC = () => {
   const [route, setRoute] = useState(window.location.hash || '#');
@@ -60,6 +61,7 @@ const App: React.FC = () => {
         {renderPage()}
       </main>
       <Footer />
+      <AIChatBot />
     </div>
   );
 };
