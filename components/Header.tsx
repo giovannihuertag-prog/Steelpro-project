@@ -4,33 +4,34 @@ import { useLanguage } from '../context/LanguageContext';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMachineryOpen, setIsMachineryOpen] = useState(false);
-  const machineryRef = useRef<HTMLDivElement>(null);
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  const catalogRef = useRef<HTMLDivElement>(null);
   const { t, language, setLanguage } = useLanguage();
 
-  const machineryLinks = [
-      { name: t('nav.construction'), href: '#solutions/construction', description: 'Bombas y mezcladoras DASWELL.' },
-      { name: t('nav.engineering'), href: '#solutions/engineering', description: 'Excavación y carga pesada.' },
+  const catalogLinks = [
+      { name: 'Maquinaria: Construcción', href: '#solutions/construction', description: 'Bombas, mixers y plantas DASWELL.' },
+      { name: 'Maquinaria: Ingeniería', href: '#solutions/engineering', description: 'Excavación y movimiento de tierras.' },
+      { name: 'Aceros Industriales', href: '#solutions/steel', description: 'Materiales certificados y corte.' },
   ];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-        if (machineryRef.current && !machineryRef.current.contains(event.target as Node)) {
-            setIsMachineryOpen(false);
+        if (catalogRef.current && !catalogRef.current.contains(event.target as Node)) {
+            setIsCatalogOpen(false);
         }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
         document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [machineryRef]);
+  }, [catalogRef]);
 
   const toggleLanguage = () => {
     setLanguage(language === 'es' ? 'en' : 'es');
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-zinc-950/90 backdrop-blur-lg border-b border-white/5">
+    <header className="fixed inset-x-0 top-0 z-50 bg-zinc-950/95 backdrop-blur-md border-b border-white/5">
       <nav className="flex items-center justify-between p-4 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
         
         {/* Logo */}
@@ -61,44 +62,43 @@ const Header: React.FC = () => {
           </button>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation - Optimized Structure */}
         <div className="hidden lg:flex lg:gap-x-8 items-center">
-          <a href="#" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.home')}</a>
-          <a href="#solutions" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.solutions')}</a>
+          <a href="#" className="text-sm font-bold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">Inicio</a>
           
-          {/* Machinery Dropdown */}
-          <div className="relative" ref={machineryRef}>
+          {/* Unified Catalog Dropdown */}
+          <div className="relative" ref={catalogRef}>
             <button
-              onClick={() => setIsMachineryOpen(!isMachineryOpen)}
-              className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide focus:outline-none transition-colors"
+              onClick={() => setIsCatalogOpen(!isCatalogOpen)}
+              className="flex items-center gap-x-1 text-sm font-bold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide focus:outline-none transition-colors"
             >
-              {t('nav.machinery')}
-              <svg className={`h-4 w-4 transition-transform ${isMachineryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+              Catálogo
+              <svg className={`h-4 w-4 transition-transform ${isCatalogOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
             </button>
             
-            <div className={`absolute -left-4 top-full z-10 mt-3 w-64 overflow-hidden rounded-sm bg-zinc-900 shadow-2xl ring-1 ring-white/10 transition-all duration-200 ${isMachineryOpen ? 'opacity-100 translate-y-0 visible' : 'opacity-0 translate-y-2 invisible'}`}>
+            <div className={`absolute -left-4 top-full z-10 mt-3 w-72 overflow-hidden rounded-sm bg-zinc-900 shadow-2xl ring-1 ring-white/10 transition-all duration-200 ${isCatalogOpen ? 'opacity-100 translate-y-0 visible' : 'opacity-0 translate-y-2 invisible'}`}>
               <div className="p-2">
-                {machineryLinks.map((item) => (
+                {catalogLinks.map((item) => (
                   <a
                     key={item.name}
                     href={item.href}
-                    onClick={() => setIsMachineryOpen(false)}
-                    className="block rounded-sm px-4 py-3 text-sm font-semibold text-white hover:bg-white/5 hover:text-yellow-400 transition-colors"
+                    onClick={() => setIsCatalogOpen(false)}
+                    className="block rounded-sm px-4 py-3 text-sm font-semibold text-white hover:bg-white/5 hover:text-yellow-400 transition-colors group"
                   >
-                    <div className="uppercase">{item.name}</div>
-                    <div className="text-xs text-zinc-500 font-normal normal-case mt-0.5">{item.description}</div>
+                    <div className="uppercase font-bold">{item.name}</div>
+                    <div className="text-xs text-zinc-500 font-normal normal-case mt-0.5 group-hover:text-zinc-400">{item.description}</div>
                   </a>
                 ))}
               </div>
             </div>
           </div>
 
-          <a href="#solutions/steel-tech" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.steel')}</a>
-          <a href="#about" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.about')}</a>
-          <a href="#calculator" className="text-sm font-semibold leading-6 text-yellow-500 hover:text-white uppercase tracking-wide flex items-center gap-1 transition-colors">
-             <CalculatorIcon className="h-4 w-4" /> {t('nav.calculator')}
+          <a href="#about" className="text-sm font-bold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">Servicios & Soporte</a>
+          
+          <a href="#calculator" className="text-sm font-bold leading-6 text-yellow-500 hover:text-white uppercase tracking-wide flex items-center gap-1 transition-colors border border-yellow-500/20 bg-yellow-500/5 px-3 py-1 rounded-sm">
+             <CalculatorIcon className="h-4 w-4" /> Herramientas
           </a>
         </div>
 
@@ -107,17 +107,16 @@ const Header: React.FC = () => {
            {/* Language Switcher */}
            <button 
              onClick={toggleLanguage}
-             className="text-xs font-bold uppercase text-zinc-400 hover:text-white border border-white/10 px-3 py-1.5 rounded-sm transition-colors flex items-center gap-1"
+             className="text-xs font-bold uppercase text-zinc-500 hover:text-white px-3 py-1.5 transition-colors flex items-center gap-1"
           >
-             <span className="material-symbols-outlined text-[16px]">language</span>
-             {language === 'es' ? 'English' : 'Español'}
+             {language === 'es' ? 'EN' : 'ES'}
           </button>
 
           <a href="https://wa.me/524428192172" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-[#25D366] transition-colors" aria-label="WhatsApp">
             <WhatsAppIcon className="h-6 w-6" />
           </a>
-          <a href="#contact" className="text-sm font-bold leading-6 text-black bg-yellow-500 hover:bg-yellow-400 px-6 py-2.5 transition-all uppercase tracking-wider skew-x-[-10deg]">
-            <span className="block skew-x-[10deg]">{t('nav.quote')}</span>
+          <a href="#contact" className="text-sm font-black leading-6 text-black bg-yellow-500 hover:bg-white hover:text-black px-6 py-2.5 transition-all uppercase tracking-wider skew-x-[-10deg]">
+            <span className="block skew-x-[10deg]">Cotizar Ahora</span>
           </a>
         </div>
       </nav>
@@ -145,22 +144,22 @@ const Header: React.FC = () => {
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-white/10">
                 <div className="space-y-2 py-6">
-                  <a href="#" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.home')}</a>
-                  <a href="#solutions" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.solutions')}</a>
+                  <a href="#" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-white hover:bg-white/5 uppercase">Inicio</a>
                   
                   <div className="py-2">
-                    <p className="px-3 text-xs font-bold text-yellow-500 uppercase tracking-widest mb-2">{t('nav.machinery')}</p>
-                    {machineryLinks.map((item) => (
-                         <a key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-zinc-300 hover:text-white pl-6 uppercase">
+                    <p className="px-3 text-xs font-bold text-yellow-500 uppercase tracking-widest mb-2">Catálogo</p>
+                    {catalogLinks.map((item) => (
+                         <a key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-sm font-semibold leading-7 text-zinc-300 hover:text-white pl-6 uppercase">
                             {item.name}
                          </a>
                     ))}
                   </div>
 
-                  <a href="#solutions/steel-tech" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.steel')}</a>
-                  <a href="#calculator" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-yellow-500 hover:bg-white/5 uppercase">{t('nav.calculator')}</a>
-                  <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.about')}</a>
-                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.contact')}</a>
+                  <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-white hover:bg-white/5 uppercase">Servicios</a>
+                  <a href="#calculator" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-yellow-500 hover:bg-white/5 uppercase flex items-center gap-2">
+                      <CalculatorIcon className="h-4 w-4"/> Calculadora
+                  </a>
+                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-white hover:bg-white/5 uppercase">Contacto</a>
                 </div>
                 
                 {/* Mobile Social & CTA */}
@@ -176,7 +175,7 @@ const Header: React.FC = () => {
                           <WhatsAppIcon className="h-6 w-6" />
                       </a>
                   </div>
-                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-yellow-500 px-3 py-2.5 text-base font-bold text-black uppercase hover:bg-yellow-400">{t('nav.quote')}</a>
+                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-yellow-500 px-3 py-3 text-base font-black text-black uppercase hover:bg-yellow-400">COTIZAR AHORA</a>
                 </div>
               </div>
             </div>

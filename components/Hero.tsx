@@ -3,17 +3,17 @@ import { useLanguage } from '../context/LanguageContext';
 
 const images = [
     {
-        // Mining Excavator - Yellow Machinery (Fits SteelPro/Daswell aesthetic)
+        // Mining Excavator
         src: "https://images.unsplash.com/photo-1578326584285-d852a32c253b?q=80&w=2940&auto=format&fit=crop",
         alt: "Excavadora pesada en entorno minero"
     },
     {
-        // Concrete Mixer Truck - Daswell core product
+        // Concrete Mixer Truck
         src: "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?q=80&w=2940&auto=format&fit=crop",
         alt: "Camión mezclador de concreto industrial"
     },
     {
-        // Crushing Plant / Industrial - Mining context
+        // Crushing Plant
         src: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?q=80&w=2940&auto=format&fit=crop",
         alt: "Planta de procesamiento de minerales"
     }
@@ -41,82 +41,77 @@ const Hero: React.FC = () => {
                             alt={image.alt}
                             className="h-full w-full object-cover scale-105"
                         />
-                        {/* Improved Overlay for Readability */}
-                        <div className="absolute inset-0 bg-zinc-950/50 mix-blend-multiply" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+                        <div className="absolute inset-0 bg-zinc-950/70 mix-blend-multiply" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
                     </div>
                 ))}
             </div>
             
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-32 sm:py-48 lg:py-56 relative z-10 text-center">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-32 sm:py-48 lg:py-56 relative z-10 text-center sm:text-left">
                 
-                {/* Badge - Technical Look & Floating Grey/White */}
-                <div className="inline-flex items-center gap-x-3 mb-12 animate-fade-in backdrop-blur-sm bg-white/5 border border-white/10 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                {/* Authority Badge */}
+                <div className="inline-flex items-center gap-x-3 mb-8 animate-fade-in backdrop-blur-md bg-white/5 border border-white/10 px-4 py-1.5 rounded-sm">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
                     </span>
-                    <span className="text-xs font-black uppercase tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-400 drop-shadow-sm">
-                        {t('hero.badge')}
+                    <span className="text-xs font-bold uppercase tracking-widest text-yellow-500">
+                        Distribuidor Autorizado DASWELL
                     </span>
                 </div>
                 
-                {/* Main Title - Stylized, Thicker, Metallic & Floating */}
-                <h1 className="text-6xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase mb-6 drop-shadow-2xl">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-200 to-zinc-500 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
-                        STEEL
-                    </span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-br from-yellow-300 via-yellow-500 to-orange-600 drop-shadow-[0_4px_15px_rgba(234,179,8,0.4)]">
-                        PRO
-                    </span>
+                {/* Main Title - Refined */}
+                <h1 className="text-6xl sm:text-8xl md:text-9xl font-semibold tracking-[0.15em] uppercase mb-4 text-white leading-tight animate-fade-in">
+                    STEELPRO
                 </h1>
                 
-                {/* Subtitle - Sober & Technical */}
-                <div className="mb-10">
-                    <h2 className="inline-block text-base sm:text-xl font-bold tracking-[0.2em] text-zinc-300 uppercase drop-shadow-md">
-                        {t('hero.subtitle')}
-                    </h2>
-                </div>
-                
-                {/* Paragraph - Elegant Readability */}
-                <p className="mt-4 text-base sm:text-lg leading-8 text-zinc-300 max-w-2xl mx-auto font-light mix-blend-plus-lighter">
-                    {t('hero.desc')}
+                {/* Subtitle - Technical & Sober */}
+                <p className="text-lg sm:text-xl font-medium tracking-widest uppercase text-zinc-300 max-w-3xl animate-fade-in delay-100 mb-8 border-l-4 border-yellow-500 pl-4 sm:pl-6 ml-1 sm:ml-0">
+                    Infraestructura Sólida para Proyectos Globales
+                </p>
+
+                {/* Descriptive Text - Value Proposition */}
+                <p className="mt-4 text-base sm:text-lg leading-relaxed text-zinc-400 max-w-2xl font-light animate-fade-in delay-200">
+                    Suministro estratégico de maquinaria pesada y aceros industriales. 
+                    Sin intermediarios. Sin tiempos muertos.
                 </p>
                 
-                <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
+                {/* Transactional CTAs */}
+                <div className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in delay-300">
                     <a
                         href="#solutions"
-                        className="w-full sm:w-auto bg-yellow-500 px-8 py-4 text-xs font-bold text-black shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)] hover:bg-white hover:text-black transition-all uppercase tracking-[0.15em] skew-x-[-10deg] hover:scale-105"
+                        className="bg-yellow-500 px-8 py-4 text-sm font-bold text-black hover:bg-white hover:text-black transition-all uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg hover:shadow-yellow-500/20"
                     >
-                        <span className="block skew-x-[10deg]">{t('hero.catalog')}</span>
+                        Ver Catálogo
+                        <span className="material-symbols-outlined text-lg">arrow_forward</span>
                     </a>
                     <a 
-                        href="#contact" 
-                        className="w-full sm:w-auto border border-white/30 bg-black/20 backdrop-blur-sm px-8 py-4 text-xs font-bold text-white hover:bg-white hover:text-black transition-all uppercase tracking-[0.15em] skew-x-[-10deg]"
+                        href="#solutions/steel" 
+                        className="border border-white/10 bg-white/5 backdrop-blur-sm px-8 py-4 text-sm font-bold text-white hover:bg-white hover:text-black transition-all uppercase tracking-widest flex items-center justify-center gap-2"
                     >
-                        <span className="block skew-x-[10deg]">{t('hero.project_quote')}</span>
+                        Cotizar Aceros
                     </a>
                 </div>
             </div>
 
-            {/* Stats Bar - Cleaner integration */}
-            <div className="absolute bottom-0 w-full border-t border-white/5 bg-black/60 backdrop-blur-md">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center divide-x divide-white/5">
-                    <div>
-                        <p className="text-2xl font-bold text-white">+15</p>
-                        <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-500">{t('hero.exp')}</p>
+            {/* Stats Bar - Refined */}
+            <div className="absolute bottom-0 w-full border-t border-white/10 bg-black/60 backdrop-blur-md">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
+                    <div className="border-r border-white/5 md:border-none last:border-none">
+                        <p className="text-2xl font-bold text-white tracking-tight">+15 Años</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Experiencia</p>
                     </div>
-                    <div>
-                        <p className="text-2xl font-bold text-white">ISO</p>
-                        <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-500">{t('hero.cert')}</p>
+                    <div className="border-r border-white/5 md:border-none last:border-none">
+                        <p className="text-2xl font-bold text-white tracking-tight">ISO 9001</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Certificación</p>
                     </div>
-                    <div>
-                        <p className="text-2xl font-bold text-white">24h</p>
-                        <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-500">{t('hero.support')}</p>
+                    <div className="border-r border-white/5 md:border-none last:border-none">
+                        <p className="text-2xl font-bold text-white tracking-tight">Stock Real</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Entrega Inmediata</p>
                     </div>
-                    <div>
-                        <p className="text-2xl font-bold text-white">Global</p>
-                        <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-500">{t('hero.logistics')}</p>
+                    <div className="hidden md:block">
+                        <p className="text-2xl font-bold text-white tracking-tight">Nacional</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Cobertura</p>
                     </div>
                 </div>
             </div>

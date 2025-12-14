@@ -7,6 +7,12 @@ import { useLanguage } from '../context/LanguageContext';
 const DENSITIES_METRIC: Record<string, number> = {
     acero: 7850, // kg/m3
     acero4140: 7850, // kg/m3
+    inox410: 7750,
+    inox416: 7750,
+    inox420: 7750,
+    alum6061: 2700,
+    alum7075: 2810,
+    alum1050: 2705,
     cobre: 8960,
     bronce: 8700,
     laton: 8500
@@ -16,6 +22,12 @@ const DENSITIES_METRIC: Record<string, number> = {
 const DENSITIES_IMPERIAL: Record<string, number> = {
     acero: 490, 
     acero4140: 490,
+    inox410: 484,
+    inox416: 484,
+    inox420: 484,
+    alum6061: 169,
+    alum7075: 175,
+    alum1050: 169,
     cobre: 559,
     bronce: 543,
     laton: 530
@@ -74,6 +86,17 @@ const CalculatorPage: React.FC = () => {
     const MATERIAL_OPTIONS = [
         { id: 'acero', name: language === 'es' ? 'Acero A36/1045' : 'Steel A36/1045', class: 'bg-zinc-800' },
         { id: 'acero4140', name: language === 'es' ? 'Acero 4140' : 'Steel 4140', class: 'bg-slate-800' },
+        
+        // Stainless Steel Series
+        { id: 'inox410', name: 'Inox 410', class: 'bg-stone-800' },
+        { id: 'inox416', name: 'Inox 416', class: 'bg-stone-800' },
+        { id: 'inox420', name: 'Inox 420', class: 'bg-stone-800' },
+
+        // Aluminum Series
+        { id: 'alum6061', name: 'Alum 6061', class: 'bg-zinc-700' },
+        { id: 'alum7075', name: 'Alum 7075', class: 'bg-zinc-700' },
+        { id: 'alum1050', name: 'Alum 1050', class: 'bg-zinc-700' },
+
         { id: 'cobre', name: language === 'es' ? 'Cobre' : 'Copper', class: 'bg-orange-900/40' },
         { id: 'bronce', name: language === 'es' ? 'Bronce' : 'Bronze', class: 'bg-yellow-900/40' },
         { id: 'laton', name: language === 'es' ? 'Latón' : 'Brass', class: 'bg-yellow-500/20' }
@@ -130,6 +153,12 @@ const CalculatorPage: React.FC = () => {
         if (!material) {
             setFormError(language === 'es' ? '⚠️ Seleccione un material para continuar.' : '⚠️ Select a material to continue.');
             return;
+        }
+
+        // Validate Density Existence
+        if (DENSITIES_METRIC[material] === undefined || DENSITIES_IMPERIAL[material] === undefined) {
+             setFormError(language === 'es' ? '⚠️ Error de configuración: Densidad no definida para el material seleccionado.' : '⚠️ Configuration Error: Density not defined for selected material.');
+             return;
         }
 
         // 2. Validate Shape
@@ -594,26 +623,31 @@ const CalculatorPage: React.FC = () => {
                                     <button
                                         key={opt.id}
                                         onClick={() => { setMaterial(opt.id); setFormError(''); }}
-                                        className={`group relative p-4 border ${material === opt.id ? 'border-yellow-500 opacity-100 ring-1 ring-yellow-500' : 'border-white/10 opacity-60 hover:opacity-100'} rounded-sm transition-all flex flex-col items-center gap-2 ${opt.class}`}
+                                        className={`group relative p-4 border rounded-sm transition-all duration-300 flex flex-col items-center gap-2 ${opt.class} ${
+                                            material === opt.id 
+                                            ? 'border-yellow-500 opacity-100 ring-1 ring-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.2)] scale-105 z-10' 
+                                            : 'border-white/10 opacity-60 hover:opacity-100 hover:border-yellow-500 hover:shadow-lg'
+                                        }`}
                                     >
                                         {/* Tooltip */}
-                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max bg-zinc-900 border border-white/20 p-2 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
-                                            <p className="text-[10px] text-yellow-500 font-bold uppercase text-center mb-1 border-b border-white/10 pb-1">
-                                                Densidad
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-max bg-zinc-900 border border-white/20 p-3 rounded-sm shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 backdrop-blur-xl">
+                                            <p className="text-[10px] text-yellow-500 font-bold uppercase text-center mb-2 pb-1 border-b border-white/10 tracking-widest">
+                                                {language === 'es' ? 'Densidad' : 'Density'}
                                             </p>
-                                            <div className="flex gap-3 text-[9px] text-zinc-400">
+                                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
                                                 <div className="text-center">
-                                                    <span className="block font-bold text-white text-xs">{DENSITIES_METRIC[opt.id]}</span>
-                                                    kg/m³
+                                                    <span className="block text-zinc-500 uppercase text-[9px] mb-0.5">{language === 'es' ? 'Métrico' : 'Metric'}</span>
+                                                    <span className="block font-black text-white text-sm tracking-tight">{DENSITIES_METRIC[opt.id]}</span>
+                                                    <span className="text-zinc-400 font-mono text-[9px]">kg/m³</span>
                                                 </div>
-                                                <div className="w-px bg-white/10"></div>
-                                                <div className="text-center">
-                                                    <span className="block font-bold text-white text-xs">{DENSITIES_IMPERIAL[opt.id]}</span>
-                                                    lbs/ft³
+                                                <div className="text-center border-l border-white/10 pl-4">
+                                                    <span className="block text-zinc-500 uppercase text-[9px] mb-0.5">{language === 'es' ? 'Imperial' : 'Imperial'}</span>
+                                                    <span className="block font-black text-white text-sm tracking-tight">{DENSITIES_IMPERIAL[opt.id]}</span>
+                                                    <span className="text-zinc-400 font-mono text-[9px]">lbs/ft³</span>
                                                 </div>
                                             </div>
                                             {/* Arrow */}
-                                            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-zinc-900"></div>
+                                            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-zinc-900"></div>
                                         </div>
 
                                         <CubeTransparentIcon className="h-6 w-6 text-white" />
@@ -657,57 +691,63 @@ const CalculatorPage: React.FC = () => {
                     </div>
                 )}
 
-                {/* STEP 3: RESULTS */}
+                {/* STEP 3: RESULTS (Enhanced UX) */}
                 {step === 3 && result && (
                     <div className="max-w-xl mx-auto animate-fade-in">
-                        <div className="bg-zinc-900 border border-yellow-500 rounded-sm overflow-hidden shadow-[0_0_50px_rgba(234,179,8,0.15)]">
-                            <div className="bg-yellow-500 p-4 text-center">
+                        <div className="bg-zinc-900 border border-yellow-500 rounded-sm overflow-hidden shadow-[0_0_50px_rgba(234,179,8,0.15)] relative">
+                             {/* Quote Header Stripe */}
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+                            
+                            <div className="bg-yellow-500 p-6 text-center">
                                 <h3 className="text-black font-black uppercase text-xl tracking-wider">{t('calc.result_title')}</h3>
+                                <p className="text-black/70 text-xs font-bold uppercase mt-1">Pre-Cotización Estimada</p>
                             </div>
+                            
                             <div className="p-8">
                                 <div className="grid grid-cols-2 gap-8 mb-8 border-b border-white/10 pb-8">
-                                    <div className="text-center">
-                                        <p className="text-xs uppercase text-zinc-500 mb-1">Material</p>
-                                        <p className="text-white font-bold text-lg uppercase">{MATERIAL_OPTIONS.find(m => m.id === material)?.name}</p>
-                                        <p className="text-xs text-zinc-600">Densidad Ref: {system === 'metric' ? DENSITIES_METRIC[material] : DENSITIES_IMPERIAL[material]} {system === 'metric' ? 'kg/m³' : 'lbs/ft³'}</p>
+                                    <div className="text-center border-r border-white/5">
+                                        <p className="text-[10px] uppercase text-zinc-500 mb-1 font-bold">Material Seleccionado</p>
+                                        <p className="text-white font-black text-lg uppercase">{MATERIAL_OPTIONS.find(m => m.id === material)?.name}</p>
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-xs uppercase text-zinc-500 mb-1">Geometría</p>
-                                        <p className="text-white font-bold text-lg uppercase">{SHAPE_OPTIONS.find(s => s.id === shape)?.name}</p>
+                                        <p className="text-[10px] uppercase text-zinc-500 mb-1 font-bold">Geometría</p>
+                                        <p className="text-white font-black text-lg uppercase">{SHAPE_OPTIONS.find(s => s.id === shape)?.name}</p>
                                     </div>
                                 </div>
 
-                                <div className="space-y-6">
+                                <div className="space-y-6 bg-black/30 p-6 rounded-sm border border-white/5">
                                     <div className="flex justify-between items-end">
-                                        <span className="text-zinc-400 uppercase text-sm">{t('calc.vol_total')}</span>
+                                        <span className="text-zinc-400 uppercase text-xs font-bold tracking-wider">{t('calc.vol_total')}</span>
                                         <span className="text-white font-mono text-xl">{result.volume.toFixed(4)} <span className="text-sm text-zinc-500">{result.unitV}</span></span>
                                     </div>
                                     <div className="flex justify-between items-end border-t border-white/10 pt-4">
-                                        <span className="text-yellow-500 font-bold uppercase text-lg">{t('calc.weight_est')}</span>
+                                        <span className="text-yellow-500 font-bold uppercase text-sm tracking-wider">{t('calc.weight_est')}</span>
                                         <span className="text-white font-black text-4xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-yellow-200">
                                             {result.weight.toFixed(2)} <span className="text-lg text-zinc-500 font-normal">{result.unitW}</span>
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="mt-8 bg-black/40 p-4 rounded text-xs text-zinc-400 border-l-2 border-yellow-500">
-                                    <p className="mb-2"><strong>Nota Técnica:</strong> Este cálculo es una referencia teórica basada en densidades estándar. Las tolerancias de fabricación pueden variar el peso real.</p>
-                                    <p>Para disponibilidad de stock y tiempos de entrega en {userData.location}, contacte a un ingeniero.</p>
-                                </div>
-
-                                <div className="mt-8 grid grid-cols-2 gap-4">
-                                    <button 
-                                        onClick={resetCalculator}
-                                        className="w-full border border-white/10 text-white font-bold uppercase py-3 hover:bg-white/5 transition-colors text-xs"
-                                    >
-                                        {t('calc.new_calc')}
-                                    </button>
-                                    <a 
-                                        href="#contact"
-                                        className="w-full bg-yellow-500 text-black font-bold uppercase py-3 hover:bg-yellow-400 transition-colors text-xs flex items-center justify-center"
-                                    >
-                                        {t('calc.req_material')}
-                                    </a>
+                                <div className="mt-8 text-center space-y-4">
+                                    <p className="text-xs text-zinc-400">
+                                        Este cálculo se adjuntará a su solicitud para verificar stock en <strong>{userData.location}</strong>.
+                                    </p>
+                                    
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <button 
+                                            onClick={resetCalculator}
+                                            className="w-full border border-white/10 text-zinc-400 font-bold uppercase py-4 hover:bg-white/5 hover:text-white transition-colors text-xs tracking-wider"
+                                        >
+                                            {t('calc.new_calc')}
+                                        </button>
+                                        <a 
+                                            href="#contact"
+                                            className="w-full bg-yellow-500 text-black font-black uppercase py-4 hover:bg-yellow-400 transition-colors text-xs flex items-center justify-center gap-2 tracking-wider shadow-lg hover:shadow-yellow-500/20"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">request_quote</span>
+                                            Cotizar Este Material
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

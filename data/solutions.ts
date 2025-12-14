@@ -21,6 +21,8 @@ export interface Solution {
     imageUrl: string;
     imageAlt: string;
     gallery?: string[];
+    densityMetric?: number; // kg/m3
+    densityImperial?: number; // lbs/ft3
 }
 
 export const solutions: Solution[] = [
@@ -173,6 +175,8 @@ export const solutions: Solution[] = [
         icon: CubeTransparentIcon,
         description: 'Acero al carbono-manganeso de mecanizado optimizado. Su formato tubular sin costura reduce drásticamente los tiempos de maquinado y el desperdicio de material en la fabricación de piezas cilíndricas. Ofrece excelente soldabilidad y cementación.',
         shortDescription: 'Barra hueca sin costura para bujes y camisas.',
+        densityMetric: 7850,
+        densityImperial: 490,
         features: [
             'Grado: SAE 1518 (Bajo Carbono / Alto Manganeso)',
             'Formato: Barra Hueca sin costura',
@@ -190,6 +194,8 @@ export const solutions: Solution[] = [
         icon: ServerStackIcon,
         description: 'El estándar de oro en la construcción y manufactura general. Placa de acero de bajo carbono con un equilibrio óptimo entre resistencia, conformabilidad y soldabilidad. Ideal para bases de maquinaria, placas de anclaje y estructuras soldadas.',
         shortDescription: 'Placa estructural estándar para bases y soportes.',
+        densityMetric: 7850,
+        densityImperial: 490,
         features: [
             'Grado: ASTM A36',
             'Formato: Placa (Lámina caliente)',
@@ -207,6 +213,8 @@ export const solutions: Solution[] = [
         icon: ShieldCheckIcon,
         description: 'Barras de fundición continua libres de porosidad. El hierro gris (Clase 40) ofrece una maquinabilidad superior y excelente amortiguación de vibraciones. El hierro nodular (65-45-12) aporta mayor ductilidad y resistencia al impacto para componentes sometidos a estrés.',
         shortDescription: 'Barra sólida de fundición continua.',
+        densityMetric: 7200,
+        densityImperial: 450,
         features: [
             'Grados: Hierro Gris Clase 40 / Nodular 65-45-12',
             'Formato: Barra Sólida',
@@ -224,6 +232,8 @@ export const solutions: Solution[] = [
         icon: AnalysisIcon,
         description: 'Aceros inoxidables no magnéticos de alta resistencia a la corrosión. Ideales para la industria alimentaria, química y marina. Mantenemos stock en grados especializados para maquinabilidad (303), uso general (304) y ambientes corrosivos severos (316L).',
         shortDescription: 'Barra sólida: 303, 304, 316L.',
+        densityMetric: 7900,
+        densityImperial: 493,
         features: [
             '303: Azufre añadido para maquinado rápido (fittings)',
             '304: El estándar industrial (sanitario/general)',
@@ -241,6 +251,8 @@ export const solutions: Solution[] = [
         icon: ShieldCheckIcon,
         description: 'Acero inoxidable martensítico básico. Endurecible mediante tratamiento térmico. Combina alta resistencia mecánica con resistencia a la corrosión moderada. Es la opción económica para piezas sometidas a estrés en ambientes no severos.',
         shortDescription: 'Martensítico endurecible de uso general.',
+        densityMetric: 7750,
+        densityImperial: 484,
         features: [
             'Grado: AISI 410 (Martensítico)',
             'Dureza Típica: 38-42 HRC (Temple)',
@@ -258,6 +270,8 @@ export const solutions: Solution[] = [
         icon: CubeTransparentIcon,
         description: 'La versión de "Mecanizado Libre" del 410. La adición de azufre crea inclusiones de sulfuro de manganeso que rompen la viruta, permitiendo velocidades de corte hasta 85% mayores. Ideal para producción en serie en tornos automáticos.',
         shortDescription: 'El inoxidable de mayor maquinabilidad.',
+        densityMetric: 7750,
+        densityImperial: 484,
         features: [
             'Grado: AISI 416 (Martensítico con Azufre)',
             'Maquinabilidad: 160% (vs 100% del acero 1212)',
@@ -275,6 +289,8 @@ export const solutions: Solution[] = [
         icon: AnalysisIcon,
         description: 'Acero martensítico con mayor contenido de carbono que el 410, diseñado para alcanzar alta dureza (50-52 HRC). Ofrece excelente resistencia al desgaste y capacidad de pulido espejo, lo que lo hace el estándar para moldes de inyección de plástico.',
         shortDescription: 'Alta dureza para moldes y corte.',
+        densityMetric: 7750,
+        densityImperial: 484,
         features: [
             'Grado: AISI 420 (Alto Carbono)',
             'Dureza Máxima: 50-52 HRC',
@@ -292,6 +308,8 @@ export const solutions: Solution[] = [
         icon: ServerStackIcon,
         description: 'La aleación de aluminio más versátil del mercado. El temple T6 proporciona una excelente resistencia mecánica y a la corrosión. Es soldable y conformable, convirtiéndolo en el material estándar para estructuras ligeras, marcos de maquinaria y componentes arquitectónicos.',
         shortDescription: 'Aleación estructural soldable y versátil.',
+        densityMetric: 2700,
+        densityImperial: 169,
         features: [
             'Aleación: 6061-T6 (Magnesio y Silicio)',
             'Dureza: ~95 HB (Brinell)',
@@ -309,6 +327,8 @@ export const solutions: Solution[] = [
         icon: VisualizationIcon,
         description: 'Aleación de ultra-alta resistencia (serie Zinc). Ofrece propiedades mecánicas comparables a muchos aceros pero con un tercio del peso. Esencial para aplicaciones donde el ahorro de peso y la resistencia a la fatiga son críticos. No es recomendable para soldadura.',
         shortDescription: 'Grado aeroespacial de máxima resistencia.',
+        densityMetric: 2810,
+        densityImperial: 175,
         features: [
             'Aleación: 7075-T6 (Zinc)',
             'Dureza: ~150 HB (Brinell)',
@@ -326,6 +346,8 @@ export const solutions: Solution[] = [
         icon: CubeTransparentIcon,
         description: 'Aleación de aluminio comercialmente puro con excelente resistencia a la corrosión y alta conductividad térmica y eléctrica. Debido a su alta ductilidad y acabado brillante, es la elección preferida para la industria química, reflectores de iluminación y trabajos de chapa fina.',
         shortDescription: 'Aluminio puro: alta ductilidad y corrosión.',
+        densityMetric: 2705,
+        densityImperial: 169,
         features: [
             'Pureza: 99.5% Al (mínimo)',
             'Conductividad: 61.5% IACS',
@@ -343,6 +365,8 @@ export const solutions: Solution[] = [
         icon: TraceabilityIcon,
         description: 'Metales rojos y amarillos seleccionados por sus propiedades de conductividad y antifricción. Materiales esenciales para transmisión eléctrica, componentes de desgaste (bujes) y aplicaciones decorativas o de valvulería.',
         shortDescription: 'Aleaciones de Cobre para conducción y desgaste.',
+        densityMetric: 8800,
+        densityImperial: 550,
         features: [
             'Bronce (SAE 660/64): Alta carga, antifricción (bujes)',
             'Cobre: Electrolítico, alta conductividad térmica/eléctrica',
