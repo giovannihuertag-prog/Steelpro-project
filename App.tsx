@@ -34,7 +34,7 @@ const AppContent: React.FC = () => {
             setRoute(newRoute);
             window.scrollTo(0, 0);
             setTimeout(() => setIsTransitioning(false), 50); 
-          }, 300);
+          }, 500);
         }
       } else {
         window.scrollTo(0, 0);
@@ -72,7 +72,13 @@ const AppContent: React.FC = () => {
       {/* Hide Header/Footer on Dashboard for a focused view, or keep them. Keeping them for consistency but maybe simpler. */}
       {route !== '#dashboard' && <Header />}
       
-      <main className={`transition-opacity duration-300 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+      <main 
+        className={`transition-all duration-500 ease-in-out transform ${
+            isTransitioning 
+            ? 'opacity-0 translate-y-4 scale-[0.99]' 
+            : 'opacity-100 translate-y-0 scale-100'
+        }`}
+      >
         {renderPage()}
       </main>
       
