@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FacebookIcon, InstagramIcon, WhatsAppIcon } from './Icons';
+import { FacebookIcon, InstagramIcon, WhatsAppIcon, CalculatorIcon } from './Icons';
 
 // Sub-menu for Machinery
 const machineryLinks = [
@@ -85,8 +85,9 @@ const Header: React.FC = () => {
 
           <a href="#solutions/steel-tech" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Aceros Industriales</a>
           <a href="#about" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Aliados</a>
-          <a href="#about" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Nosotros</a>
-          <a href="#contact" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Ayuda / Contacto</a>
+          <a href="#calculator" className="text-sm font-semibold leading-6 text-yellow-500 hover:text-white uppercase tracking-wide flex items-center gap-1">
+             <CalculatorIcon className="h-4 w-4" /> Calculadora
+          </a>
         </div>
 
         {/* CTA Button */}
@@ -135,8 +136,8 @@ const Header: React.FC = () => {
                   </div>
 
                   <a href="#solutions/steel-tech" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Aceros Industriales</a>
+                  <a href="#calculator" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-yellow-500 hover:bg-white/5 uppercase">Calculadora Industrial</a>
                   <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Aliados</a>
-                  <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Nosotros</a>
                   <a href="#contact" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Ayuda / Contacto</a>
                 </div>
                 

@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import SolutionsPage from './pages/SolutionsPage';
 import AboutPage from './pages/AboutPage';
 import DashboardPage from './pages/DashboardPage';
+import CalculatorPage from './pages/CalculatorPage';
 import AIChatBot from './components/AIChatBot';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
@@ -53,6 +54,9 @@ const App: React.FC = () => {
     }
     if (route === '#about') {
         return <AboutPage />;
+    }
+    if (route === '#calculator') {
+        return <CalculatorPage />;
     }
     if (route === '#dashboard') {
         // Dashboard has its own internal login state, so we just render it.
