@@ -1,0 +1,340 @@
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { solutions, Solution } from '../data/solutions';
+import { CheckIcon, XIcon } from '../components/Icons';
+import ContactForm from '../components/ContactForm';
+
+const filterCategories = [
+    { id: 'all', name: 'Catálogo Completo' },
+    { id: 'construction', name: 'Maquinaria Construcción' },
+    { id: 'engineering', name: 'Maquinaria Ingeniería' },
+    { id: 'steel', name: 'Aceros' },
+];
+
+interface SectionProps {
+    title: string;
+    description: string;
+    items: Solution[];
+    onSelect: (s: Solution) => void;
+    id: string;
+}
+
+const SolutionSection: React.FC<SectionProps> = ({ title, description, items, onSelect, id }) => {
+    if (items.length === 0) return null;
+
+    return (
+        <div id={id} className="py-12 border-b border-white/5 last:border-0">
+            <div className="mb-10">
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tighter border-l-4 border-yellow-500 pl-4">
+                    {title}
+                </h3>
+                <p className="mt-2 text-zinc-400 pl-5">{description}</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8">
+                {items.map((solution) => (
+                    <div 
+                        key={solution.id} 
+                        className="group relative bg-zinc-900 border border-white/5 overflow-hidden rounded-sm hover:border-yellow-500/50 transition-all duration-300 flex flex-col sm:flex-row cursor-pointer"
+                        onClick={() => onSelect(solution)}
+                    >
+                        {/* Image Container */}
+                        <div className="sm:w-2/5 relative h-64 sm:h-auto overflow-hidden">
+                            <img 
+                                src={solution.imageUrl} 
+                                alt={solution.imageAlt} 
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                            />
+                            <div className="absolute top-0 left-0 bg-yellow-500 text-black text-xs font-bold px-3 py-1 uppercase tracking-widest">
+                                {solution.brand}
+                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent sm:bg-gradient-to-r"></div>
+                        </div>
+
+                        {/* Content Container */}
+                        <div className="sm:w-3/5 p-6 flex flex-col justify-between">
+                            <div>
+                                <h4 className="text-xl font-bold text-white uppercase leading-tight mb-2 group-hover:text-yellow-500 transition-colors">
+                                    {solution.name}
+                                </h4>
+                                <p className="text-sm text-zinc-400 line-clamp-3 mb-4">
+                                    {solution.shortDescription}
+                                </p>
+                                
+                                <div className="space-y-1 mb-6">
+                                    {solution.features.slice(0, 2).map((feature, i) => (
+                                        <div key={i} className="flex items-center text-xs text-zinc-500">
+                                            <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-2"></span>
+                                            {feature}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 mt-auto">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSelect(solution);
+                                    }}
+                                    className="flex-1 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold uppercase text-white tracking-wide transition-colors"
+                                >
+                                    Ver Detalles
+                                </button>
+                                <a 
+                                    href="#contact"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="flex-1 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-xs font-bold uppercase text-black tracking-wide text-center transition-colors flex items-center justify-center"
+                                >
+                                    Solicitar Cotización
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) => {
+    const activeFilter = useMemo(() => {
+        const hashParts = route.split('/');
+        if (hashParts.length > 1 && hashParts[0] === '#solutions') {
+            const filterId = hashParts[1];
+            if (filterCategories.some(c => c.id === filterId)) {
+                return filterId;
+            }
+        }
+        return 'all';
+    }, [route]);
+
+    const [selectedSolution, setSelectedSolution] = useState<Solution | null>(null);
+    const [activeImage, setActiveImage] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Group solutions by category
+    const groupedSolutions = useMemo(() => {
+        return {
+            construction: solutions.filter(s => s.category === 'construction'),
+            engineering: solutions.filter(s => s.category === 'engineering'),
+            steel: solutions.filter(s => s.category === 'steel')
+        };
+    }, []);
+
+    useEffect(() => {
+        if (selectedSolution) {
+            document.body.style.overflow = 'hidden';
+            // Reset the active image to the main one when opening modal
+            setActiveImage(selectedSolution.imageUrl);
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+        return () => { 
+            document.body.style.overflow = 'auto';
+        };
+    }, [selectedSolution]);
+
+    useEffect(() => {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 400); 
+        return () => clearTimeout(timer);
+    }, [activeFilter]);
+
+    return (
+        <div className="pt-24 sm:pt-32 animate-fade-in bg-zinc-950 min-h-screen">
+            {/* Hero */}
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mx-auto max-w-3xl text-center">
+                    <h2 className="text-sm font-bold uppercase tracking-widest text-yellow-500">Distribuidor Autorizado DASWELL</h2>
+                    <p className="mt-2 text-4xl font-black tracking-tighter text-white sm:text-6xl uppercase">Catálogo de Maquinaria</p>
+                    <p className="mt-6 text-lg leading-8 text-zinc-400">
+                        Tecnología de punta para construcción e ingeniería. Potencia, durabilidad y soporte técnico global.
+                    </p>
+                </div>
+            </div>
+
+            {/* Filter Section */}
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-12 mb-12 sticky top-20 z-30 py-4 bg-zinc-950/90 backdrop-blur-sm border-b border-white/5">
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                    {filterCategories.map((category) => (
+                        <a
+                            key={category.id}
+                            href={category.id === 'all' ? '#solutions' : `#solutions/${category.id}`}
+                            className={`rounded-none border px-5 py-2 text-xs sm:text-sm font-bold uppercase tracking-wide transition-all duration-300 ease-in-out focus:outline-none ${
+                                activeFilter === category.id
+                                ? 'bg-yellow-500 border-yellow-500 text-black'
+                                : 'bg-transparent border-zinc-700 text-zinc-400 hover:border-yellow-500 hover:text-white'
+                            }`}
+                        >
+                            {category.name}
+                        </a>
+                    ))}
+                </div>
+            </div>
+
+            {/* Solutions List */}
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 min-h-[500px]">
+                {isLoading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="w-12 h-12 border-4 border-yellow-500 border-solid border-t-transparent animate-spin" role="status">
+                            <span className="sr-only">Cargando...</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="animate-fade-in space-y-8">
+                        {/* Section A: Construction */}
+                        {(activeFilter === 'all' || activeFilter === 'construction') && (
+                            <SolutionSection 
+                                id="construction"
+                                title="A) Maquinaria para Construcción" 
+                                description="Soluciones integrales de bombeo, mezcla y plantas de hormigón DASWELL."
+                                items={groupedSolutions.construction} 
+                                onSelect={setSelectedSolution}
+                            />
+                        )}
+
+                        {/* Section B: Engineering */}
+                        {(activeFilter === 'all' || activeFilter === 'engineering') && (
+                            <SolutionSection 
+                                id="engineering"
+                                title="B) Maquinaria de Ingeniería" 
+                                description="Equipos pesados de movimiento de tierras y elevación para grandes proyectos."
+                                items={groupedSolutions.engineering} 
+                                onSelect={setSelectedSolution}
+                            />
+                        )}
+
+                        {/* Section C: Steel (Only if specifically requested or part of all) */}
+                        {(activeFilter === 'all' || activeFilter === 'steel') && (
+                            <SolutionSection 
+                                id="steel"
+                                title="Aceros Industriales" 
+                                description="Suministro de materiales certificados para manufactura y estructuras."
+                                items={groupedSolutions.steel} 
+                                onSelect={setSelectedSolution}
+                            />
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* Contact Section */}
+            <div id="contact" className="py-16 sm:py-24 px-6 lg:px-8 mt-16 scroll-animate bg-zinc-900 border-t border-white/5">
+              <div className="mx-auto max-w-7xl rounded-sm overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2">
+                    <div className="relative hidden lg:block">
+                        <img 
+                            src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2940&auto=format&fit=crop" 
+                            alt="Construcción" 
+                            className="absolute inset-0 h-full w-full object-cover grayscale opacity-60"
+                        />
+                        <div className="absolute inset-0 bg-yellow-500/10 mix-blend-multiply"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 to-transparent"></div>
+                    </div>
+                    <div className="p-12 sm:p-16">
+                        <h2 className="text-3xl font-black tracking-tight text-white uppercase">Solicitar Cotización</h2>
+                        <p className="mt-4 text-lg leading-8 text-zinc-400">
+                            Póngase en contacto con nuestro equipo global para discutir las especificaciones de su proyecto.
+                        </p>
+                        <ContactForm idPrefix="solutions" />
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Details Modal */}
+            {selectedSolution && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in"
+                    onClick={() => setSelectedSolution(null)}
+                >
+                    <div
+                        className="relative w-full max-w-5xl bg-zinc-900 rounded-sm shadow-2xl border border-yellow-500/30 max-h-[95vh] overflow-y-auto flex flex-col md:flex-row"
+                        onClick={(e) => e.stopPropagation()} 
+                    >
+                        {/* Modal Image Column */}
+                        <div className="md:w-1/2 bg-black flex flex-col">
+                            {/* Main Image */}
+                            <div className="relative h-64 md:h-96 w-full">
+                                <img 
+                                    src={activeImage || selectedSolution.imageUrl} 
+                                    alt={selectedSolution.imageAlt} 
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                />
+                                <div className="absolute top-4 left-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 uppercase tracking-widest">
+                                    {selectedSolution.brand}
+                                </div>
+                            </div>
+                            
+                            {/* Gallery Thumbnails (only if gallery exists) */}
+                            {selectedSolution.gallery && selectedSolution.gallery.length > 0 && (
+                                <div className="p-4 grid grid-cols-4 gap-2 bg-zinc-950/50">
+                                    {selectedSolution.gallery.map((imgUrl, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setActiveImage(imgUrl)}
+                                            className={`relative aspect-square overflow-hidden border-2 transition-all ${activeImage === imgUrl ? 'border-yellow-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                                        >
+                                            <img src={imgUrl} alt={`Vista ${index + 1}`} className="w-full h-full object-cover" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Modal Content */}
+                        <div className="md:w-1/2 p-8 flex flex-col">
+                            <div className="flex items-start justify-between gap-x-4 mb-6">
+                                <h3 className="text-2xl font-black tracking-tight text-white uppercase leading-none">
+                                    {selectedSolution.name}
+                                </h3>
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedSolution(null)}
+                                    className="p-1 text-zinc-400 hover:text-white transition-colors focus:outline-none"
+                                >
+                                    <XIcon className="h-6 w-6" />
+                                </button>
+                            </div>
+
+                            <p className="text-lg text-zinc-300 mb-8 font-light">{selectedSolution.description}</p>
+                            
+                            <div className="bg-black/30 p-6 rounded-sm border border-white/5 mb-8">
+                                <h4 className="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-4">Capacidades Clave</h4>
+                                <ul className="space-y-3">
+                                    {selectedSolution.features.map((feature) => (
+                                        <li key={feature} className="flex items-start text-sm text-zinc-300">
+                                            <CheckIcon className="h-5 w-5 text-yellow-500 mr-3 flex-shrink-0" />
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="mt-auto flex justify-end gap-4">
+                                <button
+                                    onClick={() => setSelectedSolution(null)}
+                                    className="px-6 py-3 text-xs font-bold uppercase text-zinc-400 hover:text-white transition-colors"
+                                >
+                                    Cerrar
+                                </button>
+                                <a
+                                    href="#contact"
+                                    onClick={() => setSelectedSolution(null)}
+                                    className="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-xs font-bold uppercase text-black tracking-wide transition-colors"
+                                >
+                                    Cotizar Ahora
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default SolutionsPage;
