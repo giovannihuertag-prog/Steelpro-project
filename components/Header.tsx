@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { FacebookIcon, InstagramIcon, WhatsAppIcon } from './Icons';
 
 // Sub-menu for Machinery
 const machineryLinks = [
@@ -83,13 +84,16 @@ const Header: React.FC = () => {
           </div>
 
           <a href="#solutions/steel-tech" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Aceros Industriales</a>
-          <a href="#" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Aliados</a>
-          <a href="#" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Nosotros</a>
-          <a href="#" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Ayuda / Contacto</a>
+          <a href="#about" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Aliados</a>
+          <a href="#about" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Nosotros</a>
+          <a href="#contact" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Ayuda / Contacto</a>
         </div>
 
         {/* CTA Button */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center lg:gap-4">
+          <a href="https://wa.me/524428192172" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-[#25D366] transition-colors" aria-label="WhatsApp">
+            <WhatsAppIcon className="h-6 w-6" />
+          </a>
           <a href="#contact" className="text-sm font-bold leading-6 text-black bg-yellow-500 hover:bg-yellow-400 px-6 py-2.5 transition-all uppercase tracking-wider skew-x-[-10deg]">
             <span className="block skew-x-[10deg]">Cotiza Ahora</span>
           </a>
@@ -131,11 +135,24 @@ const Header: React.FC = () => {
                   </div>
 
                   <a href="#solutions/steel-tech" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Aceros Industriales</a>
-                  <a href="#" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Aliados</a>
-                  <a href="#" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Nosotros</a>
-                  <a href="#" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Ayuda / Contacto</a>
+                  <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Aliados</a>
+                  <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Nosotros</a>
+                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Ayuda / Contacto</a>
                 </div>
-                <div className="py-6">
+                
+                {/* Mobile Social & CTA */}
+                <div className="py-6 space-y-4">
+                  <div className="flex justify-center gap-6">
+                      <a href="https://www.facebook.com/profile.php?id=61584829238865" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-[#1877F2]">
+                          <FacebookIcon className="h-6 w-6" />
+                      </a>
+                      <a href="https://www.instagram.com/steelpro789" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-[#E4405F]">
+                          <InstagramIcon className="h-6 w-6" />
+                      </a>
+                      <a href="https://wa.me/524428192172" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-[#25D366]">
+                          <WhatsAppIcon className="h-6 w-6" />
+                      </a>
+                  </div>
                   <a href="#contact" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-yellow-500 px-3 py-2.5 text-base font-bold text-black uppercase hover:bg-yellow-400">Cotiza Ahora</a>
                 </div>
               </div>

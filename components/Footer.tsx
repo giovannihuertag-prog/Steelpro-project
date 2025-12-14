@@ -1,4 +1,5 @@
 import React from 'react';
+import { FacebookIcon, InstagramIcon, WhatsAppIcon } from './Icons';
 
 const navigation = {
     shortcuts: [
@@ -12,9 +13,9 @@ const navigation = {
         { name: 'Términos y condiciones', href: '#' },
     ],
     social: [
-        { name: 'LinkedIn', href: '#' },
-        { name: 'Facebook', href: '#' },
-        { name: 'Instagram', href: '#' },
+        { name: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61584829238865', icon: FacebookIcon },
+        { name: 'Instagram', href: 'https://www.instagram.com/steelpro789', icon: InstagramIcon },
+        { name: 'WhatsApp', href: 'https://wa.me/524428192172', icon: WhatsAppIcon },
     ]
 }
 
@@ -36,8 +37,11 @@ const Footer: React.FC = () => {
                             <p>Arboledas Qro. México.</p>
                             <p className="mt-2 text-yellow-500 font-bold">Querétaro, Qro. México</p>
                         </address>
-                        <div className="flex gap-4">
-                            {/* Social icons could be added here specifically if needed */}
+                        <div className="mt-4">
+                            <a href="#dashboard" className="text-[10px] text-zinc-600 uppercase tracking-widest hover:text-zinc-400 transition-colors flex items-center gap-1">
+                                <span className="material-symbols-outlined text-[14px]">lock</span>
+                                Acceso Corporativo
+                            </a>
                         </div>
                     </div>
                     <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
@@ -59,7 +63,8 @@ const Footer: React.FC = () => {
                                 <ul role="list" className="mt-6 space-y-4">
                                     {navigation.social.map((item) => (
                                         <li key={item.name}>
-                                            <a href={item.href} className="text-sm leading-6 text-zinc-400 hover:text-yellow-500 transition-colors">
+                                            <a href={item.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm leading-6 text-zinc-400 hover:text-yellow-500 transition-colors">
+                                                <item.icon className="h-5 w-5" aria-hidden="true" />
                                                 {item.name}
                                             </a>
                                         </li>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { WhatsAppIcon } from './Icons';
 
 interface ContactFormProps {
     idPrefix?: string;
@@ -101,7 +102,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ idPrefix = '' }) => {
                     {errors.message && <p id={`${idPrefix}-message-error`} className="mt-2 text-sm text-red-500">{errors.message}</p>}
                 </div>
             </div>
-            <div className="mt-8 flex justify-end">
+            <div className="mt-8 flex flex-col sm:flex-row justify-end gap-4">
+                 <a 
+                    href="https://wa.me/524428192172"
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="rounded-none border border-white/10 bg-white/5 px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-white shadow-sm hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all flex items-center justify-center gap-2"
+                >
+                    <WhatsAppIcon className="h-5 w-5" />
+                    Cotizar por WhatsApp
+                </a>
                 <button type="submit" disabled={submissionStatus === 'submitting'} className="rounded-none bg-yellow-500 px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-black shadow-sm hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     {submissionStatus === 'submitting' ? 'Procesando...' : 'Enviar Solicitud'}
                 </button>

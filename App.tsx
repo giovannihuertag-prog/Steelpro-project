@@ -3,7 +3,10 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import SolutionsPage from './pages/SolutionsPage';
+import AboutPage from './pages/AboutPage';
+import DashboardPage from './pages/DashboardPage';
 import AIChatBot from './components/AIChatBot';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
 
 const App: React.FC = () => {
   const [route, setRoute] = useState(window.location.hash || '#');
@@ -17,14 +20,13 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const newRoute = window.location.hash || '#';
+      // Only transition if not just filtering within solutions
       const isSolutionsSubNav = routeRef.current.startsWith('#solutions') && newRoute.startsWith('#solutions');
 
       if (newRoute !== routeRef.current) {
         if (isSolutionsSubNav) {
-          // It's a filter change on the same page. No transition, just update the route.
           setRoute(newRoute);
         } else {
-          // It's a navigation to a different page. Do the fade transition.
           setIsTransitioning(true);
           setTimeout(() => {
             setRoute(newRoute);
@@ -33,13 +35,11 @@ const App: React.FC = () => {
           }, 300);
         }
       } else {
-        // If it's the same route, just ensure we're at the top.
         window.scrollTo(0, 0);
       }
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    // Initial call to set state and scroll position correctly.
     handleHashChange();
 
     return () => {
@@ -51,17 +51,35 @@ const App: React.FC = () => {
     if (route.startsWith('#solutions')) {
       return <SolutionsPage route={route} />;
     }
+    if (route === '#about') {
+        return <AboutPage />;
+    }
+    if (route === '#dashboard') {
+        // Dashboard has its own internal login state, so we just render it.
+        // It's a "private" page but handled client-side for this demo.
+        return <DashboardPage />;
+    }
     return <HomePage />;
   };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-300 antialiased selection:bg-yellow-500 selection:text-black">
-      <Header />
+      {/* Hide Header/Footer on Dashboard for a focused view, or keep them. Keeping them for consistency but maybe simpler. */}
+      {route !== '#dashboard' && <Header />}
+      
       <main className={`transition-opacity duration-300 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         {renderPage()}
       </main>
-      <Footer />
-      <AIChatBot />
+      
+      {route !== '#dashboard' && <Footer />}
+      
+      {/* Chatbot and WhatsApp persist unless on dashboard */}
+      {route !== '#dashboard' && (
+        <>
+            <FloatingWhatsApp />
+            <AIChatBot />
+        </>
+      )}
     </div>
   );
 };
