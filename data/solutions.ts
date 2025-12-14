@@ -19,7 +19,7 @@ export interface Solution {
     features: string[];
     imageUrl: string;
     imageAlt: string;
-    gallery?: string[]; // New optional property for image gallery
+    gallery?: string[];
 }
 
 export const solutions: Solution[] = [
@@ -30,13 +30,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Bomba Mezcladora de Concreto',
         icon: AutomationIcon,
-        description: 'La bomba mezcladora de hormigón DASWELL es una máquina innovadora que combina mezcla y bombeo en una sola unidad, optimizando tiempos y reduciendo la necesidad de múltiples equipos en obra.',
+        description: 'La bomba mezcladora de hormigón DASWELL es una máquina innovadora que combina mezcla y bombeo en una sola unidad, optimizando tiempos y reduciendo la necesidad de múltiples equipos en obra. Ideal para edificación vertical y túneles pequeños.',
         shortDescription: 'Mezcla y bombeo integrado. Eficiencia 2 en 1.',
         features: [
-            'Capacidad de bombeo: 30-45 m³/h',
-            'Potencia: Motor Diésel / Eléctrico',
-            'Distancia de bombeo vertical: 120m',
-            'Sistema hidráulico de alta presión'
+            'Capacidad de bombeo: 30 - 40 m³/h',
+            'Presión de salida: 8 - 10 MPa',
+            'Motor: Diésel 48kW / Eléctrico 45kW',
+            'Alcance: 120m Vertical / 300m Horizontal'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Bomba mezcladora de concreto DASWELL',
@@ -47,13 +47,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Mezclador Autocargable',
         icon: CubeTransparentIcon,
-        description: 'Una planta de hormigón sobre ruedas. Carga, mezcla, transporta y descarga automáticamente. Ideal para proyectos en zonas remotas o de difícil acceso.',
-        shortDescription: 'Planta móvil 4x4 con autocarga.',
+        description: 'Una planta de hormigón sobre ruedas. Carga, mezcla, transporta y descarga automáticamente. Su sistema de tracción 4x4 permite operar en terrenos difíciles donde los camiones mixer convencionales no acceden.',
+        shortDescription: 'Planta móvil 4x4 con autocarga y rotación.',
         features: [
-            'Capacidad de mezcla: 0.6 - 4.5 m³/lote',
-            'Capacidad de salida: 1.2 - 6.5 m³',
-            'Tracción 4x4 todo terreno',
-            'Cabina giratoria y control intuitivo'
+            'Capacidad del tambor: 1.6 - 4.0 m³',
+            'Potencia motor: 55 - 92 kW Turbo',
+            'Tanque de agua: 2 x 300 Litros',
+            'Rotación descarga: 270 grados'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1632759145351-1d592919f522?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Mezclador autocargable DASWELL',
@@ -64,13 +64,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Bomba de Remolque de Hormigón',
         icon: VisualizationIcon,
-        description: 'Equipo robusto para el transporte de concreto líquido a través de tuberías. Esencial para edificios de gran altura o túneles donde el acceso directo es imposible.',
-        shortDescription: 'Bombeo estacionario de alto rendimiento.',
+        description: 'Equipo robusto para el transporte de concreto líquido a través de tuberías a largas distancias. Componentes hidráulicos de marcas líderes mundiales (Kawasaki, Rexroth) para garantizar fiabilidad continua.',
+        shortDescription: 'Bombeo estacionario de alta presión.',
         features: [
-            'Rendimiento máx: 30 - 90 m³/h',
-            'Presión de salida: 10 - 22 MPa',
-            'Motor: Diésel de alta potencia',
-            'Fácil mantenimiento y limpieza'
+            'Rendimiento teórico: 40 - 90 m³/h',
+            'Presión máx: 10 - 22 MPa',
+            'Diámetro tubería: 125 mm',
+            'Motor: Cummins / Deutz Diésel'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2969&auto=format&fit=crop',
         imageAlt: 'Bomba de remolque DASWELL',
@@ -81,13 +81,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Planta de Hormigón Seco',
         icon: TraceabilityIcon,
-        description: 'Sistema de dosificación de precisión que carga los materiales secos directamente en el camión mixer. La mezcla con agua ocurre durante el transporte, garantizando frescura.',
+        description: 'Sistema de dosificación de precisión que carga los materiales secos directamente en el camión mixer. La mezcla con agua ocurre durante el transporte, lo que permite distancias de entrega más largas.',
         shortDescription: 'Dosificación eficiente sin agua en planta.',
         features: [
-            'Rendimiento: 30 - 90 m³/h',
-            'Alta precisión en pesaje',
-            'Menor consumo energético',
-            'Instalación rápida modular'
+            'Productividad: 60 - 120 m³/h',
+            'Sistema de control: PLC Automático',
+            'Pesaje: Alta precisión electrónica',
+            'Instalación: Modular rápida'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1660566365851-75468205f20a?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Planta de hormigón seco DASWELL',
@@ -100,13 +100,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Retroexcavadora',
         icon: AnalysisIcon,
-        description: 'La versatilidad definitiva. Combina cargadora frontal y brazo excavador trasero. Perfecta para servicios públicos, agricultura y construcción general.',
+        description: 'La versatilidad definitiva. Combina cargadora frontal y brazo excavador trasero. Perfecta para servicios públicos, agricultura y construcción general. Cabina ROPS/FOPS para máxima seguridad.',
         shortDescription: 'Excavación y carga en una sola máquina.',
         features: [
-            'Cucharon de carga: 1 m³',
-            'Peso operativo: 8200 kg',
-            'Potencia nominal: 75 kW',
-            'Profundidad de excavación: 4000+ mm'
+            'Cucharon carga: 1.0 m³',
+            'Cucharon excavador: 0.3 m³',
+            'Profundidad excavación: 4085 mm',
+            'Potencia: 70 kW (95 HP)'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Retroexcavadora DASWELL',
@@ -123,13 +123,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Pala Cargadora',
         icon: ServerStackIcon,
-        description: 'Diseñada para mover grandes volúmenes de tierra, grava y minerales. Su chasis articulado y potente sistema hidráulico garantizan ciclos de trabajo rápidos.',
+        description: 'Diseñada para mover grandes volúmenes de tierra, grava y minerales. Su chasis articulado y potente sistema hidráulico garantizan ciclos de trabajo rápidos y bajo consumo de combustible.',
         shortDescription: 'Movimiento de tierras masivo y eficiente.',
         features: [
-            'Capacidad del cubo: 0.3 - 3 m³',
-            'Altura de descarga: 2000 - 3430 mm',
-            'Fuerza de arranque superior',
-            'Cabina panorámica climatizada'
+            'Carga nominal: 3000 - 5000 kg',
+            'Cucharón: 1.8 - 3.0 m³',
+            'Altura descarga: 3100 mm',
+            'Motor: 6 Cilindros Turbo'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1579567761406-4684ee0c75b6?q=80&w=2787&auto=format&fit=crop',
         imageAlt: 'Pala cargadora DASWELL',
@@ -140,13 +140,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Excavadora de Orugas',
         icon: AutomationIcon,
-        description: 'Potencia pura sobre orugas. Estabilidad inigualable para excavaciones profundas, demoliciones y minería a cielo abierto.',
+        description: 'Potencia pura sobre orugas. Estabilidad inigualable para excavaciones profundas, demoliciones y minería a cielo abierto. Motor Tier 3 de baja emisión y alto torque.',
         shortDescription: 'Máxima fuerza de excavación sobre orugas.',
         features: [
-            'Cubo estándar: 0.04 - 3.2 m³ (Roca)',
-            'Fuerza excavación: 15.2 - 287 KN',
-            'Motor Turbo Diésel Eficiente',
-            'Sistema hidráulico avanzado'
+            'Peso operativo: 21.5 - 33 Toneladas',
+            'Cucharón: 0.9 - 1.6 m³',
+            'Alcance excavación: 9900 mm',
+            'Hidráulica: Kawasaki / Rexroth'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Excavadora de orugas DASWELL',
@@ -157,13 +157,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Cargadora Compacta',
         icon: CubeTransparentIcon,
-        description: 'El "Minicargador" por excelencia. Gira sobre su propio eje, ideal para espacios confinados. Compatible con múltiples aditamentos.',
+        description: 'El "Minicargador" por excelencia. Gira sobre su propio eje, ideal para espacios confinados. Compatible con barredoras, martillos hidráulicos y horquillas.',
         shortDescription: 'Agilidad y potencia en espacios reducidos.',
         features: [
-            'Potencia motor: 18.2 - 103 KW',
-            'Capacidad cubo: 0.16 - 0.55 m³',
-            'Dirección deslizante',
-            'Sistema de acople rápido'
+            'Carga operativa: 750 - 1100 kg',
+            'Flujo hidráulico: 62 - 80 L/min',
+            'Potencia: 37 - 55 kW',
+            'Velocidad máx: 12 km/h'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1555675409-7d4323e07d0f?q=80&w=2680&auto=format&fit=crop',
         imageAlt: 'Cargadora compacta DASWELL',
@@ -174,13 +174,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Carretilla Elevadora Todo Terreno',
         icon: VisualizationIcon,
-        description: 'Levante carga donde otros no llegan. Tracción 4x4, gran despeje del suelo y neumáticos de alta flotación para obras en construcción.',
+        description: 'Levante carga donde otros no llegan. Tracción 4x4, gran despeje del suelo y neumáticos de alta flotación. Mástil reforzado para operar con seguridad en pendientes.',
         shortDescription: 'Elevación de carga 4x4 para terrenos difíciles.',
         features: [
-            'Carga nominal: 3500 - 7000 KG',
-            'Potencia motor: 36.8 - 103 KW',
-            'Ángulo de salida > 30 grados',
-            'Mástil reforzado de alta visibilidad'
+            'Carga nominal: 3.5 - 5.0 Toneladas',
+            'Altura elevación: 3.0 - 6.0 metros',
+            'Tracción: 4WD con bloqueo',
+            'Motor: Diésel 45 - 60 kW'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1587582345426-bf07f534b063?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Carretilla elevadora DASWELL',
@@ -191,13 +191,13 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Planta Dosificadora Móvil',
         icon: TraceabilityIcon,
-        description: 'Producción de concreto in-situ con total movilidad. Diseño compacto que facilita el transporte y la instalación rápida en diferentes frentes de obra.',
+        description: 'Producción de concreto in-situ con total movilidad. Diseño compacto que facilita el transporte y la instalación rápida sin necesidad de cimientos complejos.',
         shortDescription: 'Planta de concreto portátil de alta capacidad.',
         features: [
-            'Capacidad: 25 - 100 m³/h',
-            'Potencia total: 40 - 135 KW',
-            'Diseño modular remolcable',
-            'Sistema de control automático'
+            'Capacidad: 25 - 60 m³/h',
+            'Mezcladora: Doble Eje JS Series',
+            'Movilidad: Chasis remolcable integrado',
+            'Altura descarga: 3.8 metros'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1590088998492-c4193557e491?q=80&w=2807&auto=format&fit=crop',
         imageAlt: 'Planta dosificadora móvil DASWELL',
@@ -208,16 +208,17 @@ export const solutions: Solution[] = [
         brand: 'DASWELL',
         name: 'Planta Dosificadora Estacionaria',
         icon: ServerStackIcon,
-        description: 'Instalación industrial para producción masiva de concreto. Alto grado de mecanización y automatización para proyectos de infraestructura mayor.',
-        shortDescription: 'Producción masiva de concreto industrial.',
+        description: 'Instalación industrial para producción masiva de concreto premezclado. NOTA: Las especificaciones detalladas y las imágenes completas estarán disponibles próximamente, ya que se trata de una unidad industrial de alta capacidad configurada a medida.',
+        shortDescription: 'Producción masiva. (Imagen referencial - Configuración pendiente).',
         features: [
-            'Capacidad: 25 - 240 m³/h',
-            'Alta precisión de pesaje',
-            'Mezclador de doble eje horizontal',
-            'Configuración flexible de silos'
+            'Producción: Consultar Ingeniería',
+            'Mezcladora: Serie JS Industrial',
+            'Configuración: 100% Personalizable',
+            'Disponibilidad: Bajo Pedido'
         ],
-        imageUrl: 'https://images.unsplash.com/photo-1626388480376-784af2d148e6?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Planta dosificadora estacionaria DASWELL',
+        // Using a placeholder/abstract industrial image
+        imageUrl: 'https://images.unsplash.com/photo-1485628390555-173ee0992837?q=80&w=2890&auto=format&fit=crop',
+        imageAlt: 'Planta dosificadora estacionaria DASWELL (Referencial)',
     },
 
     // --- ACEROS (SteelPro Brand) ---
@@ -239,3 +240,39 @@ export const solutions: Solution[] = [
         imageAlt: 'Aceros industriales SteelPro',
     },
 ];
+
+export const categoryMetaData = {
+    construction: {
+        title: "Maquinaria de Construcción",
+        subtitle: "Tecnología de Concreto y Bombeo de Alto Rendimiento",
+        heroImage: "https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=2897&auto=format&fit=crop",
+        description: "Equipos diseñados para optimizar el flujo de trabajo en obra, garantizando mezclas homogéneas y bombeo continuo en las condiciones más exigentes.",
+        stats: [
+            { label: "Eficiencia Operativa", value: "+35%" },
+            { label: "Alcance Vertical", value: "120m+" },
+            { label: "Soporte Técnico", value: "24/7" },
+        ]
+    },
+    engineering: {
+        title: "Maquinaria de Ingeniería",
+        subtitle: "Poder de Excavación y Movimiento de Tierras",
+        heroImage: "https://images.unsplash.com/photo-1610427956424-6eb905953041?q=80&w=2874&auto=format&fit=crop",
+        description: "Soluciones de maquinaria pesada para minería, infraestructura y construcción civil. Potencia bruta combinada con precisión hidráulica.",
+        stats: [
+            { label: "Capacidad de Carga", value: "50 Ton" },
+            { label: "Torque Motor", value: "Max" },
+            { label: "Disponibilidad", value: "98%" },
+        ]
+    },
+    steel: {
+        title: "Aceros Industriales",
+        subtitle: "Certificación y Aleaciones de Grado Aeroespacial",
+        heroImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop",
+        description: "Suministro de materiales críticos para la manufactura avanzada. Trazabilidad completa y cortes a medida para su línea de producción.",
+        stats: [
+            { label: "Grados de Acero", value: "20+" },
+            { label: "Certificación", value: "ISO" },
+            { label: "Entrega", value: "Express" },
+        ]
+    }
+};
