@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { LanguageProvider } from './context/LanguageContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -9,7 +10,7 @@ import CalculatorPage from './pages/CalculatorPage';
 import AIChatBot from './components/AIChatBot';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [route, setRoute] = useState(window.location.hash || '#');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const routeRef = useRef(route);
@@ -85,6 +86,14 @@ const App: React.FC = () => {
         </>
       )}
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 };
 

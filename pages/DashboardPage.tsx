@@ -39,7 +39,10 @@ const DashboardPage: React.FC = () => {
             <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
                 <div className="w-full max-w-md p-8 bg-zinc-900 border border-white/5 rounded-sm shadow-2xl">
                     <div className="text-center mb-8">
-                        <h1 className="text-2xl font-black text-white uppercase italic mb-2">STEEL<span className="text-yellow-500">PRO</span></h1>
+                        <h1 className="text-2xl font-black text-white uppercase italic mb-2 flex items-center justify-center gap-1">
+                            <span className="material-symbols-outlined text-yellow-500">construction</span>
+                            STEEL<span className="text-yellow-500">PRO</span>
+                        </h1>
                         <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Acceso Corporativo</p>
                     </div>
                     <form onSubmit={handleLogin} className="space-y-6">
@@ -117,9 +120,9 @@ const DashboardPage: React.FC = () => {
                         <div className="space-y-4">
                             {[
                                 { label: 'Contactados', count: 120, w: '100%', c: 'bg-zinc-700' },
-                                { label: 'Interesados', count: 85, w: '75%', c: 'bg-blue-500/50' },
-                                { label: 'Cotización', count: 45, w: '50%', c: 'bg-yellow-500/50' },
-                                { label: 'Negociación', count: 18, w: '30%', c: 'bg-orange-500/50' },
+                                { label: 'Interesados', count: 85, w: '75%', c: 'bg-yellow-500/50' },
+                                { label: 'Cotización', count: 45, w: '50%', c: 'bg-orange-500/50' },
+                                { label: 'Negociación', count: 18, w: '30%', c: 'bg-red-500/50' },
                                 { label: 'Cerrados', count: 8, w: '15%', c: 'bg-green-500/50' },
                             ].map((stage, i) => (
                                 <div key={i} className="relative group">

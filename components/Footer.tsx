@@ -28,9 +28,12 @@ const Footer: React.FC = () => {
             <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
                 <div className="xl:grid xl:grid-cols-3 xl:gap-8">
                     <div className="space-y-8">
-                        <a href="#" className="text-3xl font-black tracking-tighter text-white uppercase italic">STEEL<span className="text-yellow-500">PRO</span></a>
+                        <a href="#" className="text-3xl font-black tracking-tighter text-white uppercase italic flex items-center gap-1">
+                             <span className="material-symbols-outlined text-yellow-500 text-3xl">construction</span>
+                             STEEL<span className="text-yellow-500">PRO</span>
+                        </a>
                         <p className="text-sm leading-6 text-zinc-400 max-w-xs">
-                            Servicios Industriales Globales.
+                            Potenciando la industria con maquinaria de clase mundial y aceros certificados.
                         </p>
                         <address className="not-italic text-sm text-zinc-500">
                             <p>C. Morera 312</p>
@@ -75,7 +78,7 @@ const Footer: React.FC = () => {
                         <div className="md:grid md:grid-cols-1 md:gap-8">
                             <div>
                                <h3 className="text-sm font-bold leading-6 text-white uppercase tracking-wider">Newsletter</h3>
-                               <p className="mt-2 text-sm text-zinc-400">Suscríbete para recibir noticias de maquinaria y acero.</p>
+                               <p className="mt-2 text-sm text-zinc-400">Suscríbete para recibir noticias de stock y ofertas.</p>
                                <form className="mt-6 sm:flex sm:max-w-md">
                                  <label htmlFor="email-address" className="sr-only">Email</label>
                                  <input type="email" name="email-address" id="email-address" autoComplete="email" required className="w-full min-w-0 appearance-none rounded-none border-0 bg-white/5 px-3 py-1.5 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-zinc-600 focus:ring-2 focus:ring-inset focus:ring-yellow-500 sm:w-64 sm:text-sm sm:leading-6 xl:w-full" placeholder="EMAIL CORPORATIVO" />
@@ -89,7 +92,7 @@ const Footer: React.FC = () => {
                 </div>
                 <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
                     <div className="sm:flex sm:items-center sm:justify-between">
-                        <p className="text-xs leading-5 text-zinc-500">&copy; {new Date().getFullYear()} STEELPRO Servicios Industriales Globales. Todos los derechos reservados.</p>
+                        <p className="text-xs leading-5 text-zinc-500">&copy; {new Date().getFullYear()} STEELPRO. Todos los derechos reservados.</p>
                         <div className="flex space-x-4 mt-4 sm:mt-0">
                             {navigation.legal.map((item) => (
                                 <a key={item.name} href={item.href} className="text-xs leading-5 text-zinc-500 hover:text-white transition-colors">

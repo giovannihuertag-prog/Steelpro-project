@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FacebookIcon, InstagramIcon, WhatsAppIcon, CalculatorIcon } from './Icons';
-
-// Sub-menu for Machinery
-const machineryLinks = [
-    { name: 'Construcción', href: '#solutions/construction', description: 'Bombas y mezcladoras DASWELL.' },
-    { name: 'Ingeniería', href: '#solutions/engineering', description: 'Excavación y carga pesada.' },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMachineryOpen, setIsMachineryOpen] = useState(false);
   const machineryRef = useRef<HTMLDivElement>(null);
+  const { t, language, setLanguage } = useLanguage();
+
+  const machineryLinks = [
+      { name: t('nav.construction'), href: '#solutions/construction', description: 'Bombas y mezcladoras DASWELL.' },
+      { name: t('nav.engineering'), href: '#solutions/engineering', description: 'Excavación y carga pesada.' },
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -24,19 +25,30 @@ const Header: React.FC = () => {
     };
   }, [machineryRef]);
 
+  const toggleLanguage = () => {
+    setLanguage(language === 'es' ? 'en' : 'es');
+  };
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-zinc-950/95 backdrop-blur-md border-b border-white/5">
+    <header className="fixed inset-x-0 top-0 z-50 bg-zinc-950/90 backdrop-blur-lg border-b border-white/5">
       <nav className="flex items-center justify-between p-4 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
         
         {/* Logo */}
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5 text-2xl font-black tracking-tighter text-white uppercase italic">
+          <a href="#" className="-m-1.5 p-1.5 text-2xl font-black tracking-tighter text-white uppercase italic flex items-center gap-1">
+            <span className="material-symbols-outlined text-yellow-500 text-3xl">construction</span>
             STEEL<span className="text-yellow-500">PRO</span>
           </a>
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="flex lg:hidden">
+        <div className="flex lg:hidden gap-4 items-center">
+          <button 
+             onClick={toggleLanguage}
+             className="text-xs font-bold uppercase text-white border border-white/20 px-2 py-1 rounded-sm hover:bg-white/10"
+          >
+             {language === 'es' ? 'EN' : 'ES'}
+          </button>
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-zinc-300"
@@ -51,16 +63,16 @@ const Header: React.FC = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex lg:gap-x-8 items-center">
-          <a href="#" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Inicio</a>
-          <a href="#solutions" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Soluciones</a>
+          <a href="#" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.home')}</a>
+          <a href="#solutions" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.solutions')}</a>
           
           {/* Machinery Dropdown */}
           <div className="relative" ref={machineryRef}>
             <button
               onClick={() => setIsMachineryOpen(!isMachineryOpen)}
-              className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide focus:outline-none"
+              className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide focus:outline-none transition-colors"
             >
-              Maquinaria
+              {t('nav.machinery')}
               <svg className={`h-4 w-4 transition-transform ${isMachineryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
@@ -73,7 +85,7 @@ const Header: React.FC = () => {
                     key={item.name}
                     href={item.href}
                     onClick={() => setIsMachineryOpen(false)}
-                    className="block rounded-sm px-4 py-3 text-sm font-semibold text-white hover:bg-white/5 hover:text-yellow-500 transition-colors"
+                    className="block rounded-sm px-4 py-3 text-sm font-semibold text-white hover:bg-white/5 hover:text-yellow-400 transition-colors"
                   >
                     <div className="uppercase">{item.name}</div>
                     <div className="text-xs text-zinc-500 font-normal normal-case mt-0.5">{item.description}</div>
@@ -83,20 +95,29 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          <a href="#solutions/steel-tech" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Aceros Industriales</a>
-          <a href="#about" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide">Aliados</a>
-          <a href="#calculator" className="text-sm font-semibold leading-6 text-yellow-500 hover:text-white uppercase tracking-wide flex items-center gap-1">
-             <CalculatorIcon className="h-4 w-4" /> Calculadora
+          <a href="#solutions/steel-tech" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.steel')}</a>
+          <a href="#about" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white uppercase tracking-wide transition-colors">{t('nav.about')}</a>
+          <a href="#calculator" className="text-sm font-semibold leading-6 text-yellow-500 hover:text-white uppercase tracking-wide flex items-center gap-1 transition-colors">
+             <CalculatorIcon className="h-4 w-4" /> {t('nav.calculator')}
           </a>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button & Language Switcher */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center lg:gap-4">
+           {/* Language Switcher */}
+           <button 
+             onClick={toggleLanguage}
+             className="text-xs font-bold uppercase text-zinc-400 hover:text-white border border-white/10 px-3 py-1.5 rounded-sm transition-colors flex items-center gap-1"
+          >
+             <span className="material-symbols-outlined text-[16px]">language</span>
+             {language === 'es' ? 'English' : 'Español'}
+          </button>
+
           <a href="https://wa.me/524428192172" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-[#25D366] transition-colors" aria-label="WhatsApp">
             <WhatsAppIcon className="h-6 w-6" />
           </a>
           <a href="#contact" className="text-sm font-bold leading-6 text-black bg-yellow-500 hover:bg-yellow-400 px-6 py-2.5 transition-all uppercase tracking-wider skew-x-[-10deg]">
-            <span className="block skew-x-[10deg]">Cotiza Ahora</span>
+            <span className="block skew-x-[10deg]">{t('nav.quote')}</span>
           </a>
         </div>
       </nav>
@@ -106,8 +127,9 @@ const Header: React.FC = () => {
           <div className={`fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
           <div className={`fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-zinc-950 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10 transition-transform ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5 text-2xl font-black italic text-white uppercase">
-                STEEL<span className="text-yellow-500">PRO</span>
+              <a href="#" className="-m-1.5 p-1.5 text-2xl font-black italic text-white uppercase flex items-center gap-1">
+                 <span className="material-symbols-outlined text-yellow-500">construction</span>
+                 STEEL<span className="text-yellow-500">PRO</span>
               </a>
               <button
                 type="button"
@@ -123,11 +145,11 @@ const Header: React.FC = () => {
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-white/10">
                 <div className="space-y-2 py-6">
-                  <a href="#" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Inicio</a>
-                  <a href="#solutions" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Soluciones</a>
+                  <a href="#" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.home')}</a>
+                  <a href="#solutions" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.solutions')}</a>
                   
                   <div className="py-2">
-                    <p className="px-3 text-xs font-bold text-yellow-500 uppercase tracking-widest mb-2">Maquinaria</p>
+                    <p className="px-3 text-xs font-bold text-yellow-500 uppercase tracking-widest mb-2">{t('nav.machinery')}</p>
                     {machineryLinks.map((item) => (
                          <a key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-zinc-300 hover:text-white pl-6 uppercase">
                             {item.name}
@@ -135,10 +157,10 @@ const Header: React.FC = () => {
                     ))}
                   </div>
 
-                  <a href="#solutions/steel-tech" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Aceros Industriales</a>
-                  <a href="#calculator" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-yellow-500 hover:bg-white/5 uppercase">Calculadora Industrial</a>
-                  <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Aliados</a>
-                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">Ayuda / Contacto</a>
+                  <a href="#solutions/steel-tech" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.steel')}</a>
+                  <a href="#calculator" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-bold leading-7 text-yellow-500 hover:bg-white/5 uppercase">{t('nav.calculator')}</a>
+                  <a href="#about" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.about')}</a>
+                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="-mx-3 block px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5 uppercase">{t('nav.contact')}</a>
                 </div>
                 
                 {/* Mobile Social & CTA */}
@@ -154,7 +176,7 @@ const Header: React.FC = () => {
                           <WhatsAppIcon className="h-6 w-6" />
                       </a>
                   </div>
-                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-yellow-500 px-3 py-2.5 text-base font-bold text-black uppercase hover:bg-yellow-400">Cotiza Ahora</a>
+                  <a href="#contact" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-yellow-500 px-3 py-2.5 text-base font-bold text-black uppercase hover:bg-yellow-400">{t('nav.quote')}</a>
                 </div>
               </div>
             </div>
