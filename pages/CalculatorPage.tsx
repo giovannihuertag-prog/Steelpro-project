@@ -140,18 +140,26 @@ const CalculatorPage: React.FC = () => {
         
         // 3. Validate Dimensions
         let isValidDims = true;
-        if (!dimensions.length || dimensions.length <= 0) isValidDims = false;
-        if (!dimensions.dim1 || dimensions.dim1 <= 0) isValidDims = false;
         
         // Specific checks
         if (shape === 'hollow') {
             // ID must be > 0 and < OD
-            if (!dimensions.dim2 || dimensions.dim2 <= 0 || dimensions.dim2 >= dimensions.dim1) isValidDims = false;
+            if (dimensions.dim2 >= dimensions.dim1) {
+                setFormError(language === 'es' ? '⚠️ Error de Geometría: El diámetro interior (ID) debe ser menor al exterior (OD).' : '⚠️ Geometry Error: Inner diameter (ID) must be less than outer diameter (OD).');
+                return;
+            }
+            if (!dimensions.dim2 || dimensions.dim2 <= 0) isValidDims = false;
+        } else {
+            // For other shapes, ensure main dimensions are positive
+             if (!dimensions.dim1 || dimensions.dim1 <= 0) isValidDims = false;
         }
+
         if (shape === 'plate') {
             // Width must be > 0
             if (!dimensions.dim2 || dimensions.dim2 <= 0) isValidDims = false;
         }
+
+        if (!dimensions.length || dimensions.length <= 0) isValidDims = false;
 
         if (!isValidDims) {
             setFormError(language === 'es' ? '⚠️ Verifique las dimensiones (valores positivos requeridos).' : '⚠️ Check dimensions (positive values required).');
@@ -237,18 +245,21 @@ const CalculatorPage: React.FC = () => {
         const unitSection = isImperial ? 'pulg (in)' : 'mm';
         const unitLength = isImperial ? 'pies (ft)' : 'mm'; 
 
+        const inputClass = "w-full bg-black border border-white/10 p-2 text-white focus:border-yellow-500 outline-none transition-colors";
+        const labelClass = "block text-xs uppercase text-zinc-500 mb-2 font-bold";
+
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 animate-fade-in mt-8 p-6 bg-zinc-900 border border-white/5 rounded-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 animate-fade-in mt-8 p-6 bg-zinc-900 border border-white/5 rounded-sm">
                 {shape === 'solid_round' && (
                     <>
                         <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.diameter')} ({unitSection})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.diameter')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
+                            <input type="number" className={inputClass} 
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div className="sm:col-span-2">
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.length')} ({unitLength})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
+                            <input type="number" className={inputClass} 
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -256,13 +267,13 @@ const CalculatorPage: React.FC = () => {
                 {shape === 'solid_square' && (
                     <>
                         <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.side')} ({unitSection})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.side')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
+                            <input type="number" className={inputClass} 
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div className="sm:col-span-2">
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.length')} ({unitLength})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
+                            <input type="number" className={inputClass} 
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -270,18 +281,41 @@ const CalculatorPage: React.FC = () => {
                 {shape === 'hollow' && (
                     <>
                         <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.outer_diam')} ({unitSection})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>
+                                {t('calc.outer_diam')} <span className="text-yellow-500 font-black">OD</span> <span className="text-zinc-600 font-normal">({unitSection})</span>
+                            </label>
+                            <input type="number" className={inputClass} placeholder="0.00"
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.inner_diam')} ({unitSection})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
-                                value={dimensions.dim2 || ''} onChange={e => {setDimensions({...dimensions, dim2: parseFloat(e.target.value)}); setFormError('');}} />
+                            <label className={labelClass}>
+                                {t('calc.inner_diam')} <span className="text-yellow-500 font-black">ID</span> <span className="text-zinc-600 font-normal">({unitSection})</span>
+                            </label>
+                            <div className="relative">
+                                <input type="number" placeholder="0.00"
+                                    className={`w-full bg-black border p-2 text-white outline-none transition-colors ${
+                                        dimensions.dim1 > 0 && dimensions.dim2 >= dimensions.dim1 
+                                        ? 'border-red-500 focus:border-red-500 text-red-100' 
+                                        : 'border-white/10 focus:border-yellow-500'
+                                    }`}
+                                    value={dimensions.dim2 || ''} 
+                                    onChange={e => {setDimensions({...dimensions, dim2: parseFloat(e.target.value)}); setFormError('');}} />
+                                
+                                {dimensions.dim1 > 0 && dimensions.dim2 >= dimensions.dim1 && (
+                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                        <span className="text-red-500 font-bold">!</span>
+                                    </div>
+                                )}
+                            </div>
+                            {dimensions.dim1 > 0 && dimensions.dim2 >= dimensions.dim1 && (
+                                <p className="text-red-500 text-[10px] mt-1 font-medium animate-pulse">
+                                    {language === 'es' ? 'ID debe ser menor que OD' : 'ID must be less than OD'}
+                                </p>
+                            )}
                         </div>
                         <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.length')} ({unitLength})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
+                            <input type="number" className={inputClass} placeholder="0.00"
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -289,18 +323,18 @@ const CalculatorPage: React.FC = () => {
                 {shape === 'plate' && (
                     <>
                          <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.thickness')} ({unitSection})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.thickness')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
+                            <input type="number" className={inputClass} 
                                 value={dimensions.dim1 || ''} onChange={e => {setDimensions({...dimensions, dim1: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.width')} ({unitSection})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.width')} <span className="text-zinc-600 font-normal">({unitSection})</span></label>
+                            <input type="number" className={inputClass} 
                                 value={dimensions.dim2 || ''} onChange={e => {setDimensions({...dimensions, dim2: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                         <div>
-                            <label className="block text-xs uppercase text-zinc-500 mb-2">{t('calc.length')} ({unitLength})</label>
-                            <input type="number" className="w-full bg-black border border-white/10 p-2 text-white" 
+                            <label className={labelClass}>{t('calc.length')} <span className="text-zinc-600 font-normal">({unitLength})</span></label>
+                            <input type="number" className={inputClass} 
                                 value={dimensions.length || ''} onChange={e => {setDimensions({...dimensions, length: parseFloat(e.target.value)}); setFormError('');}} />
                         </div>
                     </>
@@ -321,58 +355,70 @@ const CalculatorPage: React.FC = () => {
         );
         
         const maxVal = Math.max(...history.map(h => h.weight));
-        // Avoid division by zero
-        const safeMax = maxVal > 0 ? maxVal : 1;
+        // Default to 10 if 0 to avoid division by zero
+        const safeMax = maxVal > 0 ? maxVal : 10;
         
         return (
             <div className="mt-12 bg-zinc-900 border border-white/5 p-6 rounded-sm animate-fade-in">
                 <div className="flex justify-between items-center mb-6">
                      <h4 className="text-sm font-bold text-white uppercase flex items-center gap-2">
                         <ChartBarIcon className="h-5 w-5 text-yellow-500" />
-                        {language === 'es' ? 'Historial Reciente' : 'Recent History'}
+                        {language === 'es' ? 'Tendencia de Peso' : 'Weight Trend'}
                     </h4>
                     <button 
                         onClick={clearHistory}
                         className="text-[10px] text-zinc-500 hover:text-red-500 uppercase font-bold transition-colors"
                     >
-                        {language === 'es' ? 'Borrar' : 'Clear'}
+                        {language === 'es' ? 'Borrar Historial' : 'Clear History'}
                     </button>
                 </div>
                
-                <div className="relative h-48 mt-4">
+                <div className="relative h-48 mt-4 pl-8 border-l border-white/10 border-b border-white/10">
+                    {/* Y-Axis Labels */}
+                    <div className="absolute left-0 top-0 -translate-x-full pr-2 h-full flex flex-col justify-between text-[9px] text-zinc-500 font-mono py-1">
+                        <span>{safeMax.toFixed(0)}</span>
+                        <span>{(safeMax / 2).toFixed(0)}</span>
+                        <span>0</span>
+                    </div>
+
                     {/* Grid Lines */}
-                    <div className="absolute inset-0 flex flex-col justify-between text-zinc-600 text-[9px] font-mono pointer-events-none">
-                        <div className="border-b border-white/5 w-full flex items-end pb-1">{safeMax.toFixed(1)}</div>
-                        <div className="border-b border-white/5 w-full flex items-end pb-1">{(safeMax / 2).toFixed(1)}</div>
-                        <div className="border-b border-white/5 w-full flex items-end pb-1">0</div>
+                    <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                        <div className="border-t border-dashed border-white/5 w-full h-0"></div>
+                        <div className="border-t border-dashed border-white/5 w-full h-0"></div>
+                        <div className="border-t border-dashed border-white/5 w-full h-0"></div>
                     </div>
 
                     {/* Bars Container */}
-                    <div className="absolute inset-0 flex items-end justify-between gap-2 pl-8 pt-2">
-                         {history.map((item) => (
-                            <div key={item.id} className="w-full flex flex-col items-center gap-2 group relative h-full justify-end">
-                                {/* Bar */}
-                                <div 
-                                    style={{ height: `${(item.weight / safeMax) * 100}%` }} 
-                                    className={`w-full max-w-[40px] rounded-t-sm transition-all duration-700 relative group-hover:opacity-80 ${
-                                        item.id === history[history.length - 1].id 
-                                        ? 'bg-gradient-to-t from-yellow-600 to-yellow-400' 
-                                        : 'bg-zinc-700'
-                                    }`}
-                                >
-                                    {/* Tooltip */}
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black border border-white/10 px-2 py-1 rounded text-[10px] whitespace-nowrap z-20 pointer-events-none">
-                                        <span className="text-yellow-500 font-bold">{item.weight.toFixed(2)} {item.unit}</span>
-                                        <div className="text-zinc-400 text-[9px]">{item.material}</div>
+                    <div className="absolute inset-0 flex items-end justify-around gap-2 px-2 pb-0">
+                         {history.map((item, index) => {
+                            const isLast = index === history.length - 1;
+                            const heightPct = Math.min((item.weight / safeMax) * 100, 100);
+                            
+                            return (
+                                <div key={item.id} className="w-full flex flex-col items-center gap-2 group relative h-full justify-end">
+                                    {/* Bar */}
+                                    <div 
+                                        style={{ height: `${heightPct}%` }} 
+                                        className={`w-full max-w-[30px] sm:max-w-[40px] rounded-t-sm transition-all duration-700 relative group-hover:opacity-80 ${
+                                            isLast 
+                                            ? 'bg-yellow-500' 
+                                            : 'bg-zinc-700 hover:bg-zinc-600'
+                                        }`}
+                                    >
+                                        {/* Tooltip */}
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black border border-white/10 px-2 py-1 rounded text-[10px] whitespace-nowrap z-20 pointer-events-none shadow-xl">
+                                            <span className="text-yellow-500 font-bold block">{item.weight.toFixed(2)} {item.unit}</span>
+                                            <span className="text-zinc-400 text-[9px] block">{item.material}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Date Label */}
+                                    <div className="text-[9px] text-zinc-500 w-full text-center truncate px-1">
+                                        {item.date}
                                     </div>
                                 </div>
-                                
-                                {/* Date Label */}
-                                <div className="text-[9px] text-zinc-500 truncate w-full text-center mt-1 border-t border-transparent group-hover:border-zinc-700 pt-1">
-                                    {item.date}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -516,8 +562,28 @@ const CalculatorPage: React.FC = () => {
                                     <button
                                         key={opt.id}
                                         onClick={() => { setMaterial(opt.id); setFormError(''); }}
-                                        className={`p-4 border ${material === opt.id ? 'border-yellow-500 opacity-100 ring-1 ring-yellow-500' : 'border-white/10 opacity-60 hover:opacity-100'} rounded-sm transition-all flex flex-col items-center gap-2 ${opt.class}`}
+                                        className={`group relative p-4 border ${material === opt.id ? 'border-yellow-500 opacity-100 ring-1 ring-yellow-500' : 'border-white/10 opacity-60 hover:opacity-100'} rounded-sm transition-all flex flex-col items-center gap-2 ${opt.class}`}
                                     >
+                                        {/* Tooltip */}
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max bg-zinc-900 border border-white/20 p-2 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                                            <p className="text-[10px] text-yellow-500 font-bold uppercase text-center mb-1 border-b border-white/10 pb-1">
+                                                {language === 'es' ? 'Densidad' : 'Density'}
+                                            </p>
+                                            <div className="flex gap-3 text-[9px] text-zinc-400">
+                                                <div className="text-center">
+                                                    <span className="block font-bold text-white text-xs">{DENSITIES_METRIC[opt.id]}</span>
+                                                    kg/m³
+                                                </div>
+                                                <div className="w-px bg-white/10"></div>
+                                                <div className="text-center">
+                                                    <span className="block font-bold text-white text-xs">{DENSITIES_IMPERIAL[opt.id]}</span>
+                                                    lbs/ft³
+                                                </div>
+                                            </div>
+                                            {/* Arrow */}
+                                            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-zinc-900"></div>
+                                        </div>
+
                                         <CubeTransparentIcon className="h-6 w-6 text-white" />
                                         <span className="text-sm font-bold text-white uppercase">{opt.name}</span>
                                     </button>
