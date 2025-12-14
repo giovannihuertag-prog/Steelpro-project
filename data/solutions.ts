@@ -5,7 +5,8 @@ import {
     TraceabilityIcon,
     VisualizationIcon,
     ServerStackIcon,
-    CubeTransparentIcon
+    CubeTransparentIcon,
+    ShieldCheckIcon
 } from '../components/Icons';
 
 export interface Solution {
@@ -23,256 +24,232 @@ export interface Solution {
 }
 
 export const solutions: Solution[] = [
-    // --- SECCIÓN A: MAQUINARIA PARA CONSTRUCCIÓN (Pages 7-11) ---
+    // --- SECCIÓN A: MAQUINARIA PARA CONSTRUCCIÓN ---
     {
         id: 'concrete-mixer-pump',
         category: 'construction',
         brand: 'DASWELL',
         name: 'Bomba Mezcladora de Concreto',
         icon: AutomationIcon,
-        description: 'La bomba mezcladora de hormigón DASWELL es una máquina innovadora que combina mezcla y bombeo en una sola unidad, optimizando tiempos y reduciendo la necesidad de múltiples equipos en obra. Ideal para edificación vertical y túneles pequeños.',
-        shortDescription: 'Mezcla y bombeo integrado. Eficiencia 2 en 1.',
+        description: 'Unidad híbrida que integra mezclado forzado de doble eje y bombeo de alta presión en un solo chasis monobloque. Diseñada específicamente para optimizar la logística en obras de edificación vertical y túneles de sección media, eliminando la necesidad de plantas externas.',
+        shortDescription: 'Sistema integrado de mezcla y bombeo vertical.',
         features: [
-            'Capacidad de bombeo: 30 - 40 m³/h',
-            'Presión de salida: 8 - 10 MPa',
-            'Motor: Diésel 48kW / Eléctrico 45kW',
-            'Alcance: 120m Vertical / 300m Horizontal'
+            'Capacidad de Bombeo: 30 - 40 m³/h',
+            'Presión de Salida: 10 MPa (Alta Presión)',
+            'Alcance: 120m Vertical / 300m Horizontal',
+            'Motorización: Diesel Cummins o Eléctrico 380V'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Bomba mezcladora de concreto DASWELL',
+        imageAlt: 'Bomba mezcladora de concreto en operación',
     },
     {
         id: 'self-loading-mixer',
         category: 'construction',
         brand: 'DASWELL',
-        name: 'Mezclador Autocargable',
+        name: 'Mezclador Autocargable 4x4',
         icon: CubeTransparentIcon,
-        description: 'Una planta de hormigón sobre ruedas. Carga, mezcla, transporta y descarga automáticamente. Su sistema de tracción 4x4 permite operar en terrenos difíciles donde los camiones mixer convencionales no acceden.',
-        shortDescription: 'Planta móvil 4x4 con autocarga y rotación.',
+        description: 'Planta de concreto móvil con tracción integral 4x4 y chasis articulado. Permite la carga de áridos, dosificación de cemento, mezcla y vertido en cualquier punto del terreno. Es la solución definitiva para proyectos de infraestructura vial remota o cimentaciones en terrenos agrestes.',
+        shortDescription: 'Planta móvil 4x4 con autonomía total.',
         features: [
-            'Capacidad del tambor: 1.6 - 4.0 m³',
-            'Potencia motor: 55 - 92 kW Turbo',
-            'Tanque de agua: 2 x 300 Litros',
-            'Rotación descarga: 270 grados'
+            'Producción por Batch: 1.6m³ - 4.0m³',
+            'Rotación de Tambor: 270° para descarga lateral',
+            'Tracción: 4WD con dirección tipo cangrejo',
+            'Sistema de Pesaje: Electrónico de alta precisión'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1632759145351-1d592919f522?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Mezclador autocargable DASWELL',
+        imageAlt: 'Mezclador autocargable en terreno difícil',
     },
     {
         id: 'trailer-pump',
         category: 'construction',
         brand: 'DASWELL',
-        name: 'Bomba de Remolque de Hormigón',
+        name: 'Bomba Estacionaria de Arrastre',
         icon: VisualizationIcon,
-        description: 'Equipo robusto para el transporte de concreto líquido a través de tuberías a largas distancias. Componentes hidráulicos de marcas líderes mundiales (Kawasaki, Rexroth) para garantizar fiabilidad continua.',
-        shortDescription: 'Bombeo estacionario de alta presión.',
+        description: 'Equipo de bombeo de alto caudal diseñado para operaciones continuas de larga distancia. Incorpora válvulas S-tube de aleación de manganeso y un sistema hidráulico de circuito abierto que garantiza una disipación térmica eficiente en climas extremos.',
+        shortDescription: 'Bombeo estacionario de largo alcance.',
         features: [
-            'Rendimiento teórico: 40 - 90 m³/h',
-            'Presión máx: 10 - 22 MPa',
-            'Diámetro tubería: 125 mm',
-            'Motor: Cummins / Deutz Diésel'
+            'Rendimiento Teórico: 40 - 90 m³/h',
+            'Distancia Máxima: 800m Horizontal / 200m Vertical',
+            'Motor: Diesel Deutz/Cummins o Eléctrico',
+            'Sistema Hidráulico: Kawasaki (Japón)'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2969&auto=format&fit=crop',
-        imageAlt: 'Bomba de remolque DASWELL',
+        imageAlt: 'Bomba de concreto estacionaria industrial',
     },
     {
         id: 'dry-concrete-plant',
         category: 'construction',
         brand: 'DASWELL',
-        name: 'Planta de Hormigón Seco',
+        name: 'Planta Dosificadora Seca',
         icon: TraceabilityIcon,
-        description: 'Sistema de dosificación de precisión que carga los materiales secos directamente en el camión mixer. La mezcla con agua ocurre durante el transporte, lo que permite distancias de entrega más largas.',
-        shortDescription: 'Dosificación eficiente sin agua en planta.',
+        description: 'Sistema modular de dosificación de agregados y cemento sin mezcladora central. La mezcla húmeda se realiza en el camión mixer durante el tránsito, lo que la hace ideal para proyectos que requieren distancias de transporte medias y alta velocidad de despacho.',
+        shortDescription: 'Dosificación rápida para carga de camiones mixer.',
         features: [
-            'Productividad: 60 - 120 m³/h',
-            'Sistema de control: PLC Automático',
-            'Pesaje: Alta precisión electrónica',
-            'Instalación: Modular rápida'
+            'Capacidad: 60 - 120 m³/h',
+            'Instalación: Diseño modular de rápido despliegue',
+            'Control: Sistema SCADA totalmente automático',
+            'Precisión: Celdas de carga IP67'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1660566365851-75468205f20a?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Planta de hormigón seco DASWELL',
+        imageAlt: 'Planta de concreto tipo seca',
     },
 
-    // --- SECCIÓN B: MAQUINARIA DE INGENIERÍA (Pages 12-20) ---
+    // --- SECCIÓN B: MAQUINARIA DE INGENIERÍA ---
     {
-        id: 'backhoe',
+        id: 'crawler-excavator',
         category: 'engineering',
         brand: 'DASWELL',
-        name: 'Retroexcavadora',
+        name: 'Excavadora de Orugas Serie E',
         icon: AnalysisIcon,
-        description: 'La versatilidad definitiva. Combina cargadora frontal y brazo excavador trasero. Perfecta para servicios públicos, agricultura y construcción general. Cabina ROPS/FOPS para máxima seguridad.',
-        shortDescription: 'Excavación y carga en una sola máquina.',
+        description: 'Máquina de alto tonelaje diseñada para minería a cielo abierto y excavación masiva. Equipada con motores Isuzu de bajo consumo y un brazo reforzado con acero de alta tensión para soportar ciclos de trabajo severos en roca dura.',
+        shortDescription: 'Excavación pesada y minería.',
         features: [
-            'Cucharon carga: 1.0 m³',
-            'Cucharon excavador: 0.3 m³',
-            'Profundidad excavación: 4085 mm',
-            'Potencia: 70 kW (95 HP)'
+            'Peso Operativo: 22T - 36T',
+            'Capacidad de Cucharón: 1.0 - 1.8 m³',
+            'Profundidad de Excavación: 6.5 - 7.5 m',
+            'Cabina: ROPS/FOPS con climatización'
         ],
-        imageUrl: 'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Retroexcavadora DASWELL',
-        gallery: [
-            'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop', // Main
-            'https://images.unsplash.com/photo-1616406432452-9226602aa36f?q=80&w=2940&auto=format&fit=crop', // Digging action
-            'https://images.unsplash.com/photo-1657094770337-b4528f9d6c17?q=80&w=2940&auto=format&fit=crop', // Side profile
-            'https://images.unsplash.com/photo-1627838528935-7c152d192070?q=80&w=2940&auto=format&fit=crop'  // Front view / Detail
-        ]
+        imageUrl: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Excavadora de orugas en operación minera',
     },
     {
         id: 'wheel-loader',
         category: 'engineering',
         brand: 'DASWELL',
-        name: 'Pala Cargadora',
+        name: 'Cargador Frontal Articulado',
         icon: ServerStackIcon,
-        description: 'Diseñada para mover grandes volúmenes de tierra, grava y minerales. Su chasis articulado y potente sistema hidráulico garantizan ciclos de trabajo rápidos y bajo consumo de combustible.',
-        shortDescription: 'Movimiento de tierras masivo y eficiente.',
+        description: 'Cargador sobre neumáticos con cinemática en Z para máxima fuerza de arranque. Ideal para plantas de agregados y movimiento de tierras. Su transmisión Powershift asegura ciclos de carga y descarga fluidos y rápidos.',
+        shortDescription: 'Carga eficiente de áridos y graneles.',
         features: [
-            'Carga nominal: 3000 - 5000 kg',
-            'Cucharón: 1.8 - 3.0 m³',
-            'Altura descarga: 3100 mm',
-            'Motor: 6 Cilindros Turbo'
+            'Carga Nominal: 3000kg - 6000kg',
+            'Capacidad de Cuchara: 1.8 - 4.5 m³',
+            'Altura de Descarga: > 3100 mm',
+            'Motor: Weichai / Cummins Tier 3'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1579567761406-4684ee0c75b6?q=80&w=2787&auto=format&fit=crop',
-        imageAlt: 'Pala cargadora DASWELL',
+        imageAlt: 'Cargador frontal articulado',
     },
     {
-        id: 'crawler-excavator',
+        id: 'backhoe-loader',
         category: 'engineering',
         brand: 'DASWELL',
-        name: 'Excavadora de Orugas',
-        icon: AutomationIcon,
-        description: 'Potencia pura sobre orugas. Estabilidad inigualable para excavaciones profundas, demoliciones y minería a cielo abierto. Motor Tier 3 de baja emisión y alto torque.',
-        shortDescription: 'Máxima fuerza de excavación sobre orugas.',
-        features: [
-            'Peso operativo: 21.5 - 33 Toneladas',
-            'Cucharón: 0.9 - 1.6 m³',
-            'Alcance excavación: 9900 mm',
-            'Hidráulica: Kawasaki / Rexroth'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Excavadora de orugas DASWELL',
-    },
-    {
-        id: 'skid-steer',
-        category: 'engineering',
-        brand: 'DASWELL',
-        name: 'Cargadora Compacta',
+        name: 'Retroexcavadora 4x4',
         icon: CubeTransparentIcon,
-        description: 'El "Minicargador" por excelencia. Gira sobre su propio eje, ideal para espacios confinados. Compatible con barredoras, martillos hidráulicos y horquillas.',
-        shortDescription: 'Agilidad y potencia en espacios reducidos.',
+        description: 'La máquina más versátil para infraestructura urbana y servicios públicos. Combina la capacidad de carga frontal con la precisión de excavación trasera. Estabilizadores hidráulicos verticales para operación en espacios confinados.',
+        shortDescription: 'Versatilidad urbana: Carga y excavación.',
         features: [
-            'Carga operativa: 750 - 1100 kg',
-            'Flujo hidráulico: 62 - 80 L/min',
-            'Potencia: 37 - 55 kW',
-            'Velocidad máx: 12 km/h'
+            'Potencia: 70kW (95 HP) Turbo',
+            'Tracción: 4WD conectable',
+            'Cuchara Frontal: 1.0 m³ (4 en 1 opcional)',
+            'Profundidad Excavación: 4.4 m'
         ],
-        imageUrl: 'https://images.unsplash.com/photo-1555675409-7d4323e07d0f?q=80&w=2680&auto=format&fit=crop',
-        imageAlt: 'Cargadora compacta DASWELL',
+        imageUrl: 'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Retroexcavadora en obra civil',
     },
     {
-        id: 'rough-terrain-forklift',
+        id: 'mobile-crushing-plant',
         category: 'engineering',
         brand: 'DASWELL',
-        name: 'Carretilla Elevadora Todo Terreno',
-        icon: VisualizationIcon,
-        description: 'Levante carga donde otros no llegan. Tracción 4x4, gran despeje del suelo y neumáticos de alta flotación. Mástil reforzado para operar con seguridad en pendientes.',
-        shortDescription: 'Elevación de carga 4x4 para terrenos difíciles.',
-        features: [
-            'Carga nominal: 3.5 - 5.0 Toneladas',
-            'Altura elevación: 3.0 - 6.0 metros',
-            'Tracción: 4WD con bloqueo',
-            'Motor: Diésel 45 - 60 kW'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1587582345426-bf07f534b063?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Carretilla elevadora DASWELL',
-    },
-    {
-        id: 'mobile-batching-plant',
-        category: 'engineering',
-        brand: 'DASWELL',
-        name: 'Planta Dosificadora Móvil',
-        icon: TraceabilityIcon,
-        description: 'Producción de concreto in-situ con total movilidad. Diseño compacto que facilita el transporte y la instalación rápida sin necesidad de cimientos complejos.',
-        shortDescription: 'Planta de concreto portátil de alta capacidad.',
-        features: [
-            'Capacidad: 25 - 60 m³/h',
-            'Mezcladora: Doble Eje JS Series',
-            'Movilidad: Chasis remolcable integrado',
-            'Altura descarga: 3.8 metros'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1590088998492-c4193557e491?q=80&w=2807&auto=format&fit=crop',
-        imageAlt: 'Planta dosificadora móvil DASWELL',
-    },
-    {
-        id: 'stationary-batching-plant',
-        category: 'engineering',
-        brand: 'DASWELL',
-        name: 'Planta Dosificadora Estacionaria',
+        name: 'Planta de Trituración Móvil',
         icon: ServerStackIcon,
-        description: 'Instalación industrial para producción masiva de concreto premezclado. NOTA: Las especificaciones detalladas y las imágenes completas estarán disponibles próximamente, ya que se trata de una unidad industrial de alta capacidad configurada a medida.',
-        shortDescription: 'Producción masiva. (Imagen referencial - Configuración pendiente).',
+        description: 'Unidad autónoma de trituración y cribado montada sobre orugas o neumáticos. Permite procesar material in-situ, reduciendo costos de transporte en canteras y proyectos de demolición. Configurable con trituradora de mandíbula o cono.',
+        shortDescription: 'Trituración y cribado portátil.',
         features: [
-            'Producción: Consultar Ingeniería',
-            'Mezcladora: Serie JS Industrial',
-            'Configuración: 100% Personalizable',
-            'Disponibilidad: Bajo Pedido'
+            'Capacidad: 80 - 450 TPH',
+            'Configuración: Primaria / Secundaria',
+            'Alimentación: Tolva vibratoria integrada',
+            'Movilidad: Chasis reforzado de transporte'
         ],
-        // Using a placeholder/abstract industrial image
-        imageUrl: 'https://images.unsplash.com/photo-1485628390555-173ee0992837?q=80&w=2890&auto=format&fit=crop',
-        imageAlt: 'Planta dosificadora estacionaria DASWELL (Referencial)',
+        imageUrl: 'https://images.unsplash.com/photo-1599933451563-71452df1575a?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Planta de trituración móvil',
     },
 
-    // --- ACEROS (SteelPro Brand) ---
+    // --- SECCIÓN C: ACEROS INDUSTRIALES (NUEVA ESTRUCTURA) ---
     {
-        id: 'steel-tech',
+        id: 'wear-resistant-steel',
         category: 'steel',
         brand: 'STEELPRO',
-        name: 'Aceros de Grado Industrial',
-        icon: TraceabilityIcon,
-        description: 'División especializada en aceros de alta resistencia y aleaciones para manufactura. Suministro confiable para la industria metalmecánica.',
-        shortDescription: 'Aleaciones especiales y aceros certificados.',
+        name: 'Aceros Anti-Desgaste (AR)',
+        icon: ShieldCheckIcon,
+        description: 'Placas de acero de alta dureza (400 - 600 HBW) diseñadas para resistir la abrasión severa y el impacto en maquinaria minera. Material esencial para el revestimiento de tolvas, cucharones de excavadoras y chutes de transferencia.',
+        shortDescription: 'Placas AR400/AR500 para blindaje de maquinaria.',
         features: [
-            'Acero Grado Maquinaria (1045T, 4140T)',
-            'Aceros Inoxidables (303, 304, 316L)',
-            'Aluminio Aeroespacial (6061 - 7075)',
-            'Bronces, Cobre y Latón'
+            'Dureza: 400 HBW / 500 HBW',
+            'Espesores: 6mm a 100mm',
+            'Aplicación: Revestimiento de Cucharones',
+            'Servicio: Corte y dimensionado CNC'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?q=80&w=2836&auto=format&fit=crop',
-        imageAlt: 'Aceros industriales SteelPro',
+        imageAlt: 'Placas de acero anti-desgaste',
+    },
+    {
+        id: 'grinding-media',
+        category: 'steel',
+        brand: 'STEELPRO',
+        name: 'Bolas de Molienda',
+        icon: CubeTransparentIcon,
+        description: 'Medios de molienda forjados y fundidos de alto cromo para molinos SAG y de bolas. Optimizados para maximizar la eficiencia de conminución y reducir el consumo por tonelada de mineral procesado en plantas concentradoras.',
+        shortDescription: 'Insumos críticos para molienda minera.',
+        features: [
+            'Diámetros: 1" a 6"',
+            'Dureza Volumétrica: 60 - 65 HRC',
+            'Material: Acero Aleado Alto Carbono',
+            'Garantía: Tasa de rotura < 1%'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1615818451845-93c6ae1636c7?q=80&w=2750&auto=format&fit=crop', // Abstract metallic spheres
+        imageAlt: 'Bolas de acero para molinos mineros',
+    },
+    {
+        id: 'structural-steel',
+        category: 'steel',
+        brand: 'STEELPRO',
+        name: 'Perfiles Estructurales',
+        icon: ServerStackIcon,
+        description: 'Vigas IPR, IPS y perfiles tubulares de grado estructural para la construcción de naves industriales y soporte de maquinaria pesada. Acero certificado bajo normas ASTM para garantizar la integridad sísmica y de carga.',
+        shortDescription: 'Vigas y perfiles para infraestructura.',
+        features: [
+            'Normas: ASTM A992 / A572-50',
+            'Perfiles: IPR, IPS, HSS',
+            'Largo: Stock en 6m y 12m',
+            'Certificación: Calidad metalúrgica (Mill Test)'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Estructuras de acero industrial',
     },
 ];
 
 export const categoryMetaData = {
     construction: {
-        title: "Maquinaria de Construcción",
-        subtitle: "Tecnología de Concreto y Bombeo de Alto Rendimiento",
+        title: "División Concreto",
+        subtitle: "Tecnología de Bombeo y Mezclado",
         heroImage: "https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=2897&auto=format&fit=crop",
-        description: "Equipos diseñados para optimizar el flujo de trabajo en obra, garantizando mezclas homogéneas y bombeo continuo en las condiciones más exigentes.",
+        description: "Soluciones de ingeniería para la producción y colocación de concreto. Desde bombas estáticas de ultra-alta presión hasta plantas móviles todo terreno, nuestros equipos están diseñados para maximizar el uptime en obra.",
         stats: [
-            { label: "Eficiencia Operativa", value: "+35%" },
-            { label: "Alcance Vertical", value: "120m+" },
-            { label: "Soporte Técnico", value: "24/7" },
+            { label: "Presión Máxima", value: "22 MPa" },
+            { label: "Alcance Vertical", value: "200m+" },
+            { label: "Disponibilidad", value: "Inmediata" },
         ]
     },
     engineering: {
-        title: "Maquinaria de Ingeniería",
-        subtitle: "Poder de Excavación y Movimiento de Tierras",
+        title: "Maquinaria Pesada",
+        subtitle: "Movimiento de Tierras y Minería",
         heroImage: "https://images.unsplash.com/photo-1610427956424-6eb905953041?q=80&w=2874&auto=format&fit=crop",
-        description: "Soluciones de maquinaria pesada para minería, infraestructura y construcción civil. Potencia bruta combinada con precisión hidráulica.",
+        description: "Flota de alto rendimiento para los entornos más exigentes. Nuestras excavadoras y cargadores combinan hidráulica japonesa de precisión con estructuras reforzadas para soportar ciclos de trabajo 24/7.",
         stats: [
-            { label: "Capacidad de Carga", value: "50 Ton" },
-            { label: "Torque Motor", value: "Max" },
-            { label: "Disponibilidad", value: "98%" },
+            { label: "Capacidad Cuchara", value: "6.0 m³" },
+            { label: "Peso Operativo", value: "50 Ton" },
+            { label: "Motores", value: "Tier 3/4" },
         ]
     },
     steel: {
-        title: "Aceros Industriales",
-        subtitle: "Certificación y Aleaciones de Grado Aeroespacial",
-        heroImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop",
-        description: "Suministro de materiales críticos para la manufactura avanzada. Trazabilidad completa y cortes a medida para su línea de producción.",
+        title: "Aceros Técnicos",
+        subtitle: "Suministro Industrial Certificado",
+        heroImage: "https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop", // Industrial Steel Mill
+        description: "El eslabón crítico en su cadena de mantenimiento y construcción. Proveemos aceros anti-desgaste para blindaje de equipos y estructuras certificadas para grandes claros industriales.",
         stats: [
-            { label: "Grados de Acero", value: "20+" },
-            { label: "Certificación", value: "ISO" },
-            { label: "Entrega", value: "Express" },
+            { label: "Dureza Máx", value: "600 HBW" },
+            { label: "Stock", value: "+5000 Ton" },
+            { label: "Corte", value: "Plasma/Oxi" },
         ]
     }
 };
