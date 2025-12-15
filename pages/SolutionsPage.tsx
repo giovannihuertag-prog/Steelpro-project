@@ -4,6 +4,64 @@ import { CheckIcon, XIcon, AnalysisIcon, CubeTransparentIcon, ShareIcon } from '
 import ContactForm from '../components/ContactForm';
 import Product3DViewer from '../components/Product3DViewer';
 
+// --- UTILS ---
+const shuffleArray = (array: Solution[]) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+};
+
+// --- COMPONENTS ---
+
+const RecommendationCard: React.FC<{ solution: Solution; onSelect: (s: Solution) => void }> = ({ solution, onSelect }) => (
+    <div 
+        onClick={() => onSelect(solution)}
+        className="group relative bg-zinc-900 border border-white/5 rounded-sm overflow-hidden hover:border-yellow-500/50 transition-all cursor-pointer flex flex-row xl:flex-col gap-3 p-3 xl:p-0"
+    >
+        <div className="relative w-24 h-24 xl:w-full xl:h-32 shrink-0 overflow-hidden bg-black">
+             <img 
+                src={solution.imageUrl} 
+                alt={solution.name} 
+                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
+            />
+            <div className="absolute top-0 left-0 bg-yellow-500 text-black text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-widest">
+                {solution.categoryLabel || solution.category}
+            </div>
+        </div>
+        <div className="flex flex-col justify-center xl:p-3 xl:pt-0">
+            <h5 className="text-xs font-bold text-white uppercase leading-tight group-hover:text-yellow-500 transition-colors line-clamp-2">
+                {solution.name}
+            </h5>
+            <p className="text-[10px] text-zinc-500 mt-1 line-clamp-2 hidden xl:block">
+                {solution.shortDescription}
+            </p>
+            <button className="mt-2 text-[9px] font-bold uppercase text-yellow-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0">
+                Ver Ficha <span className="material-symbols-outlined text-[10px]">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+);
+
+const RecommendationColumn: React.FC<{ title: string; items: Solution[]; onSelect: (s: Solution) => void }> = ({ title, items, onSelect }) => {
+    if (items.length === 0) return null;
+    return (
+        <div className="flex flex-col gap-4 animate-fade-in">
+             <div className="flex items-center gap-2 mb-2 border-b border-white/10 pb-2">
+                <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse"></span>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{title}</h4>
+             </div>
+             <div className="flex flex-col gap-3">
+                 {items.map(item => (
+                     <RecommendationCard key={item.id} solution={item} onSelect={onSelect} />
+                 ))}
+             </div>
+        </div>
+    );
+};
+
 // Dynamically generate filter categories from data
 const getFilterCategories = () => {
     const uniqueCategories = Array.from(new Set(solutions.map(s => s.category)));
@@ -27,16 +85,16 @@ const SolutionSection: React.FC<SectionProps> = ({ title, description, items, on
     if (items.length === 0) return null;
 
     return (
-        <div id={id} className={`py-12 ${showDivider ? 'border-b border-white/5' : ''} last:border-0`}>
-            <div className="mb-10">
-                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tighter border-l-4 border-yellow-500 pl-4">
+        <div id={id} className={`py-8 ${showDivider ? 'border-b border-white/5' : ''} last:border-0`}>
+            <div className="mb-6">
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter border-l-4 border-yellow-500 pl-4">
                     {title}
                 </h3>
-                <p className="mt-2 text-zinc-400 pl-5">{description}</p>
+                <p className="mt-1 text-sm text-zinc-400 pl-5">{description}</p>
             </div>
             
-            {/* Grid Layout Updated to 4 cols on XL */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+            {/* Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                 {items.map((solution) => (
                     <div 
                         key={solution.id} 
@@ -44,7 +102,7 @@ const SolutionSection: React.FC<SectionProps> = ({ title, description, items, on
                         onClick={() => onSelect(solution)}
                     >
                         {/* Image Container */}
-                        <div className="relative h-48 overflow-hidden bg-black">
+                        <div className="relative h-40 overflow-hidden bg-black">
                             <img 
                                 src={solution.imageUrl} 
                                 alt={solution.imageAlt} 
@@ -62,17 +120,17 @@ const SolutionSection: React.FC<SectionProps> = ({ title, description, items, on
                         </div>
 
                         {/* Content Container */}
-                        <div className="p-5 flex flex-col flex-grow">
+                        <div className="p-4 flex flex-col flex-grow">
                             <h4 className="text-sm font-bold text-white uppercase leading-tight mb-2 group-hover:text-yellow-500 transition-colors">
                                 {solution.name}
                             </h4>
-                            <p className="text-xs text-zinc-400 line-clamp-3 mb-4 flex-grow">
+                            <p className="text-xs text-zinc-400 line-clamp-2 mb-3 flex-grow">
                                 {solution.shortDescription}
                             </p>
                             
-                            <div className="space-y-1 mb-4 border-t border-white/5 pt-3">
+                            <div className="space-y-1 mb-3 border-t border-white/5 pt-2">
                                 {solution.features.slice(0, 2).map((feature, i) => (
-                                    <div key={i} className="flex items-center text-[10px] text-zinc-500">
+                                    <div key={i} className="flex items-center text-[9px] text-zinc-500">
                                         <span className="w-1 h-1 bg-yellow-500 rounded-full mr-2 flex-shrink-0"></span>
                                         <span className="truncate">{feature}</span>
                                     </div>
@@ -109,7 +167,7 @@ const SegmentPreview: React.FC<{ items: Solution[] }> = ({ items }) => {
     if (items.length === 0) return null;
 
     return (
-        <div className="grid grid-cols-3 gap-1 h-32 md:h-48 mb-12 opacity-60 hover:opacity-100 transition-opacity duration-500">
+        <div className="grid grid-cols-3 gap-1 h-32 md:h-48 mb-8 opacity-60 hover:opacity-100 transition-opacity duration-500">
             {previewImages.map((item, idx) => (
                 <div key={idx} className="relative overflow-hidden group bg-black">
                     <img 
@@ -147,11 +205,37 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
     const [viewMode, setViewMode] = useState<'image' | '3d'>('image');
     const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
-    // Filter solutions dynamically
+    // Filter solutions dynamically (Main Content)
     const currentSolutions = useMemo(() => {
         if (activeFilter === 'all') return solutions;
         return solutions.filter(s => s.category === activeFilter);
     }, [activeFilter]);
+
+    // INTELLIGENT RECOMMENDATION ENGINE
+    const { leftRecommendations, rightRecommendations } = useMemo(() => {
+        // 1. Exclude items currently visible in the main view (Rule: No duplicates)
+        const visibleIds = new Set(currentSolutions.map(s => s.id));
+        const availableForRecs = solutions.filter(s => !visibleIds.has(s.id));
+
+        // 2. Prioritize items. Random shuffle for "discovery" feel + category variety
+        const shuffled = shuffleArray(availableForRecs);
+
+        // 3. Split into Left and Right columns (approx 3-4 items each)
+        const left = shuffled.slice(0, 4);
+        const right = shuffled.slice(4, 8);
+
+        return { leftRecommendations: left, rightRecommendations: right };
+    }, [currentSolutions]);
+
+    // RELATED PRODUCTS FOR MODAL
+    const relatedProducts = useMemo(() => {
+        if (!selectedSolution) return [];
+        // Show items from same category first, then others
+        return solutions
+            .filter(s => s.id !== selectedSolution.id && s.category === selectedSolution.category)
+            .slice(0, 3); // Top 3 related
+    }, [selectedSolution]);
+
 
     useEffect(() => {
         if (selectedSolution) {
@@ -278,44 +362,69 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                 </div>
             </div>
 
-            {/* Solutions Content */}
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 min-h-[500px] py-12">
-                {isLoading ? (
-                    <div className="flex justify-center items-center h-64">
-                        <div className="w-12 h-12 border-4 border-yellow-500 border-solid border-t-transparent animate-spin" role="status">
-                            <span className="sr-only">Cargando...</span>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="animate-fade-in">
-                        
-                        {/* Dynamic Preview for Category View */}
-                        {isCategoryView && <SegmentPreview items={currentSolutions} />}
+            {/* MAIN CONTENT AREA - 3 COLUMN LAYOUT */}
+            <div className="mx-auto max-w-[1600px] px-4 lg:px-8 min-h-[500px] py-12">
+                <div className="flex flex-col xl:flex-row gap-8 relative items-start">
+                    
+                    {/* LEFT COLUMN: Recommendations */}
+                    <aside className="hidden xl:flex flex-col w-64 shrink-0 sticky top-40 h-fit max-h-[80vh] overflow-y-auto no-scrollbar pb-10">
+                        <RecommendationColumn 
+                            title="Sugerencias" 
+                            items={leftRecommendations} 
+                            onSelect={setSelectedSolution} 
+                        />
+                    </aside>
 
-                        {/* If viewing ALL, group by category. If viewing ONE category, show just that list */}
-                        {activeFilter === 'all' ? (
-                            filterCategories.filter(c => c.id !== 'all').map(cat => (
-                                <SolutionSection
-                                    key={cat.id}
-                                    id={cat.id}
-                                    title={`Maquinaria: ${cat.name}`}
-                                    description={categoryMetaData[cat.id as keyof typeof categoryMetaData]?.subtitle || ''}
-                                    items={solutions.filter(s => s.category === cat.id)}
-                                    onSelect={setSelectedSolution}
-                                />
-                            ))
+                    {/* CENTER COLUMN: Main Content */}
+                    <main className="flex-1 w-full min-w-0">
+                        {isLoading ? (
+                            <div className="flex justify-center items-center h-64">
+                                <div className="w-12 h-12 border-4 border-yellow-500 border-solid border-t-transparent animate-spin" role="status">
+                                    <span className="sr-only">Cargando...</span>
+                                </div>
+                            </div>
                         ) : (
-                            <SolutionSection 
-                                id={activeFilter}
-                                title="Equipos Disponibles" 
-                                description={`Listado completo de equipos para ${categoryMetaData[activeFilter as keyof typeof categoryMetaData]?.title}`}
-                                items={currentSolutions} 
-                                onSelect={setSelectedSolution}
-                                showDivider={false}
-                            />
+                            <div className="animate-fade-in">
+                                
+                                {/* Dynamic Preview for Category View */}
+                                {isCategoryView && <SegmentPreview items={currentSolutions} />}
+
+                                {/* If viewing ALL, group by category. If viewing ONE category, show just that list */}
+                                {activeFilter === 'all' ? (
+                                    filterCategories.filter(c => c.id !== 'all').map(cat => (
+                                        <SolutionSection
+                                            key={cat.id}
+                                            id={cat.id}
+                                            title={`Maquinaria: ${cat.name}`}
+                                            description={categoryMetaData[cat.id as keyof typeof categoryMetaData]?.subtitle || ''}
+                                            items={solutions.filter(s => s.category === cat.id)}
+                                            onSelect={setSelectedSolution}
+                                        />
+                                    ))
+                                ) : (
+                                    <SolutionSection 
+                                        id={activeFilter}
+                                        title="Equipos Disponibles" 
+                                        description={`Listado completo de equipos para ${categoryMetaData[activeFilter as keyof typeof categoryMetaData]?.title}`}
+                                        items={currentSolutions} 
+                                        onSelect={setSelectedSolution}
+                                        showDivider={false}
+                                    />
+                                )}
+                            </div>
                         )}
-                    </div>
-                )}
+                    </main>
+
+                    {/* RIGHT COLUMN: Recommendations */}
+                    <aside className="hidden xl:flex flex-col w-64 shrink-0 sticky top-40 h-fit max-h-[80vh] overflow-y-auto no-scrollbar pb-10">
+                        <RecommendationColumn 
+                            title="Tendencias" 
+                            items={rightRecommendations} 
+                            onSelect={setSelectedSolution} 
+                        />
+                    </aside>
+
+                </div>
             </div>
 
             {/* Contact Section */}
@@ -412,7 +521,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                         </div>
 
                         {/* Modal Content - LIGHT THEME */}
-                        <div className="md:w-7/12 p-8 md:p-12 flex flex-col overflow-y-auto bg-white text-zinc-900">
+                        <div className="md:w-7/12 p-8 md:p-12 flex flex-col overflow-y-auto bg-white text-zinc-900 scroll-smooth">
                             <div className="flex items-start justify-between gap-x-4 mb-2">
                                 <div className="inline-flex items-center gap-2 mb-2">
                                     <span className={`h-2 w-2 rounded-full ${selectedSolution.status === 'disponible' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></span>
@@ -483,6 +592,33 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                                     )}
                                 </div>
                             </div>
+                            
+                            {/* RELATED PRODUCTS SECTION (Intelligent Recommendation for Product Page) */}
+                            {relatedProducts.length > 0 && (
+                                <div className="mb-8 border-t border-zinc-200 pt-8">
+                                    <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-yellow-500">recommend</span>
+                                        Productos Relacionados
+                                    </h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        {relatedProducts.map(rel => (
+                                            <div 
+                                                key={rel.id} 
+                                                onClick={() => setSelectedSolution(rel)}
+                                                className="group cursor-pointer border border-zinc-200 hover:border-yellow-500 transition-colors rounded-sm overflow-hidden"
+                                            >
+                                                <div className="h-24 bg-zinc-100 overflow-hidden relative">
+                                                    <img src={rel.imageUrl} alt={rel.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                </div>
+                                                <div className="p-3">
+                                                    <h5 className="text-xs font-bold text-zinc-900 uppercase truncate mb-1">{rel.name}</h5>
+                                                    <p className="text-[9px] text-zinc-500 uppercase tracking-wider">{rel.categoryLabel}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="mt-auto flex flex-col sm:flex-row justify-end gap-4 border-t border-zinc-200 pt-6">
                                 <button
