@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
                                     {navigation.social.map((item) => (
                                         <li key={item.name}>
                                             <a href={item.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm leading-6 text-zinc-400 hover:text-yellow-500 transition-colors">
-                                                <item.icon className="h-5 w-5" aria-hidden="true" />
+                                                <item.icon className="h-5 w-5" aria-hidden={true} />
                                                 {item.name}
                                             </a>
                                         </li>

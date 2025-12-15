@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { LanguageProvider } from './context/LanguageContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -10,8 +9,8 @@ import CalculatorPage from './pages/CalculatorPage';
 import AIChatBot from './components/AIChatBot';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
-const AppContent: React.FC = () => {
-  const [route, setRoute] = useState(window.location.hash || '#');
+const App: React.FC = () => {
+  const [route, setRoute] = useState(typeof window !== 'undefined' ? window.location.hash || '#' : '#');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const routeRef = useRef(route);
 
@@ -19,34 +18,24 @@ const AppContent: React.FC = () => {
     routeRef.current = route;
   }, [route]);
 
+  // Refactored navigation logic as requested
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleHashChange = () => {
       const newRoute = window.location.hash || '#';
-      // Only transition if not just filtering within solutions
-      const isSolutionsSubNav = routeRef.current.startsWith('#solutions') && newRoute.startsWith('#solutions');
 
       if (newRoute !== routeRef.current) {
-        if (isSolutionsSubNav) {
-          setRoute(newRoute);
-        } else {
-          setIsTransitioning(true);
-          setTimeout(() => {
-            setRoute(newRoute);
-            window.scrollTo(0, 0);
-            setTimeout(() => setIsTransitioning(false), 50); 
-          }, 500);
-        }
-      } else {
+        setRoute(newRoute);
         window.scrollTo(0, 0);
       }
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange();
+    handleHashChange(); // Initial check
 
-    return () => {
+    return () =>
       window.removeEventListener('hashchange', handleHashChange);
-    };
   }, []);
 
   const renderPage = () => {
@@ -60,16 +49,22 @@ const AppContent: React.FC = () => {
         return <CalculatorPage />;
     }
     if (route === '#dashboard') {
-        // Dashboard has its own internal login state, so we just render it.
-        // It's a "private" page but handled client-side for this demo.
+        // Dashboard has its own internal login state
         return <DashboardPage />;
     }
     return <HomePage />;
   };
 
+  // Trigger transition effect when route changes
+  useEffect(() => {
+     setIsTransitioning(true);
+     const timer = setTimeout(() => setIsTransitioning(false), 500);
+     return () => clearTimeout(timer);
+  }, [route]);
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-300 antialiased selection:bg-yellow-500 selection:text-black">
-      {/* Hide Header/Footer on Dashboard for a focused view, or keep them. Keeping them for consistency but maybe simpler. */}
+      {/* Hide Header/Footer on Dashboard for a focused view */}
       {route !== '#dashboard' && <Header />}
       
       <main 
@@ -92,14 +87,6 @@ const AppContent: React.FC = () => {
         </>
       )}
     </div>
-  );
-};
-
-const App: React.FC = () => {
-  return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
   );
 };
 

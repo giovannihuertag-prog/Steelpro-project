@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { solutions, Solution, categoryMetaData } from '../data/solutions';
-import { CheckIcon, XIcon, AnalysisIcon } from '../components/Icons';
+import { CheckIcon, XIcon, AnalysisIcon, CubeTransparentIcon } from '../components/Icons';
 import ContactForm from '../components/ContactForm';
+import Product3DViewer from '../components/Product3DViewer';
 
 const filterCategories = [
     { id: 'all', name: 'Catálogo Completo' },
@@ -115,6 +116,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
     const [selectedSolution, setSelectedSolution] = useState<Solution | null>(null);
     const [activeImage, setActiveImage] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
+    const [viewMode, setViewMode] = useState<'image' | '3d'>('image');
 
     // Group solutions by category
     const groupedSolutions = useMemo(() => {
@@ -130,6 +132,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
             document.body.style.overflow = 'hidden';
             // Reset the active image to the main one when opening modal
             setActiveImage(selectedSolution.imageUrl);
+            setViewMode('image'); // Reset to image view
         } else {
             document.body.style.overflow = 'auto';
         }
@@ -321,23 +324,52 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                         className="relative w-full max-w-6xl bg-zinc-900 rounded-sm shadow-2xl border border-yellow-500/30 max-h-[95vh] overflow-y-auto flex flex-col md:flex-row"
                         onClick={(e) => e.stopPropagation()} 
                     >
-                        {/* Modal Image Column */}
-                        <div className="md:w-5/12 bg-black flex flex-col">
-                            {/* Main Image */}
-                            <div className="relative h-64 md:h-[500px] w-full group">
-                                <img 
-                                    src={activeImage || selectedSolution.imageUrl} 
-                                    alt={selectedSolution.imageAlt} 
-                                    className="absolute inset-0 w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
-                                <div className="absolute top-4 left-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 uppercase tracking-widest z-10">
-                                    {selectedSolution.brand}
-                                </div>
+                        {/* Modal Image/3D Column */}
+                        <div className="md:w-5/12 bg-black flex flex-col relative group">
+                            
+                            {/* Toggle Switch */}
+                            <div className="absolute top-4 right-4 z-20 flex bg-zinc-900/90 backdrop-blur rounded-sm border border-white/10 p-1">
+                                <button
+                                    onClick={() => setViewMode('image')}
+                                    className={`px-3 py-1.5 text-[10px] font-bold uppercase transition-colors ${viewMode === 'image' ? 'bg-white text-black' : 'text-zinc-500 hover:text-white'}`}
+                                >
+                                    Fotos
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('3d')}
+                                    className={`px-3 py-1.5 text-[10px] font-bold uppercase transition-colors flex items-center gap-1 ${viewMode === '3d' ? 'bg-yellow-500 text-black' : 'text-zinc-500 hover:text-white'}`}
+                                >
+                                    <CubeTransparentIcon className="h-3 w-3" />
+                                    3D
+                                </button>
+                            </div>
+
+                            {/* Main Content Area (Image or 3D) */}
+                            <div className="relative h-64 md:h-[500px] w-full bg-zinc-950">
+                                {viewMode === 'image' ? (
+                                    <>
+                                        <img 
+                                            src={activeImage || selectedSolution.imageUrl} 
+                                            alt={selectedSolution.imageAlt} 
+                                            className="absolute inset-0 w-full h-full object-cover animate-fade-in"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 pointer-events-none"></div>
+                                        <div className="absolute top-4 left-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 uppercase tracking-widest z-10 pointer-events-none">
+                                            {selectedSolution.brand}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="w-full h-full animate-fade-in">
+                                         <Product3DViewer category={selectedSolution.category} />
+                                         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur px-3 py-1 rounded-full text-[10px] text-zinc-300 pointer-events-none border border-white/10">
+                                            Click y arrastre para rotar • Scroll para zoom
+                                         </div>
+                                    </div>
+                                )}
                             </div>
                             
-                            {/* Gallery Thumbnails (only if gallery exists) */}
-                            {selectedSolution.gallery && selectedSolution.gallery.length > 0 && (
+                            {/* Gallery Thumbnails (only if gallery exists AND in image mode) */}
+                            {viewMode === 'image' && selectedSolution.gallery && selectedSolution.gallery.length > 0 && (
                                 <div className="p-4 grid grid-cols-4 gap-2 bg-zinc-950/50 border-t border-white/5">
                                     {selectedSolution.gallery.map((imgUrl, index) => (
                                         <button
