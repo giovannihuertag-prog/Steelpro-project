@@ -394,8 +394,11 @@ const CalculatorPage: React.FC = () => {
         const labelUnitSection = isImperial ? 'IN' : 'MM';
         const labelUnitLength = isImperial ? 'FT' : 'MM';
 
-        const phSection = isImperial ? '0.00' : '0.00';
-        const phLength = isImperial ? '0.00' : '0.00';
+        const phSection = isImperial ? '0.00 in' : '0.00 mm';
+        const phLength = isImperial ? '0.00 ft' : '0.00 mm';
+        
+        const tipSection = isImperial ? '1 in ≈ 25.4 mm' : '10 mm = 1 cm';
+        const tipLength = isImperial ? '1 ft = 30.48 cm' : '1000 mm = 1 m';
 
         const baseInputClass = "w-full bg-black border p-2 pl-3 text-right text-white font-mono outline-none transition-all placeholder:text-zinc-700";
         
@@ -405,12 +408,33 @@ const CalculatorPage: React.FC = () => {
             return `${baseInputClass} border-white/10 focus:border-yellow-500`;
         };
         
-        const labelClass = "block text-[10px] uppercase text-zinc-500 mb-1 font-bold tracking-wider";
-        const primaryLabelClass = "block text-[10px] uppercase text-yellow-500 mb-1 font-bold flex items-center gap-1 tracking-wider";
+        const renderLabel = (text: string, icon: string | null, unit: string, tip: string, isPrimary: boolean = false) => (
+             <label className={`flex items-center justify-between text-[10px] uppercase mb-1 font-bold tracking-wider w-full ${isPrimary ? 'text-yellow-500' : 'text-zinc-500'}`}>
+                <div className="flex items-center gap-1">
+                    {icon && <span className="material-symbols-outlined text-[14px]">{icon}</span>}
+                    {text}
+                </div>
+                
+                <div className="flex items-center gap-1 group relative cursor-help">
+                    <span className="font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors">{unit}</span>
+                    <span className="material-symbols-outlined text-[12px] text-zinc-700 group-hover:text-yellow-500 transition-colors">help</span>
+                    
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                        <div className="bg-zinc-800 border border-white/10 text-white text-[9px] px-2 py-1.5 rounded shadow-xl whitespace-nowrap font-mono flex items-center gap-2">
+                             <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                            {tip}
+                        </div>
+                        {/* Arrow */}
+                        <div className="absolute top-full right-1.5 -mt-[1px] border-4 border-transparent border-t-zinc-800"></div>
+                    </div>
+                </div>
+             </label>
+        );
         
         const InputWrapper = ({ label, unit, children, error }: any) => (
              <div>
-                <div className="flex justify-between items-end mb-1">
+                <div className="mb-1">
                     {label}
                 </div>
                 <div className="relative group">
@@ -440,11 +464,19 @@ const CalculatorPage: React.FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
                         {shape === 'solid_round' && (
                             <>
-                                <InputWrapper label={<label className={primaryLabelClass}>{t('calc.diameter')}</label>} unit={labelUnitSection} error={fieldErrors.dim1}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.diameter'), 'circle', labelUnitSection, tipSection, true)} 
+                                    unit={labelUnitSection} 
+                                    error={fieldErrors.dim1}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.dim1, true)} placeholder={phSection}
                                         value={dimensions.dim1 || ''} onChange={e => updateDimension('dim1', e.target.value)} />
                                 </InputWrapper>
-                                <InputWrapper label={<label className={labelClass}>{t('calc.length')}</label>} unit={labelUnitLength} error={fieldErrors.length}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.length'), null, labelUnitLength, tipLength)} 
+                                    unit={labelUnitLength} 
+                                    error={fieldErrors.length}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.length)} placeholder={phLength}
                                         value={dimensions.length || ''} onChange={e => updateDimension('length', e.target.value)} />
                                 </InputWrapper>
@@ -452,11 +484,19 @@ const CalculatorPage: React.FC = () => {
                         )}
                         {shape === 'solid_square' && (
                              <>
-                                <InputWrapper label={<label className={primaryLabelClass}>{t('calc.side')}</label>} unit={labelUnitSection} error={fieldErrors.dim1}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.side'), 'square', labelUnitSection, tipSection, true)} 
+                                    unit={labelUnitSection} 
+                                    error={fieldErrors.dim1}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.dim1, true)} placeholder={phSection}
                                         value={dimensions.dim1 || ''} onChange={e => updateDimension('dim1', e.target.value)} />
                                 </InputWrapper>
-                                <InputWrapper label={<label className={labelClass}>{t('calc.length')}</label>} unit={labelUnitLength} error={fieldErrors.length}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.length'), null, labelUnitLength, tipLength)} 
+                                    unit={labelUnitLength} 
+                                    error={fieldErrors.length}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.length)} placeholder={phLength}
                                         value={dimensions.length || ''} onChange={e => updateDimension('length', e.target.value)} />
                                 </InputWrapper>
@@ -464,16 +504,28 @@ const CalculatorPage: React.FC = () => {
                         )}
                         {shape === 'hollow' && (
                             <>
-                                <InputWrapper label={<label className={primaryLabelClass}>{t('calc.outer_diam')}</label>} unit={labelUnitSection} error={fieldErrors.dim1}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.outer_diam'), 'radio_button_unchecked', labelUnitSection, tipSection, true)} 
+                                    unit={labelUnitSection} 
+                                    error={fieldErrors.dim1}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.dim1, true)} placeholder={phSection}
                                         value={dimensions.dim1 || ''} onChange={e => updateDimension('dim1', e.target.value)} />
                                 </InputWrapper>
-                                <InputWrapper label={<label className={labelClass}>{t('calc.inner_diam')}</label>} unit={labelUnitSection} error={fieldErrors.dim2}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.inner_diam'), null, labelUnitSection, tipSection)} 
+                                    unit={labelUnitSection} 
+                                    error={fieldErrors.dim2}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.dim2)} placeholder={phSection}
                                         value={dimensions.dim2 || ''} onChange={e => updateDimension('dim2', e.target.value)} />
                                 </InputWrapper>
                                 <div className="sm:col-span-2">
-                                     <InputWrapper label={<label className={labelClass}>{t('calc.length')}</label>} unit={labelUnitLength} error={fieldErrors.length}>
+                                     <InputWrapper 
+                                        label={renderLabel(t('calc.length'), null, labelUnitLength, tipLength)} 
+                                        unit={labelUnitLength} 
+                                        error={fieldErrors.length}
+                                    >
                                         <input type="number" className={getInputClass(!!fieldErrors.length)} placeholder={phLength}
                                             value={dimensions.length || ''} onChange={e => updateDimension('length', e.target.value)} />
                                     </InputWrapper>
@@ -482,16 +534,28 @@ const CalculatorPage: React.FC = () => {
                         )}
                         {shape === 'plate' && (
                              <>
-                                <InputWrapper label={<label className={primaryLabelClass}>{t('calc.thickness')}</label>} unit={labelUnitSection} error={fieldErrors.dim1}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.thickness'), 'space_dashboard', labelUnitSection, tipSection, true)} 
+                                    unit={labelUnitSection} 
+                                    error={fieldErrors.dim1}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.dim1, true)} placeholder={phSection}
                                         value={dimensions.dim1 || ''} onChange={e => updateDimension('dim1', e.target.value)} />
                                 </InputWrapper>
-                                <InputWrapper label={<label className={labelClass}>{t('calc.width')}</label>} unit={labelUnitSection} error={fieldErrors.dim2}>
+                                <InputWrapper 
+                                    label={renderLabel(t('calc.width'), null, labelUnitSection, tipSection)} 
+                                    unit={labelUnitSection} 
+                                    error={fieldErrors.dim2}
+                                >
                                     <input type="number" className={getInputClass(!!fieldErrors.dim2)} placeholder={phSection}
                                         value={dimensions.dim2 || ''} onChange={e => updateDimension('dim2', e.target.value)} />
                                 </InputWrapper>
                                 <div className="sm:col-span-2">
-                                    <InputWrapper label={<label className={labelClass}>{t('calc.length')}</label>} unit={labelUnitLength} error={fieldErrors.length}>
+                                    <InputWrapper 
+                                        label={renderLabel(t('calc.length'), null, labelUnitLength, tipLength)} 
+                                        unit={labelUnitLength} 
+                                        error={fieldErrors.length}
+                                    >
                                         <input type="number" className={getInputClass(!!fieldErrors.length)} placeholder={phLength}
                                             value={dimensions.length || ''} onChange={e => updateDimension('length', e.target.value)} />
                                     </InputWrapper>

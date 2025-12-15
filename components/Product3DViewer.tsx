@@ -70,33 +70,36 @@ const IndustrialMachine = (props: any) => {
     );
 };
 
-// A procedural metal bar/tube representation
+// A procedural metal beam representation (I-Beam)
 const IndustrialMetal = (props: any) => {
     const group = useRef<THREE.Group>(null);
 
     return (
         <group ref={group} {...props} dispose={null}>
             <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                {/* Main Bar */}
-                <mesh rotation={[0, 0, Math.PI / 4]}>
-                    <cylinderGeometry args={[0.4, 0.4, 4, 64]} />
-                    <meshStandardMaterial 
-                        color="#aaa" 
-                        roughness={0.2} 
-                        metalness={1} 
-                        envMapIntensity={1}
-                    />
-                </mesh>
+                {/* I-Beam */}
+                <group rotation={[Math.PI / 4, Math.PI / 4, 0]}>
+                     {/* Web */}
+                    <mesh>
+                        <boxGeometry args={[0.15, 1.5, 4.5]} />
+                        <meshStandardMaterial color="#b0b0b0" roughness={0.4} metalness={0.9} />
+                    </mesh>
+                    {/* Top Flange */}
+                    <mesh position={[0, 0.75, 0]}>
+                        <boxGeometry args={[1, 0.15, 4.5]} />
+                        <meshStandardMaterial color="#b0b0b0" roughness={0.4} metalness={0.9} />
+                    </mesh>
+                    {/* Bottom Flange */}
+                    <mesh position={[0, -0.75, 0]}>
+                        <boxGeometry args={[1, 0.15, 4.5]} />
+                        <meshStandardMaterial color="#b0b0b0" roughness={0.4} metalness={0.9} />
+                    </mesh>
+                </group>
                 
-                {/* Secondary Bar for visual interest */}
-                <mesh position={[0.8, 0.5, 0.5]} rotation={[0, 0, Math.PI / 4]}>
-                    <cylinderGeometry args={[0.3, 0.3, 3.5, 64]} />
-                    <meshStandardMaterial 
-                        color="#888" 
-                        roughness={0.2} 
-                        metalness={1} 
-                        envMapIntensity={1}
-                    />
+                {/* Hollow Tube / Pipe Element */}
+                <mesh position={[1.5, 0, 0.5]} rotation={[0.2, 0, 0.2]}>
+                    <cylinderGeometry args={[0.4, 0.4, 3.5, 32, 1, true]} />
+                    <meshStandardMaterial color="#a0a0a0" roughness={0.3} metalness={1} side={THREE.DoubleSide} />
                 </mesh>
             </Float>
         </group>
