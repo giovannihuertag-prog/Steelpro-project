@@ -2,37 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { CalculatorIcon, ShieldCheckIcon, CubeTransparentIcon, ChartBarIcon } from '../components/Icons';
 import { useLanguage } from '../context/LanguageContext';
 
-// --- DATA CONSTANTS ---
-
-const DENSITIES_METRIC: Record<string, number> = {
-    acero: 7850, // kg/m3
-    acero4140: 7850, // kg/m3
-    inox410: 7750,
-    inox416: 7750,
-    inox420: 7750,
-    alum6061: 2700,
-    alum7075: 2810,
-    alum1050: 2705,
-    cobre: 8960,
-    bronce: 8700,
-    laton: 8500
-};
-
-// lbs/ft3 approx
-const DENSITIES_IMPERIAL: Record<string, number> = {
-    acero: 490, 
-    acero4140: 490,
-    inox410: 484,
-    inox416: 484,
-    inox420: 484,
-    alum6061: 169,
-    alum7075: 175,
-    alum1050: 169,
-    cobre: 559,
-    bronce: 543,
-    laton: 530
-};
-
 // --- TYPES ---
 
 interface UserData {
@@ -83,40 +52,122 @@ const CalculatorPage: React.FC = () => {
     // Result
     const [result, setResult] = useState<{ volume: number, weight: number, unitW: string, unitV: string } | null>(null);
 
-    // Scrolling Ref
-    const containerRef = useRef<HTMLDivElement>(null);
+    // Scrolling Refs
+    const topRef = useRef<HTMLDivElement>(null);
+    const historyRef = useRef<HTMLDivElement>(null);
 
-    const smoothScrollToTop = () => {
-        if (containerRef.current) {
-            setTimeout(() => {
-                containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-        }
+    // Enhanced smooth scroll function with offset calculation
+    const smoothScrollTo = (targetRef: React.RefObject<HTMLDivElement>) => {
+        setTimeout(() => {
+            if (targetRef.current) {
+                const headerOffset = 100; // Adjust for fixed header height
+                const elementPosition = targetRef.current.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }, 150); // Small delay to allow render/layout updates
     };
 
-    // Derived Constants based on Language
+    // --- CONFIGURATION & DATA ---
+
+    // Unified Material Options containing metadata and densities
     const MATERIAL_OPTIONS = [
         { 
             id: 'acero', 
             name: language === 'es' ? 'Acero A36/1045' : 'Steel A36/1045', 
+            icon: CubeTransparentIcon,
             class: 'bg-zinc-800',
-            image: 'https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop'
+            image: 'https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop',
+            densityMetric: 7850, // kg/m3
+            densityImperial: 490 // lbs/ft3
         },
-        { id: 'acero4140', name: language === 'es' ? 'Acero 4140' : 'Steel 4140', class: 'bg-slate-800' },
-        
+        { 
+            id: 'acero4140', 
+            name: language === 'es' ? 'Acero 4140' : 'Steel 4140', 
+            icon: ShieldCheckIcon,
+            class: 'bg-slate-800',
+            densityMetric: 7850,
+            densityImperial: 490
+        },
         // Stainless Steel Series
-        { id: 'inox410', name: 'Inox 410', class: 'bg-stone-800' },
-        { id: 'inox416', name: 'Inox 416', class: 'bg-stone-800' },
-        { id: 'inox420', name: 'Inox 420', class: 'bg-stone-800' },
-
+        { 
+            id: 'inox410', 
+            name: 'Inox 410', 
+            icon: CubeTransparentIcon,
+            class: 'bg-stone-800',
+            densityMetric: 7750,
+            densityImperial: 484
+        },
+        { 
+            id: 'inox416', 
+            name: 'Inox 416', 
+            icon: CubeTransparentIcon,
+            class: 'bg-stone-800',
+            densityMetric: 7750,
+            densityImperial: 484
+        },
+        { 
+            id: 'inox420', 
+            name: 'Inox 420', 
+            icon: CubeTransparentIcon,
+            class: 'bg-stone-800',
+            densityMetric: 7750,
+            densityImperial: 484
+        },
         // Aluminum Series
-        { id: 'alum6061', name: 'Alum 6061', class: 'bg-zinc-700' },
-        { id: 'alum7075', name: 'Alum 7075', class: 'bg-zinc-700' },
-        { id: 'alum1050', name: 'Alum 1050', class: 'bg-zinc-700' },
-
-        { id: 'cobre', name: language === 'es' ? 'Cobre' : 'Copper', class: 'bg-orange-900/40' },
-        { id: 'bronce', name: language === 'es' ? 'Bronce' : 'Bronze', class: 'bg-yellow-900/40' },
-        { id: 'laton', name: language === 'es' ? 'Latón' : 'Brass', class: 'bg-yellow-500/20' }
+        { 
+            id: 'alum6061', 
+            name: 'Alum 6061', 
+            icon: CubeTransparentIcon,
+            class: 'bg-zinc-700',
+            densityMetric: 2700,
+            densityImperial: 169
+        },
+        { 
+            id: 'alum7075', 
+            name: 'Alum 7075', 
+            icon: CubeTransparentIcon,
+            class: 'bg-zinc-700',
+            densityMetric: 2810,
+            densityImperial: 175
+        },
+        { 
+            id: 'alum1050', 
+            name: 'Alum 1050', 
+            icon: CubeTransparentIcon,
+            class: 'bg-zinc-700',
+            densityMetric: 2705,
+            densityImperial: 169
+        },
+        // Non-Ferrous
+        { 
+            id: 'cobre', 
+            name: language === 'es' ? 'Cobre' : 'Copper', 
+            icon: CubeTransparentIcon,
+            class: 'bg-orange-900/40',
+            densityMetric: 8960,
+            densityImperial: 559
+        },
+        { 
+            id: 'bronce', 
+            name: language === 'es' ? 'Bronce' : 'Bronze', 
+            icon: CubeTransparentIcon,
+            class: 'bg-yellow-900/40',
+            densityMetric: 8700,
+            densityImperial: 543
+        },
+        { 
+            id: 'laton', 
+            name: language === 'es' ? 'Latón' : 'Brass', 
+            icon: CubeTransparentIcon,
+            class: 'bg-yellow-500/20',
+            densityMetric: 8500,
+            densityImperial: 530
+        }
     ];
 
     const SHAPE_OPTIONS = [
@@ -161,7 +212,7 @@ const CalculatorPage: React.FC = () => {
         setUserErrors(errors);
         if (Object.keys(errors).length === 0) {
             setStep(2);
-            smoothScrollToTop();
+            smoothScrollTo(topRef);
         }
     };
 
@@ -184,16 +235,12 @@ const CalculatorPage: React.FC = () => {
         setFormError('');
         setFieldErrors({});
         
-        // 1. Validate Material (Explicit Validation)
-        if (!material) {
+        // 1. Validate Material & Get Data
+        const selectedMaterial = MATERIAL_OPTIONS.find(m => m.id === material);
+
+        if (!material || !selectedMaterial) {
             setFormError(language === 'es' ? '⚠️ Seleccione un material para continuar.' : '⚠️ Select a material to continue.');
             return;
-        }
-
-        // Validate Density Existence
-        if (DENSITIES_METRIC[material] === undefined || DENSITIES_IMPERIAL[material] === undefined) {
-             setFormError(language === 'es' ? '⚠️ Error de configuración: Densidad no definida para el material seleccionado.' : '⚠️ Configuration Error: Density not defined for selected material.');
-             return;
         }
 
         // 2. Validate Shape
@@ -243,10 +290,11 @@ const CalculatorPage: React.FC = () => {
             return;
         }
 
-        // Calculation Logic - Refined for Clarity and Precision
+        // Calculation Logic
         let vol = 0;
         let weight = 0;
-        const density = system === 'metric' ? DENSITIES_METRIC[material] : DENSITIES_IMPERIAL[material];
+        // Access density from the configured object
+        const density = system === 'metric' ? selectedMaterial.densityMetric : selectedMaterial.densityImperial;
 
         if (system === 'metric') {
              // Metric Input: mm -> Output: m
@@ -300,7 +348,7 @@ const CalculatorPage: React.FC = () => {
         // Save History
         const newItem: HistoryItem = {
             id: Date.now(),
-            material: MATERIAL_OPTIONS.find(m => m.id === material)?.name || material,
+            material: selectedMaterial.name,
             weight: weight,
             unit: system === 'metric' ? 'kg' : 'lbs',
             date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -312,13 +360,13 @@ const CalculatorPage: React.FC = () => {
         localStorage.setItem('steelpro_history', JSON.stringify(updatedHistory));
 
         setStep(3);
-        smoothScrollToTop();
+        smoothScrollTo(topRef);
     };
 
     const resetCalculator = () => {
         setResult(null);
         setStep(2); // Keep user data, go back to config
-        smoothScrollToTop();
+        smoothScrollTo(topRef);
     };
     
     const clearHistory = () => {
@@ -570,7 +618,7 @@ const CalculatorPage: React.FC = () => {
 
     const renderHistoryChart = () => {
         if (history.length === 0) return (
-            <div className="mt-12 bg-zinc-900 border border-white/5 p-6 rounded-sm animate-fade-in text-center">
+            <div ref={historyRef} className="mt-12 bg-zinc-900 border border-white/5 p-6 rounded-sm animate-fade-in text-center">
                  <h4 className="text-sm font-bold text-white uppercase flex items-center justify-center gap-2 mb-2">
                     <ChartBarIcon className="h-5 w-5 text-zinc-500" />
                     {language === 'es' ? 'Historial de Cálculo' : 'Calculation History'}
@@ -584,7 +632,7 @@ const CalculatorPage: React.FC = () => {
         const safeMax = maxVal > 0 ? maxVal : 10;
         
         return (
-            <div className="mt-12 bg-zinc-900 border border-white/5 p-6 rounded-sm animate-fade-in">
+            <div ref={historyRef} className="mt-12 bg-zinc-900 border border-white/5 p-6 rounded-sm animate-fade-in">
                 <div className="flex justify-between items-center mb-6">
                      <h4 className="text-sm font-bold text-white uppercase flex items-center gap-2">
                         <ChartBarIcon className="h-5 w-5 text-yellow-500" />
@@ -652,7 +700,7 @@ const CalculatorPage: React.FC = () => {
 
     return (
         <div className="bg-zinc-950 min-h-screen pt-24 pb-24 animate-fade-in font-sans">
-            <div ref={containerRef} className="mx-auto max-w-4xl px-6 lg:px-8 scroll-mt-32">
+            <div ref={topRef} className="mx-auto max-w-4xl px-6 lg:px-8 scroll-mt-32">
                 
                 {/* HEADER */}
                 <div className="mb-12 text-center">
@@ -789,7 +837,7 @@ const CalculatorPage: React.FC = () => {
                         <div className="mb-8 relative z-10">
                             <label className="block text-xs font-bold uppercase text-zinc-500 mb-3 tracking-widest">{t('calc.select_material')}</label>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {MATERIAL_OPTIONS.map((opt: any) => (
+                                {MATERIAL_OPTIONS.map((opt) => (
                                     <button
                                         key={opt.id}
                                         onClick={() => { setMaterial(opt.id); setFormError(''); }}
@@ -816,12 +864,12 @@ const CalculatorPage: React.FC = () => {
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] font-mono">
                                                 <div className="text-center">
                                                     <span className="block text-zinc-500 uppercase text-[9px] mb-0.5 font-sans">{language === 'es' ? 'Métrico' : 'Metric'}</span>
-                                                    <span className="block font-bold text-white text-sm tracking-tight">{DENSITIES_METRIC[opt.id]}</span>
+                                                    <span className="block font-bold text-white text-sm tracking-tight">{opt.densityMetric}</span>
                                                     <span className="text-zinc-400 text-[9px]">kg/m³</span>
                                                 </div>
                                                 <div className="text-center border-l border-white/10 pl-4">
                                                     <span className="block text-zinc-500 uppercase text-[9px] mb-0.5 font-sans">{language === 'es' ? 'Imperial' : 'Imperial'}</span>
-                                                    <span className="block font-bold text-white text-sm tracking-tight">{DENSITIES_IMPERIAL[opt.id]}</span>
+                                                    <span className="block font-bold text-white text-sm tracking-tight">{opt.densityImperial}</span>
                                                     <span className="text-zinc-400 text-[9px]">lbs/ft³</span>
                                                 </div>
                                             </div>
@@ -830,7 +878,7 @@ const CalculatorPage: React.FC = () => {
                                         </div>
 
                                         <div className="relative z-10 flex flex-col items-center gap-2">
-                                            <CubeTransparentIcon className="h-6 w-6 text-white" />
+                                            <opt.icon className="h-6 w-6 text-white" />
                                             <span className="text-sm font-bold text-white uppercase text-center shadow-black drop-shadow-md">{opt.name}</span>
                                         </div>
                                     </button>
@@ -943,6 +991,17 @@ const CalculatorPage: React.FC = () => {
                                     <span className="material-symbols-outlined text-base">request_quote</span>
                                     Cotizar Este Material
                                 </a>
+                            </div>
+                            
+                             {/* Scroll to History Action */}
+                            <div className="bg-black/80 p-2 text-center border-t border-white/5">
+                                <button 
+                                    onClick={() => smoothScrollTo(historyRef)}
+                                    className="text-[10px] text-zinc-500 hover:text-yellow-500 uppercase font-bold transition-colors flex items-center justify-center gap-1 w-full"
+                                >
+                                    <ChartBarIcon className="h-3 w-3" />
+                                    {language === 'es' ? 'Ver Historial de Cálculos' : 'View Calculation History'}
+                                </button>
                             </div>
                         </div>
 

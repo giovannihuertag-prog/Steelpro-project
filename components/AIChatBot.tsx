@@ -13,10 +13,11 @@ interface Message {
 }
 
 const SYSTEM_INSTRUCTION = `
-Eres el Ingeniero de Ventas Senior de SteelPro, distribuidor autorizado de DASWELL.
-Tu objetivo es asesorar técnicamente a los visitantes y guiarlos hacia el cierre de venta (solicitar cotización).
+Actúas como ASESOR INDUSTRIAL ESPECIALIZADO de STEELPRO – Servicios Industriales Globales.
 
-CONTEXTO DE PRODUCTOS (Usa esta información para responder):
+Tu función es realizar CÁLCULOS TÉCNICOS INDUSTRIALES de metales y aceros de forma precisa, verificable y profesional, así como brindar información técnica sobre nuestro catálogo.
+
+CONTEXTO DE PRODUCTOS (Referencia técnica):
 ${JSON.stringify(solutions.map(s => ({
     name: s.name,
     category: s.category,
@@ -25,20 +26,66 @@ ${JSON.stringify(solutions.map(s => ({
     brand: s.brand
 })))}
 
-REGLAS DE COMPORTAMIENTO:
-1.  **Experto y Profesional:** Usas terminología industrial correcta pero eres accesible.
-2.  **Proactivo (Pre-cierre):** Después de responder una duda técnica, siempre haz una pregunta de cierre o calificación. Ejemplo: "¿Para qué volumen de obra requiere este equipo?" o "¿Le gustaría que le preparemos una ficha técnica formal?".
-3.  **Enfoque en Soluciones:** Si preguntan por precios, explica que dependen de la configuración (puerto de destino, motorización, extras) e invítalos a usar el formulario de "Solicitar Cotización".
-4.  **Breve y Conciso:** Respuestas directas. No escribas párrafos enormes.
-5.  **Grounding:** Si te preguntan sobre tendencias del mercado, precios del acero globales o noticias, usa tu herramienta de búsqueda.
+REGLAS FUNDAMENTALES:
+1. NO inventes datos.  
+2. NO asumas dimensiones, formas ni materiales.  
+3. Si falta información, DETÉN el cálculo y solicita los datos faltantes de manera clara y técnica.
+4. Todas las unidades deben ser confirmadas antes de calcular.
+5. Explica brevemente el procedimiento, sin lenguaje comercial ni fantasía.
 
-Si el usuario pregunta algo fuera del contexto industrial/maquinaria, responde educadamente que solo puedes asistir en temas de SteelPro y Daswell.
+DATOS OBLIGATORIOS PARA CUALQUIER CÁLCULO:
+- Material específico (ej. A36, 1045, 304, 6061, Cobre Tipo M, Bronce SAE, Latón, etc.)
+- Forma geométrica:
+  • Placa
+  • Barra sólida
+  • Barra hueca / tubo
+- Dimensiones completas:
+  • Largo
+  • Ancho / diámetro exterior
+  • Espesor / diámetro interior
+- Sistema de unidades:
+  • Métrico (mm, m, kg)
+  • Imperial (pulgadas, pies, lb)
+- Cantidad de piezas
+
+DENSIDADES (usar solo si el material está claramente definido):
+- Acero al carbono: ~7,850 kg/m³
+- Acero inoxidable: ~8,000 kg/m³
+- Aluminio: ~2,700 kg/m³
+- Cobre: ~8,960 kg/m³
+- Latón: ~8,400 kg/m³
+- Bronce: ~8,700 kg/m³
+
+PROCEDIMIENTO:
+1. Verificar que todos los datos estén completos.
+2. Convertir todas las dimensiones a un solo sistema de unidades.
+3. Calcular volumen según la geometría:
+   - Placa: largo × ancho × espesor
+   - Barra sólida: π × (radio²) × largo
+   - Barra hueca: π × (radio exterior² − radio interior²) × largo
+4. Multiplicar volumen × densidad.
+5. Mostrar resultado:
+   - Peso por pieza
+   - Peso total
+   - En kg y lb (si aplica)
+
+FORMATO DE RESPUESTA:
+- Resumen del material
+- Datos utilizados
+- Cálculo paso a paso
+- Resultado final claro y legible
+
+TONO:
+Profesional, técnico, directo.  
+Hablas como ingeniero industrial, no como vendedor ni asistente genérico.
+
+Si el usuario pregunta algo fuera del contexto industrial/maquinaria, responde educadamente que solo puedes asistir en temas técnicos de SteelPro.
 `;
 
 const AIChatBot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { role: 'model', text: 'Bienvenido a SteelPro. Soy su ingeniero asignado. ¿En qué tipo de proyecto industrial está trabajando hoy?' }
+        { role: 'model', text: 'Bienvenido a Ingeniería SteelPro. Soy su Asesor Industrial. ¿Requiere un cálculo de material o información técnica de equipos?' }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -63,11 +110,11 @@ const AIChatBot: React.FC = () => {
             let promoMessage = '';
 
             if (hash.includes('construction')) {
-                promoMessage = 'Veo que le interesa nuestra línea de concreto. ¿Busca bombeo de altura o mezcla in-situ?';
+                promoMessage = 'Ingeniería SteelPro en línea. ¿Necesita especificaciones técnicas sobre bombas de concreto?';
             } else if (hash.includes('engineering')) {
-                promoMessage = 'Nuestra maquinaria amarilla DASWELL tiene disponibilidad inmediata. ¿Busca excavación o carga frontal?';
+                promoMessage = 'Sistema listo. ¿Requiere fichas técnicas de maquinaria pesada o excavadoras?';
             } else if (hash.includes('steel')) {
-                promoMessage = 'Contamos con aceros certificados 1045T y 4140T. ¿Necesita corte a medida?';
+                promoMessage = 'Módulo de cálculo activo. ¿Necesita estimar pesos para aceros 1045, 4140 o Inoxidables?';
             }
 
             if (promoMessage) {
@@ -150,15 +197,15 @@ const AIChatBot: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <div className="relative">
                             <div className="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-black">smart_toy</span>
+                                <span className="material-symbols-outlined text-black">engineering</span>
                             </div>
                             <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-zinc-950 rounded-full"></span>
                         </div>
                         <div>
-                            <h3 className="text-white font-bold text-sm uppercase">Ingeniero SteelPro</h3>
+                            <h3 className="text-white font-bold text-sm uppercase">Asesor Industrial</h3>
                             <p className="text-zinc-400 text-xs flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[10px] text-yellow-500">spark</span>
-                                Powered by Gemini
+                                <span className="material-symbols-outlined text-[10px] text-yellow-500">calculate</span>
+                                SteelPro Engineering
                             </p>
                         </div>
                     </div>
@@ -172,19 +219,19 @@ const AIChatBot: React.FC = () => {
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div 
-                                className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${
+                                className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed font-mono ${
                                     msg.role === 'user' 
                                     ? 'bg-white/10 text-white rounded-br-none border border-white/5' 
                                     : 'bg-zinc-800 text-zinc-300 rounded-bl-none border border-yellow-500/20'
                                 } ${msg.isError ? 'border-red-500/50 text-red-200' : ''}`}
                             >
-                                <p>{msg.text}</p>
+                                <p className="whitespace-pre-wrap">{msg.text}</p>
                                 {msg.groundingUrl && (
                                     <a 
                                         href={msg.groundingUrl} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="mt-2 text-xs flex items-center gap-1 text-yellow-500 hover:underline border-t border-white/5 pt-2"
+                                        className="mt-2 text-xs flex items-center gap-1 text-yellow-500 hover:underline border-t border-white/5 pt-2 font-sans"
                                     >
                                         <span className="material-symbols-outlined text-[12px]">google</span>
                                         Fuente verificada
@@ -212,8 +259,8 @@ const AIChatBot: React.FC = () => {
                             type="text"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
-                            placeholder="Escriba su consulta técnica..."
-                            className="w-full bg-zinc-900 text-white text-sm rounded-full pl-4 pr-12 py-3 border border-white/10 focus:border-yellow-500 focus:outline-none focus:ring-1 focus:ring-yellow-500 transition-all placeholder:text-zinc-600"
+                            placeholder="Solicite un cálculo o dato técnico..."
+                            className="w-full bg-zinc-900 text-white text-sm rounded-full pl-4 pr-12 py-3 border border-white/10 focus:border-yellow-500 focus:outline-none focus:ring-1 focus:ring-yellow-500 transition-all placeholder:text-zinc-600 font-mono"
                         />
                         <button 
                             type="submit" 
@@ -234,7 +281,7 @@ const AIChatBot: React.FC = () => {
                  {isOpen ? (
                      <span className="material-symbols-outlined">expand_more</span>
                  ) : (
-                    <span className="material-symbols-outlined text-3xl">voice_chat</span>
+                    <span className="material-symbols-outlined text-3xl">calculate</span>
                  )}
                  
                  {/* Notification Badge if closed */}
