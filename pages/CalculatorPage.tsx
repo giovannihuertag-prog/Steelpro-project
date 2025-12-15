@@ -379,6 +379,7 @@ const CalculatorPage: React.FC = () => {
     const renderShapeDiagram = () => {
         const strokeColor = "#eab308"; // Yellow-500
         const strokeWidth = 2;
+        const textColor = "#a1a1aa"; // Zinc-400
         
         if (!shape) return (
             <div className="h-full w-full flex items-center justify-center border-2 border-dashed border-white/5 rounded-sm bg-black/20">
@@ -389,45 +390,79 @@ const CalculatorPage: React.FC = () => {
         );
 
         return (
-            <div className="h-full w-full flex items-center justify-center bg-black/20 rounded-sm relative overflow-hidden group">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] opacity-10"></div>
+            <div className="h-full w-full flex items-center justify-center bg-black/20 rounded-sm relative overflow-hidden group border border-white/5">
+                {/* Pattern */}
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] opacity-5"></div>
                 
-                <svg viewBox="0 0 100 100" className="w-32 h-32 drop-shadow-[0_0_10px_rgba(234,179,8,0.3)] transition-all duration-500 group-hover:scale-105">
+                <svg viewBox="0 0 100 100" className="w-32 h-32 drop-shadow-[0_0_10px_rgba(234,179,8,0.2)] transition-all duration-500">
+                    <defs>
+                        <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                            <path d="M0,0 L6,3 L0,6" fill={textColor} />
+                        </marker>
+                    </defs>
+
                     {shape === 'solid_round' && (
                         <>
-                            <circle cx="50" cy="50" r="35" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
-                            {/* Diameter Line */}
-                            <line x1="15" y1="50" x2="85" y2="50" stroke="white" strokeWidth="1" strokeDasharray="4 2" opacity="0.5" />
-                            <text x="50" y="45" textAnchor="middle" fill="white" fontSize="8" fontFamily="monospace">Ø</text>
+                            <circle cx="50" cy="50" r="30" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+                            
+                            {/* D1 Line */}
+                            <line x1="20" y1="90" x2="80" y2="90" stroke={textColor} strokeWidth="0.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                            <line x1="20" y1="82" x2="20" y2="95" stroke={textColor} strokeWidth="0.5" />
+                            <line x1="80" y1="82" x2="80" y2="95" stroke={textColor} strokeWidth="0.5" />
+                            <text x="50" y="85" textAnchor="middle" fill={textColor} fontSize="6" fontFamily="monospace">{t('calc.diameter')}</text>
                         </>
                     )}
                     {shape === 'solid_square' && (
                         <>
-                            <rect x="20" y="20" width="60" height="60" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
-                             {/* Side indicators */}
-                             <line x1="20" y1="90" x2="80" y2="90" stroke="white" strokeWidth="1" opacity="0.3" />
-                             <line x1="20" y1="85" x2="20" y2="95" stroke="white" strokeWidth="1" opacity="0.3" />
-                             <line x1="80" y1="85" x2="80" y2="95" stroke="white" strokeWidth="1" opacity="0.3" />
+                            <rect x="25" y="25" width="50" height="50" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+                            
+                            {/* D1 Line */}
+                            <line x1="25" y1="85" x2="75" y2="85" stroke={textColor} strokeWidth="0.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                            <line x1="25" y1="77" x2="25" y2="90" stroke={textColor} strokeWidth="0.5" />
+                            <line x1="75" y1="77" x2="75" y2="90" stroke={textColor} strokeWidth="0.5" />
+                            <text x="50" y="80" textAnchor="middle" fill={textColor} fontSize="6" fontFamily="monospace">{t('calc.side')}</text>
                         </>
                     )}
                     {shape === 'hollow' && (
                         <>
-                            <circle cx="50" cy="50" r="40" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
-                            <circle cx="50" cy="50" r="25" fill="none" stroke="white" strokeWidth="1" strokeDasharray="4" opacity="0.6" />
-                             {/* Thickness area */}
-                             <path d="M50 10 A40 40 0 1 0 50 90 A40 40 0 1 0 50 10 Z M50 25 A25 25 0 1 1 50 75 A25 25 0 1 1 50 25 Z" fill={strokeColor} fillOpacity="0.1" fillRule="evenodd" />
+                            <circle cx="50" cy="50" r="35" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+                            <circle cx="50" cy="50" r="20" fill="none" stroke="white" strokeWidth="1" strokeDasharray="2" opacity="0.5" />
+                            
+                            {/* OD Line */}
+                            <line x1="15" y1="92" x2="85" y2="92" stroke={textColor} strokeWidth="0.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                            <line x1="15" y1="85" x2="15" y2="95" stroke={textColor} strokeWidth="0.5" />
+                            <line x1="85" y1="85" x2="85" y2="95" stroke={textColor} strokeWidth="0.5" />
+                            <text x="50" y="89" textAnchor="middle" fill={textColor} fontSize="5" fontFamily="monospace">OD</text>
+
+                            {/* ID Line */}
+                            <line x1="50" y1="50" x2="70" y2="50" stroke={textColor} strokeWidth="0.5" markerEnd="url(#arrow)" />
+                            <text x="60" y="47" textAnchor="middle" fill={textColor} fontSize="5" fontFamily="monospace">ID</text>
                         </>
                     )}
                     {shape === 'plate' && (
                          <>
-                            {/* Isometric-ish look */}
-                            <path d="M10 30 L80 30 L90 20 L20 20 Z" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
-                            <path d="M10 30 L80 30 L80 70 L10 70 Z" fill={strokeColor} fillOpacity="0.1" stroke={strokeColor} strokeWidth={strokeWidth} />
-                            <path d="M80 30 L90 20 L90 60 L80 70 Z" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+                            <rect x="20" y="35" width="60" height="30" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+                            
+                            {/* Width Line */}
+                            <line x1="20" y1="75" x2="80" y2="75" stroke={textColor} strokeWidth="0.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                            <line x1="20" y1="67" x2="20" y2="80" stroke={textColor} strokeWidth="0.5" />
+                            <line x1="80" y1="67" x2="80" y2="80" stroke={textColor} strokeWidth="0.5" />
+                            <text x="50" y="72" textAnchor="middle" fill={textColor} fontSize="6" fontFamily="monospace">{t('calc.width')}</text>
+
+                            {/* Thickness Line */}
+                            <line x1="90" y1="35" x2="90" y2="65" stroke={textColor} strokeWidth="0.5" markerStart="url(#arrow)" markerEnd="url(#arrow)" />
+                            <line x1="82" y1="35" x2="95" y2="35" stroke={textColor} strokeWidth="0.5" />
+                            <line x1="82" y1="65" x2="95" y2="65" stroke={textColor} strokeWidth="0.5" />
+                            {/* Rotated text for thickness */}
+                            <g transform="translate(95, 50) rotate(90)">
+                                <text x="0" y="0" textAnchor="middle" fill={textColor} fontSize="6" fontFamily="monospace">{t('calc.thickness')}</text>
+                            </g>
                         </>
                     )}
                 </svg>
-                <div className="absolute bottom-2 right-2 text-[10px] text-zinc-600 font-mono">FIG. 0{SHAPE_OPTIONS.findIndex(s => s.id === shape) + 1}</div>
+                <div className="absolute top-2 right-2 px-2 py-1 bg-zinc-800 rounded text-[9px] text-zinc-400 font-mono border border-white/5 shadow-sm">
+                    {SHAPE_OPTIONS.find(s => s.id === shape)?.name}
+                </div>
             </div>
         );
     };
