@@ -11,7 +11,7 @@ import {
 
 export interface Solution {
     id: string;
-    category: 'construction' | 'engineering' | 'road' | 'steel' | 'production';
+    category: 'construction' | 'engineering' | 'road' | 'crushing' | 'milling' | 'steel' | 'production';
     categoryLabel?: string; // For display purposes
     brand?: string;
     name: string;
@@ -444,6 +444,290 @@ export const solutions: Solution[] = [
         ]
     },
 
+    // --- SEGMENTO: TRITURACIÓN Y AGREGADOS (CRUSHING) ---
+    {
+        id: 'mini-mobile-crusher',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Mini Planta Trituradora Móvil',
+        icon: CubeTransparentIcon,
+        status: 'bajo_pedido',
+        description: 'Planta compacta diseñada para operaciones de pequeña escala y reciclaje. Su chasis móvil permite una fácil reubicación en sitios de construcción estrechos.',
+        shortDescription: 'Trituración compacta y versátil.',
+        features: [
+            'Capacidad Trituradora: 5 – 21 t/h',
+            'Capacidad Cribadora: 10 – 80 m³/h',
+            'Movilidad: Remolcable',
+            'Aplicación: Pequeña minería'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1599933451563-71452df1575a?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Mini planta trituradora móvil',
+        gallery: []
+    },
+    {
+        id: 'mobile-crushing-plant',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Planta Móvil de Trituración',
+        icon: ServerStackIcon,
+        status: 'bajo_pedido',
+        description: 'Sistema completo de trituración montado sobre chasis (oruga o neumático). Ideal para procesar residuos de construcción y piedra caliza directamente en la fuente.',
+        shortDescription: 'Planta completa sobre ruedas/orugas.',
+        features: [
+            'Tipo: Oruga / Neumático',
+            'Materias primas: Residuos, Caliza',
+            'Configuración: Flexible',
+            'Movilidad: Alta'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1578326584285-d852a32c253b?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Planta móvil de trituración',
+        gallery: []
+    },
+    {
+        id: 'stone-crushing-plant',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Planta Trituradora de Piedra',
+        icon: AnalysisIcon,
+        status: 'bajo_pedido',
+        description: 'Planta estacionaria diseñada a medida para canteras y minas. Capaz de procesar granito, guijarros de río y basalto con alta eficiencia.',
+        shortDescription: 'Producción estacionaria masiva.',
+        features: [
+            'Capacidad: 1 - 1000 tph',
+            'Materiales: Granito, Río, Caliza',
+            'Componentes: Trituradora, Criba, Cinta',
+            'Uso: Canteras grandes'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1525126859551-7f374780516f?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Planta trituradora de piedra estacionaria',
+        gallery: []
+    },
+    {
+        id: 'track-crusher',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Trituradora de Orugas',
+        icon: ShieldCheckIcon,
+        status: 'bajo_pedido',
+        description: 'Equipo de trituración autónomo montado sobre orugas hidráulicas. Puede acceder a terrenos difíciles y operar sin infraestructura externa.',
+        shortDescription: 'Trituración todoterreno autónoma.',
+        features: [
+            'Capacidad: 1 - 1000 tph',
+            'Tracción: Orugas Hidráulicas',
+            'Materiales: Residuos, Roca dura',
+            'Ventaja: Acceso difícil'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1595246738090-4497e7530691?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Trituradora de orugas',
+        gallery: []
+    },
+    {
+        id: 'jaw-crusher',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Trituradora de Mandíbula',
+        icon: AutomationIcon,
+        status: 'disponible',
+        description: 'Trituradora primaria por excelencia. Utiliza fuerza de compresión para romper roca dura y abrasiva. Estructura robusta para larga vida útil.',
+        shortDescription: 'Trituración primaria robusta.',
+        features: [
+            'Capacidad: 1 - 1100 tph',
+            'Dimensión: 4800*3200*4200 mm',
+            'Aplicación: Primaria',
+            'Material: Roca dura'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1629738848773-195f0022f468?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Trituradora de mandíbula',
+        gallery: []
+    },
+    {
+        id: 'cone-crusher',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Trituradora de Cono',
+        icon: TraceabilityIcon,
+        status: 'bajo_pedido',
+        description: 'Máquina de trituración secundaria o terciaria. Utiliza un manto giratorio para triturar roca contra un cóncavo. Produce agregados de forma cúbica excelente.',
+        shortDescription: 'Trituración secundaria de precisión.',
+        features: [
+            'Capacidad: 5 - 530 tph',
+            'Dimensiones: 2983*1866*3156 mm',
+            'Tecnología: Hidráulica',
+            'Producto: Agregado cúbico'
+        ],
+        imageUrl: 'https://plus.unsplash.com/premium_photo-1664303847960-586318f59035?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Trituradora de cono',
+        gallery: []
+    },
+    {
+        id: 'impact-crusher',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Trituradora de Impacto',
+        icon: AnalysisIcon,
+        status: 'bajo_pedido',
+        description: 'Utiliza energía de impacto para romper materiales. Ideal para piedra caliza y materiales de dureza media. Alta relación de reducción.',
+        shortDescription: 'Alto radio de reducción.',
+        features: [
+            'Alimentación: 400 - 1260 mm',
+            'Capacidad: 15 - 800 t/h',
+            'Rotor: Alta inercia',
+            'Mantenimiento: Fácil acceso'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2874&auto=format&fit=crop',
+        imageAlt: 'Trituradora de impacto',
+        gallery: []
+    },
+    {
+        id: 'hammer-crusher',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Trituradora de Martillo',
+        icon: CubeTransparentIcon,
+        status: 'disponible',
+        description: 'Trituradora de una etapa que utiliza martillos giratorios de alta velocidad. Eficiente para materiales frágiles como carbón, yeso y caliza.',
+        shortDescription: 'Trituración de una etapa.',
+        features: [
+            'Capacidad: 5 - 50 t/h',
+            'Potencia: 11 - 55 kW',
+            'Uso: Materiales blandos',
+            'Costo: Económico'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1581093583449-ed252133d01e?q=80&w=2832&auto=format&fit=crop',
+        imageAlt: 'Trituradora de martillo',
+        gallery: []
+    },
+    {
+        id: 'sand-making-machine',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Máquina de Fabricación de Arena',
+        icon: VisualizationIcon,
+        status: 'bajo_pedido',
+        description: 'Trituradora de impacto de eje vertical (VSI). Diseñada para producir arena artificial de alta calidad y dar forma a los agregados.',
+        shortDescription: 'Producción de arena artificial.',
+        features: [
+            'Alimentación: 550 - 640 mm',
+            'Dimensiones: 5500*2750*3950 mm',
+            'Tecnología: Piedra contra piedra',
+            'Producto: Arena fina'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Máquina VSI para arena',
+        gallery: []
+    },
+    {
+        id: 'sand-washer',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Lavadora de Arena',
+        icon: TraceabilityIcon,
+        status: 'disponible',
+        description: 'Equipo de lavado tipo rueda utilizado para eliminar polvo e impurezas de la arena, mejorando su calidad para la construcción.',
+        shortDescription: 'Lavado eficiente de áridos.',
+        features: [
+            'Tamaño alim.: ≤10 mm',
+            'Capacidad: 20 - 250 t/h',
+            'Tipo: Rueda / Cangilones',
+            'Eficiencia: Alta limpieza'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1574360778004-459807f7943d?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Lavadora de arena',
+        gallery: []
+    },
+    {
+        id: 'fine-sand-recycling',
+        category: 'crushing',
+        categoryLabel: 'Trituración y Agregados',
+        brand: 'DASWELL',
+        name: 'Máquina de Reciclaje de Arena Fina',
+        icon: ShieldCheckIcon,
+        status: 'bajo_pedido',
+        description: 'Sistema diseñado para recuperar la arena fina que se pierde en el proceso de lavado tradicional, aumentando la producción total y reduciendo residuos.',
+        shortDescription: 'Recuperación de finos.',
+        features: [
+            'Tamaño alim.: ≤10 mm',
+            'Capacidad: 20 - 250 t/h',
+            'Recuperación: >90%',
+            'Beneficio: Mayor rentabilidad'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?q=80&w=2864&auto=format&fit=crop',
+        imageAlt: 'Equipo de reciclaje de arena',
+        gallery: []
+    },
+
+    // --- SEGMENTO: MOLIENDA INDUSTRIAL (MILLING) ---
+    {
+        id: 'ball-mill',
+        category: 'milling',
+        categoryLabel: 'Molienda Industrial',
+        brand: 'DASWELL',
+        name: 'Molino de Bolas',
+        icon: AnalysisIcon,
+        status: 'bajo_pedido',
+        description: 'Equipo clave para la molienda de materiales triturados. Adecuado para molienda seca y húmeda de diversos minerales y materiales molibles como calcita, mármol y caliza.',
+        shortDescription: 'Molienda industrial de alta capacidad.',
+        features: [
+            'Capacidad: 1 - 500,000 t/año',
+            'Materiales: Calcita, Mármol, Caliza',
+            'Tipo: Rejilla / Desbordamiento',
+            'Uso: Minería y Cemento'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1629738848773-195f0022f468?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Molino de bolas industrial',
+        gallery: []
+    },
+    {
+        id: 'ring-roller-mill',
+        category: 'milling',
+        categoryLabel: 'Molienda Industrial',
+        brand: 'DASWELL',
+        name: 'Molino de Rodillos (Micro Polvo)',
+        icon: TraceabilityIcon,
+        status: 'bajo_pedido',
+        description: 'Molino diseñado para la producción de polvos ultrafinos. Su tecnología de rodillos permite obtener una finura de descarga excepcional, ideal para aplicaciones industriales exigentes.',
+        shortDescription: 'Pulverización ultrafina de precisión.',
+        features: [
+            'Alimentación: 0 - 10 mm',
+            'Descarga: 5 - 45 μm',
+            'Eficiencia: Alta finura',
+            'Aplicación: Polvos químicos/minerales'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1535732820275-9ffd998cac22?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Molino de micro polvo',
+        gallery: []
+    },
+    {
+        id: 'raymond-mill',
+        category: 'milling',
+        categoryLabel: 'Molienda Industrial',
+        brand: 'DASWELL',
+        name: 'Molino Raymond',
+        icon: ServerStackIcon,
+        status: 'bajo_pedido',
+        description: 'El clásico molino pendular Raymond, optimizado para la molienda de materiales no inflamables y no explosivos. Estructura vertical compacta con sistema de clasificación de aire integrado.',
+        shortDescription: 'Molienda pendular eficiente.',
+        features: [
+            'Alim. Máx: 20 - 30 mm',
+            'Descarga: 45 - 180 μm',
+            'Estructura: Vertical compacta',
+            'Uso: Minerales no metálicos'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Molino Raymond',
+        gallery: []
+    },
+
     // --- SEGMENTO: ACEROS ---
     {
         id: 'hollow-bar-1518',
@@ -531,6 +815,28 @@ export const categoryMetaData = {
             { label: "Capacidad", value: "400 t/h" },
             { label: "Precisión", value: "Digital" },
             { label: "Movilidad", value: "Modular" },
+        ]
+    },
+    crushing: {
+        title: "Trituración y Agregados",
+        subtitle: "Procesamiento de Minerales",
+        heroImage: "https://images.unsplash.com/photo-1578326584285-d852a32c253b?q=80&w=2940&auto=format&fit=crop",
+        description: "Equipos de trituración, cribado y lavado para canteras y minería. Desde plantas móviles compactas hasta instalaciones estacionarias de gran capacidad.",
+        stats: [
+            { label: "Capacidad", value: "1100 tph" },
+            { label: "Materiales", value: "Roca Dura" },
+            { label: "Sistemas", value: "Móviles" },
+        ]
+    },
+    milling: {
+        title: "Molienda Industrial",
+        subtitle: "Equipos de Pulverización Fina",
+        heroImage: "https://images.unsplash.com/photo-1629738848773-195f0022f468?q=80&w=2940&auto=format&fit=crop",
+        description: "Tecnología avanzada para la molienda de minerales. Molinos de bolas y rodillos diseñados para alcanzar niveles de finura micrométrica con alta eficiencia energética.",
+        stats: [
+            { label: "Finura", value: "5-45 μm" },
+            { label: "Capacidad", value: "500k t/a" },
+            { label: "Uso", value: "Minería" },
         ]
     },
     production: {
