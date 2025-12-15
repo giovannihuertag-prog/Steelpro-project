@@ -60,13 +60,13 @@ const Hero: React.FC = () => {
                     </span>
                 </div>
                 
-                {/* Main Title - Refined */}
-                <h1 className="text-6xl sm:text-8xl md:text-9xl font-semibold tracking-[0.15em] uppercase mb-4 text-white leading-tight animate-fade-in">
+                {/* Main Title - Refined Typography (Premium Industrial) */}
+                <h1 className="text-5xl sm:text-7xl md:text-8xl font-semibold tracking-[0.12em] uppercase mb-6 text-zinc-100 leading-none animate-fade-in select-none">
                     STEELPRO
                 </h1>
                 
-                {/* Subtitle - Technical & Sober */}
-                <p className="text-lg sm:text-xl font-medium tracking-widest uppercase text-zinc-300 max-w-3xl animate-fade-in delay-100 mb-8 border-l-4 border-yellow-500 pl-4 sm:pl-6 ml-1 sm:ml-0">
+                {/* Subtitle - Technical, Sober & Precise */}
+                <p className="text-sm sm:text-base md:text-lg font-medium tracking-[0.2em] uppercase text-zinc-400 max-w-3xl animate-fade-in delay-100 mb-10 border-l-2 border-yellow-500/80 pl-6 ml-1 sm:ml-0 leading-relaxed">
                     Infraestructura Sólida para Proyectos Globales
                 </p>
 
