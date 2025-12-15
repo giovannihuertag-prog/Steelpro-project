@@ -1,6 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CalculatorIcon, ShieldCheckIcon, CubeTransparentIcon, ChartBarIcon } from '../components/Icons';
 import { useLanguage } from '../context/LanguageContext';
+import { Canvas } from '@react-three/fiber';
+import { Stage, OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
+
+// Fix for React Three Fiber JSX types
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      mesh: any;
+      group: any;
+      cylinderGeometry: any;
+      boxGeometry: any;
+      ringGeometry: any;
+      meshStandardMaterial: any;
+      color: any;
+      [elemName: string]: any;
+    }
+  }
+}
 
 // --- TYPES ---
 
@@ -27,6 +46,84 @@ interface HistoryItem {
 }
 
 type System = 'metric' | 'imperial';
+
+// --- 3D COMPONENTS ---
+
+const ShapeGeometry = ({ shape }: { shape: string }) => {
+    const color = "#eab308"; // Yellow 500
+    const metalMaterial = <meshStandardMaterial color={color} roughness={0.2} metalness={0.8} />;
+    
+    if (shape === 'solid_round') {
+        return (
+             <mesh rotation={[Math.PI/2, 0, 0]}>
+                <cylinderGeometry args={[1, 1, 4, 32]} />
+                {metalMaterial}
+             </mesh>
+        );
+    }
+    if (shape === 'solid_square') {
+        return (
+             <mesh rotation={[Math.PI/2, 0, 0]}>
+                <boxGeometry args={[1.5, 4, 1.5]} />
+                {metalMaterial}
+             </mesh>
+        );
+    }
+    if (shape === 'hollow') {
+        return (
+            <group rotation={[Math.PI/2, 0, 0]}>
+                <mesh>
+                    <cylinderGeometry args={[1, 1, 4, 32, 1, true]} />
+                    <meshStandardMaterial color={color} roughness={0.2} metalness={0.8} side={THREE.DoubleSide} />
+                </mesh>
+                 <mesh position={[0, 2, 0]} rotation={[Math.PI/2, 0, 0]}>
+                    <ringGeometry args={[0.8, 1, 32]} />
+                    <meshStandardMaterial color={color} roughness={0.2} metalness={0.8} side={THREE.DoubleSide} />
+                 </mesh>
+                 <mesh position={[0, -2, 0]} rotation={[Math.PI/2, 0, 0]}>
+                    <ringGeometry args={[0.8, 1, 32]} />
+                    <meshStandardMaterial color={color} roughness={0.2} metalness={0.8} side={THREE.DoubleSide} />
+                 </mesh>
+                 <mesh>
+                     <cylinderGeometry args={[0.8, 0.8, 4, 32, 1, true]} />
+                     <meshStandardMaterial color="#1a1a1a" roughness={0.8} side={THREE.DoubleSide} />
+                 </mesh>
+            </group>
+        );
+    }
+    if (shape === 'plate') {
+        return (
+             <mesh>
+                <boxGeometry args={[3, 4, 0.2]} />
+                {metalMaterial}
+             </mesh>
+        );
+    }
+    return null;
+};
+
+const ShapeVisualizer = ({ shape }: { shape: string }) => {
+    return (
+        <div className="w-full h-96 bg-zinc-900 border border-white/5 rounded-sm overflow-hidden relative animate-fade-in">
+            <div className="absolute top-4 right-4 z-10 bg-black/50 backdrop-blur px-3 py-1 rounded-full text-[10px] text-white border border-white/10 font-bold uppercase tracking-wider flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Interactive 3D
+            </div>
+            <Canvas shadows camera={{ position: [4, 2, 5], fov: 45 }}>
+                <color attach="background" args={['#18181b']} />
+                <Stage environment="city" intensity={0.6} adjustCamera>
+                     <ShapeGeometry shape={shape} />
+                </Stage>
+                <OrbitControls autoRotate autoRotateSpeed={2} enableZoom={false} />
+            </Canvas>
+             <div className="absolute bottom-4 left-0 w-full text-center pointer-events-none">
+                <p className="text-[10px] text-zinc-500 uppercase tracking-widest">
+                    Representación Visual Genérica
+                </p>
+            </div>
+        </div>
+    );
+};
 
 // --- COMPONENT ---
 
@@ -776,87 +873,82 @@ const CalculatorPage: React.FC = () => {
                 {/* PROGRESS BAR */}
                 <div className="flex justify-between items-center mb-12 max-w-lg mx-auto relative">
                     <div className="absolute top-1/2 left-0 w-full h-0.5 bg-zinc-800 -z-10"></div>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${step >= 1 ? 'bg-yellow-500 border-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.5)]' : 'bg-zinc-900 border-zinc-700 text-zinc-500'}`}>1</div>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${step >= 2 ? 'bg-yellow-500 border-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.5)]' : 'bg-zinc-900 border-zinc-700 text-zinc-500'}`}>2</div>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${step >= 3 ? 'bg-yellow-500 border-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.5)]' : 'bg-zinc-900 border-zinc-700 text-zinc-500'}`}>3</div>
+                    {[1, 2, 3].map((s) => (
+                        <div key={s} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-500 ${step >= s ? 'bg-yellow-500 text-black scale-110 shadow-[0_0_15px_rgba(234,179,8,0.4)]' : 'bg-zinc-800 text-zinc-500 border border-white/10'}`}>
+                            {step > s ? <span className="material-symbols-outlined text-lg">check</span> : s}
+                        </div>
+                    ))}
                 </div>
 
-                {/* STEP 1: DATA COLLECTION */}
+                {/* CONTENT STEPS */}
+                
+                {/* STEP 1: User Data */}
                 {step === 1 && (
-                    <div className="bg-zinc-900 border border-white/5 p-8 sm:p-12 rounded-sm shadow-2xl animate-fade-in max-w-2xl mx-auto relative overflow-hidden">
-                        {/* Decorative Corner */}
-                        <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-yellow-500/20 rounded-tr-sm"></div>
-
-                        <h2 className="text-xl font-bold text-white uppercase mb-6 flex items-center gap-2">
-                            <ShieldCheckIcon className="h-6 w-6 text-yellow-500" />
+                    <div className="bg-zinc-900 border border-white/5 p-8 rounded-sm shadow-2xl animate-fade-in">
+                        <h3 className="text-lg font-bold text-white uppercase mb-6 border-b border-white/5 pb-4">
                             {t('calc.step1')}
-                        </h2>
-                        <div className="space-y-6">
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-xs font-bold uppercase text-zinc-500 mb-1">{t('calc.name')} *</label>
+                                <label className="block text-xs font-bold text-zinc-500 uppercase mb-2">{t('calc.name')}</label>
                                 <input 
                                     type="text" 
-                                    className={`w-full bg-black border ${userErrors.name ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors font-mono`}
+                                    className={`w-full bg-black border ${userErrors.name ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors`}
                                     value={userData.name}
                                     onChange={e => setUserData({...userData, name: e.target.value})}
                                 />
-                                {userErrors.name && <p className="text-red-500 text-xs mt-1 font-mono">{userErrors.name}</p>}
+                                {userErrors.name && <p className="text-red-500 text-xs mt-1">{userErrors.name}</p>}
                             </div>
-                            
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-xs font-bold uppercase text-zinc-500 mb-1">{t('calc.email')} *</label>
-                                    <input 
-                                        type="email" 
-                                        className={`w-full bg-black border ${userErrors.email ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors font-mono`}
-                                        value={userData.email}
-                                        onChange={e => setUserData({...userData, email: e.target.value})}
-                                    />
-                                    {userErrors.email && <p className="text-red-500 text-xs mt-1 font-mono">{userErrors.email}</p>}
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold uppercase text-zinc-500 mb-1">{t('calc.company')} *</label>
-                                    <input 
-                                        type="text" 
-                                        className={`w-full bg-black border ${userErrors.company ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors font-mono`}
-                                        value={userData.company}
-                                        onChange={e => setUserData({...userData, company: e.target.value})}
-                                    />
-                                    {userErrors.company && <p className="text-red-500 text-xs mt-1 font-mono">{userErrors.company}</p>}
-                                </div>
+                            <div>
+                                <label className="block text-xs font-bold text-zinc-500 uppercase mb-2">{t('calc.email')}</label>
+                                <input 
+                                    type="email" 
+                                    className={`w-full bg-black border ${userErrors.email ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors`}
+                                    value={userData.email}
+                                    onChange={e => setUserData({...userData, email: e.target.value})}
+                                />
+                                {userErrors.email && <p className="text-red-500 text-xs mt-1">{userErrors.email}</p>}
                             </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-xs font-bold uppercase text-zinc-500 mb-1">{t('calc.location')} *</label>
-                                    <input 
-                                        type="text" 
-                                        className={`w-full bg-black border ${userErrors.location ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors font-mono`}
-                                        value={userData.location}
-                                        onChange={e => setUserData({...userData, location: e.target.value})}
-                                    />
-                                    {userErrors.location && <p className="text-red-500 text-xs mt-1 font-mono">{userErrors.location}</p>}
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold uppercase text-zinc-500 mb-1">{t('calc.usage')} *</label>
-                                    <select 
-                                        className={`w-full bg-black border ${userErrors.usage ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors font-mono`}
-                                        value={userData.usage}
-                                        onChange={e => setUserData({...userData, usage: e.target.value})}
-                                    >
-                                        <option value="">{t('calc.select_usage')}</option>
-                                        <option value="estructural">Estructural</option>
-                                        <option value="maquinado">Maquinado / Piezas</option>
-                                        <option value="mantenimiento">Mantenimiento / Refacción</option>
-                                        <option value="mineria">Minería</option>
-                                    </select>
-                                    {userErrors.usage && <p className="text-red-500 text-xs mt-1 font-mono">{userErrors.usage}</p>}
-                                </div>
+                            <div>
+                                <label className="block text-xs font-bold text-zinc-500 uppercase mb-2">{t('calc.company')}</label>
+                                <input 
+                                    type="text" 
+                                    className={`w-full bg-black border ${userErrors.company ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors`}
+                                    value={userData.company}
+                                    onChange={e => setUserData({...userData, company: e.target.value})}
+                                />
+                                {userErrors.company && <p className="text-red-500 text-xs mt-1">{userErrors.company}</p>}
                             </div>
-
+                            <div>
+                                <label className="block text-xs font-bold text-zinc-500 uppercase mb-2">{t('calc.location')}</label>
+                                <input 
+                                    type="text" 
+                                    className={`w-full bg-black border ${userErrors.location ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors`}
+                                    value={userData.location}
+                                    onChange={e => setUserData({...userData, location: e.target.value})}
+                                />
+                                {userErrors.location && <p className="text-red-500 text-xs mt-1">{userErrors.location}</p>}
+                            </div>
+                             <div className="md:col-span-2">
+                                <label className="block text-xs font-bold text-zinc-500 uppercase mb-2">{t('calc.usage')}</label>
+                                <select 
+                                    className={`w-full bg-black border ${userErrors.usage ? 'border-red-500' : 'border-white/10'} p-3 text-white focus:border-yellow-500 outline-none transition-colors`}
+                                    value={userData.usage}
+                                    onChange={e => setUserData({...userData, usage: e.target.value})}
+                                >
+                                    <option value="">{t('calc.select_usage')}</option>
+                                    <option value="construction">Construcción Civil / Civil Construction</option>
+                                    <option value="mining">Minería / Mining</option>
+                                    <option value="manufacturing">Manufactura / Manufacturing</option>
+                                    <option value="infrastructure">Infraestructura / Infrastructure</option>
+                                </select>
+                                {userErrors.usage && <p className="text-red-500 text-xs mt-1">{userErrors.usage}</p>}
+                            </div>
+                        </div>
+                        <div className="mt-8 flex justify-end">
                             <button 
                                 onClick={validateStep1}
-                                className="w-full mt-6 bg-yellow-500 text-black font-bold uppercase py-4 hover:bg-yellow-400 transition-colors tracking-wide"
+                                className="bg-yellow-500 text-black font-bold uppercase px-8 py-3 hover:bg-white transition-colors tracking-wide"
                             >
                                 {t('calc.btn_start')}
                             </button>
@@ -864,206 +956,163 @@ const CalculatorPage: React.FC = () => {
                     </div>
                 )}
 
-                {/* STEP 2: CONFIGURATION */}
+                {/* STEP 2: Configuration */}
                 {step === 2 && (
-                    <div className="bg-zinc-950 border border-white/5 rounded-sm p-6 sm:p-10 animate-fade-in relative">
-                         {/* Tech Grid Background */}
-                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none"></div>
-
-                        <div className="mb-8 border-b border-white/10 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
-                            <h2 className="text-xl font-bold text-white uppercase">{t('calc.step2')}</h2>
-                            
-                            {/* Unit Switcher */}
-                            <div className="flex bg-black rounded-sm p-1 border border-white/10">
-                                <button 
-                                    onClick={() => { setSystem('metric'); setDimensions({dim1:0,dim2:0,length:0}); setFormError(''); }}
-                                    className={`px-4 py-1.5 text-xs font-bold uppercase transition-all ${system === 'metric' ? 'bg-yellow-500 text-black shadow-lg' : 'text-zinc-500 hover:text-white'}`}
+                    <div className="animate-fade-in">
+                        {/* System Toggle */}
+                        <div className="flex justify-center mb-8">
+                            <div className="bg-zinc-900 border border-white/10 p-1 rounded-sm inline-flex">
+                                <button
+                                    onClick={() => setSystem('metric')}
+                                    className={`px-4 py-2 text-xs font-bold uppercase transition-colors ${system === 'metric' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
                                 >
                                     {t('calc.metric')}
                                 </button>
-                                <button 
-                                    onClick={() => { setSystem('imperial'); setDimensions({dim1:0,dim2:0,length:0}); setFormError(''); }}
-                                    className={`px-4 py-1.5 text-xs font-bold uppercase transition-all ${system === 'imperial' ? 'bg-yellow-500 text-black shadow-lg' : 'text-zinc-500 hover:text-white'}`}
+                                <button
+                                    onClick={() => setSystem('imperial')}
+                                    className={`px-4 py-2 text-xs font-bold uppercase transition-colors ${system === 'imperial' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
                                 >
                                     {t('calc.imperial')}
                                 </button>
                             </div>
                         </div>
 
-                        {/* Material Grid */}
-                        <div className="mb-8 relative z-10">
-                            <label className="block text-xs font-bold uppercase text-zinc-500 mb-3 tracking-widest">{t('calc.select_material')}</label>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {MATERIAL_OPTIONS.map((opt) => (
+                        {/* Material Selection */}
+                        <div className="mb-8">
+                             <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <span className="bg-yellow-500 text-black w-5 h-5 rounded-full flex items-center justify-center text-[10px]">1</span>
+                                {t('calc.select_material')}
+                             </h4>
+                             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                                {MATERIAL_OPTIONS.map((mat) => (
                                     <button
-                                        key={opt.id}
-                                        onClick={() => { setMaterial(opt.id); setFormError(''); }}
-                                        className={`group relative p-4 border rounded-sm transition-all duration-300 flex flex-col items-center gap-2 overflow-hidden ${!opt.image && opt.class} ${
-                                            material === opt.id 
-                                            ? 'border-yellow-500 opacity-100 ring-1 ring-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.15)] scale-105 z-10' 
-                                            : 'border-white/10 opacity-60 hover:opacity-100 hover:border-yellow-500 hover:shadow-lg'
+                                        key={mat.id}
+                                        onClick={() => setMaterial(mat.id)}
+                                        className={`p-3 text-left border transition-all duration-300 relative overflow-hidden group ${
+                                            material === mat.id 
+                                            ? 'border-yellow-500 bg-zinc-800' 
+                                            : 'border-white/10 bg-zinc-900 hover:border-white/30'
                                         }`}
                                     >
-                                        {/* Background Image Logic */}
-                                        {opt.image ? (
-                                            <>
-                                                <div className={`absolute inset-0 bg-zinc-900`}></div>
-                                                <img src={opt.image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay group-hover:scale-110 transition-transform duration-700" />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                                            </>
-                                        ) : null}
-
-                                        {/* Tooltip */}
-                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-max bg-zinc-900 border border-white/20 p-3 rounded-sm shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 backdrop-blur-xl">
-                                            <p className="text-[10px] text-yellow-500 font-bold uppercase text-center mb-2 pb-1 border-b border-white/10 tracking-widest">
-                                                {language === 'es' ? 'Densidad' : 'Density'}
-                                            </p>
-                                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] font-mono">
-                                                <div className="text-center">
-                                                    <span className="block text-zinc-500 uppercase text-[9px] mb-0.5 font-sans">{language === 'es' ? 'Métrico' : 'Metric'}</span>
-                                                    <span className="block font-bold text-white text-sm tracking-tight">{opt.densityMetric}</span>
-                                                    <span className="text-zinc-400 text-[9px]">kg/m³</span>
-                                                </div>
-                                                <div className="text-center border-l border-white/10 pl-4">
-                                                    <span className="block text-zinc-500 uppercase text-[9px] mb-0.5 font-sans">{language === 'es' ? 'Imperial' : 'Imperial'}</span>
-                                                    <span className="block font-bold text-white text-sm tracking-tight">{opt.densityImperial}</span>
-                                                    <span className="text-zinc-400 text-[9px]">lbs/ft³</span>
-                                                </div>
-                                            </div>
-                                            {/* Arrow */}
-                                            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-zinc-900"></div>
+                                        <div className={`absolute top-0 right-0 p-1 ${material === mat.id ? 'opacity-100' : 'opacity-0'}`}>
+                                            <span className="material-symbols-outlined text-yellow-500 text-sm">check_circle</span>
                                         </div>
-
-                                        <div className="relative z-10 flex flex-col items-center gap-2">
-                                            <opt.icon className="h-6 w-6 text-white" />
-                                            <span className="text-sm font-bold text-white uppercase text-center shadow-black drop-shadow-md">{opt.name}</span>
-                                        </div>
+                                        <mat.icon className={`h-6 w-6 mb-2 ${material === mat.id ? 'text-yellow-500' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
+                                        <p className={`text-xs font-bold uppercase leading-tight ${material === mat.id ? 'text-white' : 'text-zinc-400 group-hover:text-white'}`}>
+                                            {mat.name}
+                                        </p>
                                     </button>
                                 ))}
-                            </div>
+                             </div>
                         </div>
 
-                        {/* Shape Grid */}
-                         <div className="mb-8 relative z-10">
-                            <label className="block text-xs font-bold uppercase text-zinc-500 mb-3 tracking-widest">{t('calc.select_shape')}</label>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {SHAPE_OPTIONS.map(opt => (
+                        {/* Shape Selection */}
+                        <div className="mb-8">
+                             <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <span className="bg-yellow-500 text-black w-5 h-5 rounded-full flex items-center justify-center text-[10px]">2</span>
+                                {t('calc.select_shape')}
+                             </h4>
+                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {SHAPE_OPTIONS.map((s) => (
                                     <button
-                                        key={opt.id}
-                                        onClick={() => handleShapeSelect(opt.id)}
-                                        className={`p-4 border ${shape === opt.id ? 'border-yellow-500 bg-white/5 shadow-[inset_0_0_20px_rgba(234,179,8,0.1)]' : 'border-white/10 bg-black hover:border-white/30'} rounded-sm transition-all flex flex-col items-center gap-2`}
+                                        key={s.id}
+                                        onClick={() => handleShapeSelect(s.id)}
+                                        className={`flex flex-col items-center justify-center p-6 border rounded-sm transition-all ${
+                                            shape === s.id
+                                            ? 'border-yellow-500 bg-zinc-800 text-white shadow-[0_0_15px_rgba(234,179,8,0.1)]'
+                                            : 'border-white/10 bg-zinc-900 text-zinc-500 hover:border-white/30 hover:text-white'
+                                        }`}
                                     >
-                                        <span className={`material-symbols-outlined transition-colors ${shape === opt.id ? 'text-yellow-500' : 'text-zinc-300'}`}>{opt.icon}</span>
-                                        <span className={`text-xs font-bold uppercase text-center transition-colors ${shape === opt.id ? 'text-white' : 'text-zinc-400'}`}>{opt.name}</span>
+                                        <span className="material-symbols-outlined text-3xl mb-3">{s.icon}</span>
+                                        <span className="text-xs font-bold uppercase">{s.name}</span>
                                     </button>
                                 ))}
-                            </div>
+                             </div>
                         </div>
 
-                        {/* Dimensions Inputs */}
+                        {/* Dimensions & Calculation */}
                         {renderDimensionInputs()}
 
-                        <div className="mt-8 flex flex-col items-end gap-4 relative z-10">
-                            {formError && (
-                                <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-4 py-2 rounded-sm border border-red-500/20">
-                                    <span className="material-symbols-outlined text-sm">error</span>
-                                    <p className="text-xs font-bold uppercase tracking-wide animate-pulse">{formError}</p>
-                                </div>
-                            )}
+                        {/* Error Message */}
+                        {formError && (
+                            <div className="mt-6 p-3 bg-red-900/20 border border-red-500/50 text-red-200 text-sm text-center rounded-sm animate-pulse">
+                                {formError}
+                            </div>
+                        )}
+
+                        {/* Calculate Button */}
+                        <div className="mt-8 flex justify-center">
                             <button
                                 onClick={handleCalculate}
-                                className="bg-yellow-500 text-black font-black uppercase px-12 py-4 hover:bg-white transition-colors tracking-widest shadow-lg hover:shadow-yellow-500/20"
+                                disabled={!material || !shape}
+                                className="bg-yellow-500 text-black font-black uppercase px-12 py-4 text-lg hover:bg-white transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-yellow-500/20 tracking-wider clip-path-slant"
                             >
                                 {t('calc.btn_calc')}
                             </button>
                         </div>
+
+                         {/* History Chart (Visible in step 2) */}
+                        {renderHistoryChart()}
                     </div>
                 )}
 
-                {/* STEP 3: RESULTS (Visual Spec Sheet) */}
+                {/* STEP 3: Results */}
                 {step === 3 && result && (
-                    <div className="max-w-xl mx-auto animate-fade-in">
-                        <div className="bg-zinc-900 border border-yellow-500/50 rounded-sm overflow-hidden shadow-[0_0_50px_rgba(234,179,8,0.1)] relative group">
-                             
-                            {/* Industrial Header */}
-                            <div className="bg-black p-4 border-b border-white/10 flex justify-between items-center">
-                                <div className="flex items-center gap-2">
-                                     <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
-                                     <span className="text-[10px] font-mono text-zinc-400 uppercase">SPEC-ID: {Date.now().toString().slice(-6)}</span>
+                    <div className="animate-fade-in max-w-2xl mx-auto">
+                        <div className="bg-zinc-900 border border-yellow-500/30 p-8 rounded-sm shadow-[0_0_30px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent"></div>
+                            
+                            <div className="text-center mb-8">
+                                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest mb-2">{t('calc.result_title')}</h3>
+                                <div className="text-6xl font-black text-white mb-2 tracking-tighter">
+                                    {result.weight.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    <span className="text-2xl text-yellow-500 ml-2">{result.unitW}</span>
                                 </div>
-                                <div className="text-[10px] font-bold text-yellow-500 uppercase border border-yellow-500/30 px-2 py-0.5 rounded-sm">
-                                    Verified
+                                <div className="inline-block bg-zinc-800 px-3 py-1 rounded-full text-xs text-zinc-400 font-mono border border-white/5">
+                                    {t('calc.vol_total')}: {result.volume.toFixed(4)} {result.unitV}
                                 </div>
                             </div>
-                            
-                            <div className="p-0 relative">
-                                {/* Diagonal Lines Pattern */}
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)] pointer-events-none"></div>
 
-                                <div className="p-8 pb-4">
-                                    <h3 className="text-3xl font-black text-white uppercase tracking-tight mb-1">{t('calc.result_title')}</h3>
-                                    <p className="text-zinc-500 text-xs uppercase tracking-widest">Reporte Técnico Preliminar</p>
+                            <div className="grid grid-cols-2 gap-4 text-sm border-t border-white/10 pt-6">
+                                <div>
+                                    <p className="text-zinc-500 uppercase text-[10px] font-bold">Material</p>
+                                    <p className="text-white font-bold">{MATERIAL_OPTIONS.find(m => m.id === material)?.name}</p>
                                 </div>
-
-                                <div className="px-8 py-6">
-                                    <div className="grid grid-cols-2 gap-4 mb-8">
-                                        <div className="bg-white/5 p-4 rounded-sm border-l-2 border-yellow-500">
-                                            <p className="text-[9px] uppercase text-zinc-500 mb-1 font-bold tracking-wider">Material Base</p>
-                                            <p className="text-white font-bold text-sm uppercase">{MATERIAL_OPTIONS.find(m => m.id === material)?.name}</p>
-                                        </div>
-                                        <div className="bg-white/5 p-4 rounded-sm border-l-2 border-zinc-600">
-                                            <p className="text-[9px] uppercase text-zinc-500 mb-1 font-bold tracking-wider">Perfil</p>
-                                            <p className="text-white font-bold text-sm uppercase">{SHAPE_OPTIONS.find(s => s.id === shape)?.name}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1 bg-black p-6 rounded-sm border border-white/10 relative overflow-hidden">
-                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-500 to-transparent"></div>
-                                        
-                                        <div className="flex justify-between items-center border-b border-dashed border-white/10 pb-4 mb-4">
-                                            <span className="text-zinc-500 uppercase text-[10px] font-bold tracking-widest">{t('calc.vol_total')}</span>
-                                            <span className="text-zinc-300 font-mono text-lg">{result.volume.toFixed(4)} <span className="text-xs text-zinc-600">{result.unitV}</span></span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-white font-bold uppercase text-xs tracking-widest">{t('calc.weight_est')}</span>
-                                            <span className="text-yellow-500 font-mono font-black text-4xl tracking-tighter">
-                                                {result.weight.toFixed(2)} <span className="text-lg text-zinc-600 font-normal">{result.unitW}</span>
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div>
+                                    <p className="text-zinc-500 uppercase text-[10px] font-bold">Geometría</p>
+                                    <p className="text-white font-bold">{SHAPE_OPTIONS.find(s => s.id === shape)?.name}</p>
+                                </div>
+                                <div>
+                                    <p className="text-zinc-500 uppercase text-[10px] font-bold">Solicitante</p>
+                                    <p className="text-white font-bold">{userData.name}</p>
+                                </div>
+                                <div>
+                                    <p className="text-zinc-500 uppercase text-[10px] font-bold">Proyecto</p>
+                                    <p className="text-white font-bold">{userData.company}</p>
                                 </div>
                             </div>
-                            
-                            <div className="bg-black/50 p-6 border-t border-white/5 flex flex-col sm:flex-row gap-4">
+
+                            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <button 
                                     onClick={resetCalculator}
-                                    className="flex-1 border border-white/10 text-zinc-400 font-bold uppercase py-3 hover:bg-white/5 hover:text-white transition-colors text-[10px] tracking-wider"
+                                    className="w-full border border-white/10 bg-zinc-800 text-white font-bold uppercase py-3 hover:bg-zinc-700 transition-colors text-xs tracking-wider"
                                 >
                                     {t('calc.new_calc')}
                                 </button>
                                 <a 
                                     href="#contact"
-                                    className="flex-1 bg-yellow-500 text-black font-black uppercase py-3 hover:bg-white transition-colors text-[10px] flex items-center justify-center gap-2 tracking-wider"
+                                    className="w-full bg-yellow-500 text-black font-bold uppercase py-3 hover:bg-white transition-colors text-center text-xs tracking-wider flex items-center justify-center gap-2"
                                 >
-                                    <span className="material-symbols-outlined text-base">request_quote</span>
-                                    Cotizar Este Material
+                                    <span className="material-symbols-outlined text-sm">shopping_cart</span>
+                                    {t('calc.req_material')}
                                 </a>
-                            </div>
-                            
-                             {/* Scroll to History Action */}
-                            <div className="bg-black/80 p-2 text-center border-t border-white/5">
-                                <button 
-                                    onClick={() => smoothScrollTo(historyRef)}
-                                    className="text-[10px] text-zinc-500 hover:text-yellow-500 uppercase font-bold transition-colors flex items-center justify-center gap-1 w-full"
-                                >
-                                    <ChartBarIcon className="h-3 w-3" />
-                                    {language === 'es' ? 'Ver Historial de Cálculos' : 'View Calculation History'}
-                                </button>
                             </div>
                         </div>
 
-                        {/* HISTORY CHART */}
-                        {renderHistoryChart()}
+                        {/* Interactive Visualizer in Result */}
+                        <div className="mt-8">
+                             <ShapeVisualizer shape={shape} />
+                        </div>
                     </div>
                 )}
 

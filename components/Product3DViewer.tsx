@@ -3,6 +3,21 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stage, Float, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Fix for missing React Three Fiber JSX types
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      group: any;
+      mesh: any;
+      boxGeometry: any;
+      meshStandardMaterial: any;
+      cylinderGeometry: any;
+      color: any;
+      [elemName: string]: any;
+    }
+  }
+}
+
 // --- GEOMETRIES ---
 
 // A procedural industrial machine representation
