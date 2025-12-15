@@ -588,7 +588,13 @@ const CalculatorPage: React.FC = () => {
                         {shape === 'hollow' && (
                             <>
                                 <InputWrapper 
-                                    label={renderLabel(t('calc.outer_diam'), 'radio_button_unchecked', labelUnitSection, tipSection, true)} 
+                                    label={renderLabel(
+                                        t('calc.outer_diam'), 
+                                        'radio_button_unchecked', 
+                                        labelUnitSection, 
+                                        language === 'es' ? `Diámetro Total Externo (OD). ${tipSection}` : `Total Outer Diameter (OD). ${tipSection}`,
+                                        true
+                                    )} 
                                     unit={labelUnitSection} 
                                     error={fieldErrors.dim1}
                                 >
@@ -596,7 +602,12 @@ const CalculatorPage: React.FC = () => {
                                         value={dimensions.dim1 || ''} onChange={e => updateDimension('dim1', e.target.value)} />
                                 </InputWrapper>
                                 <InputWrapper 
-                                    label={renderLabel(t('calc.inner_diam'), null, labelUnitSection, tipSection)} 
+                                    label={renderLabel(
+                                        t('calc.inner_diam'), 
+                                        null, 
+                                        labelUnitSection, 
+                                        language === 'es' ? `Diámetro del Hueco (ID). ${tipSection}` : `Hole Diameter (ID). ${tipSection}`
+                                    )} 
                                     unit={labelUnitSection} 
                                     error={fieldErrors.dim2}
                                 >
@@ -618,7 +629,13 @@ const CalculatorPage: React.FC = () => {
                         {shape === 'plate' && (
                              <>
                                 <InputWrapper 
-                                    label={renderLabel(t('calc.thickness'), 'space_dashboard', labelUnitSection, tipSection, true)} 
+                                    label={renderLabel(
+                                        t('calc.thickness'), 
+                                        'space_dashboard', 
+                                        labelUnitSection, 
+                                        language === 'es' ? `Espesor de Placa. ${tipSection}` : `Plate Thickness. ${tipSection}`,
+                                        true
+                                    )} 
                                     unit={labelUnitSection} 
                                     error={fieldErrors.dim1}
                                 >
@@ -626,7 +643,12 @@ const CalculatorPage: React.FC = () => {
                                         value={dimensions.dim1 || ''} onChange={e => updateDimension('dim1', e.target.value)} />
                                 </InputWrapper>
                                 <InputWrapper 
-                                    label={renderLabel(t('calc.width'), null, labelUnitSection, tipSection)} 
+                                    label={renderLabel(
+                                        t('calc.width'), 
+                                        null, 
+                                        labelUnitSection, 
+                                        language === 'es' ? `Ancho Transversal. ${tipSection}` : `Cross-Section Width. ${tipSection}`
+                                    )} 
                                     unit={labelUnitSection} 
                                     error={fieldErrors.dim2}
                                 >

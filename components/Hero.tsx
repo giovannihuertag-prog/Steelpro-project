@@ -74,12 +74,12 @@ const Hero: React.FC = () => {
                 </div>
                 
                 {/* Main Title - Refined Typography (Premium Industrial) */}
-                <h1 className="text-5xl sm:text-7xl md:text-8xl font-semibold tracking-[0.12em] uppercase mb-6 text-zinc-100 leading-none animate-fade-in select-none">
+                <h1 className="text-5xl sm:text-7xl md:text-8xl font-semibold tracking-tight uppercase mb-6 text-zinc-100 leading-none animate-fade-in select-none">
                     STEELPRO
                 </h1>
                 
                 {/* Subtitle - Technical, Sober & Precise */}
-                <p className="text-sm sm:text-base md:text-lg font-medium tracking-[0.2em] uppercase text-zinc-400 max-w-3xl animate-fade-in delay-100 mb-10 border-l-2 border-yellow-500/80 pl-6 ml-1 sm:ml-0 leading-relaxed">
+                <p className="text-xs sm:text-sm md:text-base font-normal tracking-[0.15em] uppercase text-zinc-400 max-w-2xl animate-fade-in delay-100 mb-10 border-l border-yellow-500/60 pl-4 ml-1 sm:ml-0 leading-relaxed">
                     Infraestructura Sólida para Proyectos Globales
                 </p>
 
