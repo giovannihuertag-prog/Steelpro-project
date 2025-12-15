@@ -11,7 +11,7 @@ import {
 
 export interface Solution {
     id: string;
-    category: 'construction' | 'engineering' | 'steel' | 'production';
+    category: 'construction' | 'engineering' | 'road' | 'steel' | 'production';
     categoryLabel?: string; // For display purposes
     brand?: string;
     name: string;
@@ -200,6 +200,128 @@ export const solutions: Solution[] = [
         ]
     },
 
+    // --- SEGMENTO: MAQUINARIA VIAL (ROAD) ---
+    {
+        id: 'stationary-asphalt-plant',
+        category: 'road',
+        categoryLabel: 'Plantas de Asfalto',
+        brand: 'DASWELL',
+        name: 'Planta de Asfalto Estacionaria',
+        icon: ServerStackIcon,
+        status: 'bajo_pedido',
+        description: 'Planta mezcladora de asfalto ideal para proyectos de construcción de carreteras urbanas a gran escala. Diseñada con precisión para garantizar alimentación, secado, calentamiento y mezcla óptimos. Sistema de control automático para producción en masa de alta calidad.',
+        shortDescription: 'Producción masiva para autopistas.',
+        features: [
+            'Capacidad: 40 - 400 t/h',
+            'Mezclador: 750 - 5000 kg/lote',
+            'Aplicación: Autopistas / Aeropuertos',
+            'Insumos: Árido, polvo, betún'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Planta de asfalto estacionaria',
+        gallery: [
+            'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1535732820275-9ffd998cac22?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'drum-asphalt-plant',
+        category: 'road',
+        categoryLabel: 'Plantas de Asfalto',
+        brand: 'DASWELL',
+        name: 'Planta de Asfalto de Tambor',
+        icon: TraceabilityIcon,
+        status: 'bajo_pedido',
+        description: 'Equipo de mezcla asfáltica continua donde el tambor realiza funciones duales de secado y mezclado. Estructura integrada que ocupa menos espacio y facilita la movilización rápida entre obras. Ideal para caminos rurales y municipales.',
+        shortDescription: 'Mezcla continua compacta.',
+        features: [
+            'Capacidad: 40 - 100 t/h',
+            'Potencia: 75 - 200 kW',
+            'Tipo: Mezcla Continua',
+            'Ventaja: Rápida movilización'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2969&auto=format&fit=crop',
+        imageAlt: 'Planta de asfalto de tambor',
+        gallery: [
+            'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2969&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1574360778004-459807f7943d?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1595246738090-4497e7530691?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'mobile-asphalt-plant',
+        category: 'road',
+        categoryLabel: 'Plantas de Asfalto',
+        brand: 'DASWELL',
+        name: 'Planta de Asfalto Móvil',
+        icon: AutomationIcon,
+        status: 'bajo_pedido',
+        description: 'Sistema completo de producción de asfalto montado sobre chasis para facilitar el tránsito. Capaz de producir mezcla asfáltica, modificada y coloreada en cualquier ubicación. La solución preferida para obras itinerantes y mantenimiento vial.',
+        shortDescription: 'Planta completa sobre ruedas.',
+        features: [
+            'Capacidad: 40 - 160 t/h',
+            'Potencia: 75 - 142 kW',
+            'Movilidad: Chasis remolcable',
+            'Flexibilidad: Rápida instalación'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2874&auto=format&fit=crop',
+        imageAlt: 'Planta de asfalto móvil',
+        gallery: [
+            'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2874&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1584463635346-95aa5ae80136?q=80&w=2832&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'asphalt-paver',
+        category: 'road',
+        categoryLabel: 'Pavimentación',
+        brand: 'DASWELL',
+        name: 'Pavimentadora de Asfalto',
+        icon: TraceabilityIcon,
+        status: 'bajo_pedido',
+        description: 'Máquina esencial para la construcción de carreteras, diseñada para aplicar asfalto con uniformidad milimétrica. Equipada con motor Cummins QSB5.9 y sistemas de nivelación automática. Garantiza superficies lisas en autopistas y aeropuertos.',
+        shortDescription: 'Pavimentación vial de alta precisión.',
+        features: [
+            'Motor: Cummins QSB5.9 (97 kW)',
+            'Tecnología: Nivelación automática',
+            'Sistema: Hidráulico + Mecánico',
+            'Aplicación: Autopistas / Aeropuertos'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Pavimentadora de asfalto en operación',
+        gallery: [
+            'https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2874&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1584463635346-95aa5ae80136?q=80&w=2832&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'vibratory-roller',
+        category: 'road',
+        categoryLabel: 'Compactación',
+        brand: 'DASWELL',
+        name: 'Rodillo Vibratorio',
+        icon: AnalysisIcon,
+        status: 'disponible',
+        description: 'Diseñado para la compactación de materiales no cohesivos (arena, grava, roca). Utiliza fuerza estática (peso) combinada con fuerza dinámica (vibración) para penetrar profundamente en las capas del suelo. Disponible en configuraciones de tambor simple o doble (tándem).',
+        shortDescription: 'Compactación dinámica de suelos.',
+        features: [
+            'Potencia: 66.3 - 110 kW',
+            'Capacidad pendiente: 35%',
+            'Tipos: Tambor Simple / Doble',
+            'Uso: Asfalto y Bases Granulares'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1616401784845-180882ba9ba8?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Rodillo vibratorio compactador',
+        gallery: [
+            'https://images.unsplash.com/photo-1616401784845-180882ba9ba8?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2874&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1574360778004-459807f7943d?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+
     // --- SEGMENTO: INGENIERÍA ---
     {
         id: 'backhoe-loader',
@@ -209,13 +331,13 @@ export const solutions: Solution[] = [
         name: 'Retroexcavadora',
         icon: AnalysisIcon,
         status: 'disponible',
-        description: 'Máquina multifuncional que integra cargadora frontal y excavadora trasera. Sistema hidráulico con detección de carga (Load Sensing) para ahorro de combustible (hasta 16% en modo eco). Ideal para servicios públicos y zanjas.',
-        shortDescription: 'Cargadora y excavadora combinada.',
+        description: 'Integran a la perfección las capacidades de una cargadora frontal y una excavadora trasera en una máquina multifuncional ultraeficiente. Equipadas con una cuchara cargadora de 1 m³ y un potente brazo excavador trasero, estas máquinas destacan en la excavación de zanjas, la rotura de asfalto, la elevación, la carga y la manipulación de materiales. Tecnología hidráulica avanzada con detección de carga (Load Sensing) para un ciclo más suave y mayor vida útil.',
+        shortDescription: 'Funcionalidad dual: Cargadora + Excavadora.',
         features: [
-            'Peso operativo: 8200 kg',
-            'Cuchara carga: 1 m³',
-            'Tecnología: Bombas de desplazamiento variable',
-            'Eficiencia: Modo Eco + Bloqueo convertidor'
+            'Peso operativo total: 8200 kg',
+            'Capacidad cucharón: 1 m³',
+            'Hidráulica: Bombas de desplazamiento variable',
+            'Eficiencia: Ahorro combustible hasta 16%'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop',
         imageAlt: 'Retroexcavadora Daswell',
@@ -230,23 +352,95 @@ export const solutions: Solution[] = [
         category: 'engineering',
         categoryLabel: 'Maquinaria Pesada',
         brand: 'DASWELL',
-        name: 'Excavadora de Orugas Serie E',
+        name: 'Excavadora de Orugas',
         icon: AnalysisIcon,
         status: 'disponible',
-        description: 'Máquina de alto tonelaje diseñada para minería a cielo abierto y excavación masiva. Equipada con motores Isuzu de bajo consumo y un brazo reforzado con acero de alta tensión.',
-        shortDescription: 'Excavación pesada y minería.',
+        description: 'Máquina de movimiento de tierras equipada con un motor Cummins de alta potencia. Utiliza un cucharón para excavar materiales por encima o por debajo de la superficie de apoyo. Cuenta con bomba y válvula principal Kawasaki para durabilidad extrema y sistema de control electrónico de flujo positivo para respuesta rápida.',
+        shortDescription: 'Excavación pesada con motor Cummins.',
         features: [
-            'Peso Operativo: 22T - 36T',
-            'Capacidad de Cucharón: 1.0 - 1.8 m³',
-            'Profundidad de Excavación: 6.5 - 7.5 m',
-            'Cabina: ROPS/FOPS'
+            'Cubo estándar: 0.04 - 3.2 m³',
+            'Fuerza excavación: 15.2 - 28 kN',
+            'Motor: Cummins Alta Potencia',
+            'Hidráulica: Kawasaki Japón'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Excavadora de orugas',
+        imageAlt: 'Excavadora de orugas Cummins',
         gallery: [
             'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
             'https://images.unsplash.com/photo-1610427956424-6eb905953041?q=80&w=2874&auto=format&fit=crop',
             'https://images.unsplash.com/photo-1578326584285-d852a32c253b?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'skid-steer-loader',
+        category: 'engineering',
+        categoryLabel: 'Maquinaria Pesada',
+        brand: 'DASWELL',
+        name: 'Cargadora Compacta',
+        icon: CubeTransparentIcon,
+        status: 'disponible',
+        description: 'Minicargador con chasis de ruedas diseñado para espacios reducidos. Capaz de realizar giros de 360° sobre su propio eje. Versatilidad extrema gracias al cambio rápido de accesorios (martillo, barrena, horquillas). Ideal para limpieza logística y construcción municipal.',
+        shortDescription: 'Minicargador giro 360° versátil.',
+        features: [
+            'Potencia: 18.2 - 103 kW',
+            'Capacidad cubo: 0.16 - 0.55 m³',
+            'Tracción: 4x4 permanente',
+            'Uso: Espacios confinados / Logística'
+        ],
+        imageUrl: 'https://plus.unsplash.com/premium_photo-1664303847960-586318f59035?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Cargadora compacta skid steer',
+        gallery: [
+            'https://plus.unsplash.com/premium_photo-1664303847960-586318f59035?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1626264147775-7b6400595328?q=80&w=2874&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1589739900266-43b2843f4c12?q=80&w=2890&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'rough-terrain-forklift',
+        category: 'engineering',
+        categoryLabel: 'Maquinaria Pesada',
+        brand: 'DASWELL',
+        name: 'Montacargas Todo Terreno',
+        icon: ServerStackIcon,
+        status: 'bajo_pedido',
+        description: 'Carretilla elevadora con tracción integral permanente y neumáticos de base ancha. Diseñada para operar en lodo, nieve y terrenos irregulares donde los montacargas convencionales fallan. Ángulo de salida >30° y distancia al suelo >300mm.',
+        shortDescription: 'Elevación 4x4 para terreno difícil.',
+        features: [
+            'Carga nominal: 3500 - 7000 kg',
+            'Potencia: 36.8 - 103 kW',
+            'Tracción: 4WD Permanente',
+            'Pendiente superable: 25° - 35°'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1580901368919-7738efb0f87e?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Montacargas todo terreno',
+        gallery: [
+            'https://images.unsplash.com/photo-1580901368919-7738efb0f87e?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1618213837777-623253b3df76?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1595246737923-a7c88029c0f3?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'bulldozer',
+        category: 'engineering',
+        categoryLabel: 'Maquinaria Pesada',
+        brand: 'DASWELL',
+        name: 'Bulldozer Hidráulico',
+        icon: ShieldCheckIcon,
+        status: 'disponible',
+        description: 'Potente máquina de orugas para movimiento masivo de tierras. Equipada con cuchilla ancha y sistema hidráulico robusto para empuje y nivelación. Diseño de orugas que mejora la estabilidad en pendientes de hasta 45°. Indispensable en minería y construcción de presas.',
+        shortDescription: 'Empuje y nivelación de alto tonelaje.',
+        features: [
+            'Potencia: 131 - 257 kW',
+            'Pendiente máx: 45°',
+            'Implementos: Cuchilla / Ripper',
+            'Transmisión: Hidráulica'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1520106606041-6fb74c207904?q=80&w=2832&auto=format&fit=crop',
+        imageAlt: 'Bulldozer empujando tierra',
+        gallery: [
+            'https://images.unsplash.com/photo-1520106606041-6fb74c207904?q=80&w=2832&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1595246738090-4497e7530691?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1589739900266-43b2843f4c12?q=80&w=2890&auto=format&fit=crop'
         ]
     },
 
@@ -326,6 +520,17 @@ export const categoryMetaData = {
             { label: "Cuchara", value: "6.0 m³" },
             { label: "Peso Op.", value: "50 Ton" },
             { label: "Motores", value: "Tier 3/4" },
+        ]
+    },
+    road: {
+        title: "Maquinaria Vial",
+        subtitle: "Plantas de Asfalto y Pavimentación",
+        heroImage: "https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2874&auto=format&fit=crop",
+        description: "Infraestructura integral para carreteras. Plantas de asfalto de alta eficiencia y equipos de pavimentación diseñados para cumplir con los estándares internacionales más estrictos.",
+        stats: [
+            { label: "Capacidad", value: "400 t/h" },
+            { label: "Precisión", value: "Digital" },
+            { label: "Movilidad", value: "Modular" },
         ]
     },
     production: {
