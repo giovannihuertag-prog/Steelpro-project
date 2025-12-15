@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { FacebookIcon, InstagramIcon, WhatsAppIcon, CalculatorIcon } from './Icons';
 import { useLanguage } from '../context/LanguageContext';
+import { solutions, categoryMetaData } from '../data/solutions';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,11 +9,18 @@ const Header: React.FC = () => {
   const catalogRef = useRef<HTMLDivElement>(null);
   const { t, language, setLanguage } = useLanguage();
 
-  const catalogLinks = [
-      { name: 'Maquinaria: Construcción', href: '#solutions/construction', description: 'Bombas, mixers y plantas DASWELL.' },
-      { name: 'Maquinaria: Ingeniería', href: '#solutions/engineering', description: 'Excavación y movimiento de tierras.' },
-      { name: 'Aceros Industriales', href: '#solutions/steel', description: 'Materiales certificados y corte.' },
-  ];
+  // Dynamically generate catalog links from data
+  const catalogLinks = useMemo(() => {
+      const uniqueCategories = Array.from(new Set(solutions.map(s => s.category)));
+      return uniqueCategories.map(cat => {
+          const meta = categoryMetaData[cat as keyof typeof categoryMetaData];
+          return {
+              name: meta ? meta.title : cat.toUpperCase(),
+              href: `#solutions/${cat}`,
+              description: meta ? meta.subtitle : 'Ver catálogo completo'
+          };
+      });
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

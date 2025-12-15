@@ -11,382 +11,309 @@ import {
 
 export interface Solution {
     id: string;
-    category: 'construction' | 'engineering' | 'steel';
+    category: 'construction' | 'engineering' | 'steel' | 'production';
+    categoryLabel?: string; // For display purposes
     brand?: string;
     name: string;
     icon: React.FC<React.SVGProps<SVGSVGElement>>;
-    description: string;
-    shortDescription: string;
+    description: string; // Detailed description
+    shortDescription: string; // For card view
     features: string[];
     imageUrl: string;
     imageAlt: string;
     gallery?: string[];
-    densityMetric?: number; // kg/m3
-    densityImperial?: number; // lbs/ft3
+    status: 'disponible' | 'bajo_pedido' | 'proximamente';
+    pdfUrl?: string;
+    densityMetric?: number;
+    densityImperial?: number;
 }
 
 export const solutions: Solution[] = [
-    // --- SECCIÓN A: MAQUINARIA PARA CONSTRUCCIÓN ---
+    // --- SEGMENTO: CONSTRUCCIÓN (CONCRETOS) ---
     {
         id: 'concrete-mixer-pump',
         category: 'construction',
+        categoryLabel: 'División Concreto',
         brand: 'DASWELL',
         name: 'Bomba Mezcladora de Concreto',
         icon: AutomationIcon,
-        description: 'Unidad híbrida que integra mezclado forzado de doble eje y bombeo de alta presión en un solo chasis monobloque. Diseñada específicamente para optimizar la logística en obras de edificación vertical y túneles de sección media, eliminando la necesidad de plantas externas.',
-        shortDescription: 'Sistema integrado de mezcla y bombeo vertical.',
+        status: 'disponible',
+        description: 'La bomba mezcladora de hormigón es una máquina de construcción innovadora que combina las funciones de mezcla y bombeo de hormigón en una sola máquina. Ahorra mano de obra y es más económica, permitiendo completar tareas de vertido rápidamente en proyectos de vivienda y túneles.',
+        shortDescription: 'Mezcla y bombeo en un solo equipo.',
         features: [
-            'Capacidad de Bombeo: 30 - 40 m³/h',
-            'Presión de Salida: 10 MPa (Alta Presión)',
-            'Alcance: 120m Vertical / 300m Horizontal',
-            'Motorización: Diesel Cummins o Eléctrico 380V'
+            'Capacidad teórica: 30-45 m³/h',
+            'Potencia: Diesel Weichai o Eléctrico',
+            'Hidráulica: Kawasaki (Corea) / Rexroth',
+            'Alcance: Mangueras Manuli (Italia)'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Bomba mezcladora de concreto en operación',
+        imageAlt: 'Bomba mezcladora de concreto',
+        gallery: [
+            'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=2969&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1518709414768-a8c79b06a5de?q=80&w=2874&auto=format&fit=crop'
+        ],
+        pdfUrl: '#'
     },
     {
         id: 'self-loading-mixer',
         category: 'construction',
+        categoryLabel: 'División Concreto',
         brand: 'DASWELL',
-        name: 'Mezclador Autocargable 4x4',
+        name: 'Mezclador Autocargable',
         icon: CubeTransparentIcon,
-        description: 'Planta de concreto móvil con tracción integral 4x4 y chasis articulado. Permite la carga de áridos, dosificación de cemento, mezcla y vertido en cualquier punto del terreno. Es la solución definitiva para proyectos de infraestructura vial remota o cimentaciones en terrenos agrestes.',
-        shortDescription: 'Planta móvil 4x4 con autonomía total.',
+        status: 'disponible',
+        description: 'Solución integral para mezclar hormigón. Carga, mezcla, transporta y descarga automáticamente. Funciona como una pequeña planta móvil con tracción 4x4, ideal para terrenos difíciles. Cuenta con tambor giratorio de 270° y cabina cerrada.',
+        shortDescription: 'Planta móvil 4x4 todo en uno.',
         features: [
-            'Producción por Batch: 1.6m³ - 4.0m³',
-            'Rotación de Tambor: 270° para descarga lateral',
-            'Tracción: 4WD con dirección tipo cangrejo',
-            'Sistema de Pesaje: Electrónico de alta precisión'
+            'Capacidad de mezcla: 0.6 - 4.5 m³/lote',
+            'Salida: 1.2 - 6.5 m³',
+            'Rotación: 270° a 360°',
+            'Sistema de pesaje electrónico'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1632759145351-1d592919f522?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Mezclador autocargable en terreno difícil',
+        imageAlt: 'Mezclador autocargable',
+        gallery: [
+            'https://images.unsplash.com/photo-1632759145351-1d592919f522?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2874&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1584463635346-95aa5ae80136?q=80&w=2832&auto=format&fit=crop'
+        ]
     },
     {
         id: 'trailer-pump',
         category: 'construction',
+        categoryLabel: 'División Concreto',
         brand: 'DASWELL',
-        name: 'Bomba Estacionaria de Arrastre',
+        name: 'Bomba de Remolque',
         icon: VisualizationIcon,
-        description: 'Equipo de bombeo de alto caudal diseñado para operaciones continuas de larga distancia. Incorpora válvulas S-tube de aleación de manganeso y un sistema hidráulico de circuito abierto que garantiza una disipación térmica eficiente en climas extremos.',
-        shortDescription: 'Bombeo estacionario de largo alcance.',
+        status: 'bajo_pedido',
+        description: 'Equipo de bombeo estacionario para transportar concreto líquido. Disponible en versiones diésel y eléctrica. Clasificadas en bomba de piedra fina (≤30mm) y áridos grandes (≤40mm). Modelos especiales para túneles y puentes.',
+        shortDescription: 'Bombeo estacionario de alta presión.',
         features: [
-            'Rendimiento Teórico: 40 - 90 m³/h',
-            'Distancia Máxima: 800m Horizontal / 200m Vertical',
-            'Motor: Diesel Deutz/Cummins o Eléctrico',
-            'Sistema Hidráulico: Kawasaki (Japón)'
+            'Rendimiento: 30 - 90 m³/h',
+            'Presión salida: 10 - 22 MPa',
+            'Tipos: Eléctrica / Diesel',
+            'Aplicación: Rascacielos y larga distancia'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2969&auto=format&fit=crop',
-        imageAlt: 'Bomba de concreto estacionaria industrial',
+        imageAlt: 'Bomba de remolque estacionaria',
+        gallery: [
+            'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2969&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1574360778004-459807f7943d?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?q=80&w=2864&auto=format&fit=crop'
+        ]
     },
     {
-        id: 'dry-concrete-plant',
+        id: 'dry-mix-plant',
         category: 'construction',
+        categoryLabel: 'División Concreto',
         brand: 'DASWELL',
-        name: 'Planta Dosificadora Seca',
+        name: 'Planta de Hormigón Seco',
         icon: TraceabilityIcon,
-        description: 'Sistema modular de dosificación de agregados y cemento sin mezcladora central. La mezcla húmeda se realiza en el camión mixer durante el tránsito, lo que la hace ideal para proyectos que requieren distancias de transporte medias y alta velocidad de despacho.',
-        shortDescription: 'Dosificación rápida para carga de camiones mixer.',
+        status: 'bajo_pedido',
+        description: 'Sistema de dosificación sin mezcladora central. Carga áridos y cemento en seco directamente al camión mixer, donde se añade agua y se mezcla durante el transporte. Ideal para largas distancias y regiones cálidas.',
+        shortDescription: 'Dosificación rápida para mixers.',
         features: [
-            'Capacidad: 60 - 120 m³/h',
-            'Instalación: Diseño modular de rápido despliegue',
-            'Control: Sistema SCADA totalmente automático',
-            'Precisión: Celdas de carga IP67'
+            'Capacidad: 30 - 90 m³/h',
+            'Ventaja: Bajo mantenimiento',
+            'Uso: Proyectos remotos / Larga distancia',
+            'Estructura: Modular simple'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1660566365851-75468205f20a?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Planta de concreto tipo seca',
+        imageAlt: 'Planta de concreto seca',
+        gallery: [
+            'https://images.unsplash.com/photo-1660566365851-75468205f20a?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1581093583449-ed252133d01e?q=80&w=2832&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'mobile-batching-plant',
+        category: 'construction',
+        categoryLabel: 'División Concreto',
+        brand: 'DASWELL',
+        name: 'Planta Dosificadora Móvil',
+        icon: ServerStackIcon,
+        status: 'disponible',
+        description: 'Planta portátil que concentra almacenamiento, pesaje, transporte y mezcla en un bastidor móvil remolcable. Se instala en horas sin necesidad de cimientos complejos. Ahorra 90% en costes de cimentación.',
+        shortDescription: 'Producción de concreto in-situ.',
+        features: [
+            'Capacidad: 25 - 100 m³/h',
+            'Potencia: 40 - 135 kW',
+            'Movilidad: 1 o 2 remolques',
+            'Instalación: Rápida / Sin base'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1590059390234-63328ebbc5c5?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Planta móvil de concreto',
+        gallery: [
+            'https://images.unsplash.com/photo-1590059390234-63328ebbc5c5?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1580901369227-3d844b5847fa?q=80&w=2826&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1616401784845-180882ba9ba8?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'stationary-batching-plant',
+        category: 'construction',
+        categoryLabel: 'División Concreto',
+        brand: 'DASWELL',
+        name: 'Planta Estacionaria',
+        icon: ServerStackIcon,
+        status: 'bajo_pedido',
+        description: 'Instalación de producción masiva con alto grado de automatización. Diseñada para proyectos de infraestructura a gran escala (Presas, Aeropuertos, Autopistas). Estructura robusta para operación continua.',
+        shortDescription: 'Producción industrial de alto volumen.',
+        features: [
+            'Capacidad: 25 - 240 m³/h',
+            'Tipos: Tolva o Cinta Transportadora',
+            'Aplicación: Concreto Premezclado (RMC)',
+            'Durabilidad: Heavy Duty'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Planta estacionaria grande',
+        gallery: [
+            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1595246738090-4497e7530691?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1533240366601-57448d3db841?q=80&w=2940&auto=format&fit=crop'
+        ]
+    },
+    {
+        id: 'brick-machine',
+        category: 'production',
+        categoryLabel: 'Maquinaria de Producción',
+        brand: 'DASWELL',
+        name: 'Máquina de Ladrillos Hidráulica',
+        icon: CubeTransparentIcon,
+        status: 'bajo_pedido',
+        description: 'Línea de producción automática de ladrillos y bloques utilizando cenizas, arena y escoria. Sistema hidráulico de alta presión para ladrillos de alta densidad. Modelos BMM4-15 a BMM12-15.',
+        shortDescription: 'Fabricación automática de bloques.',
+        features: [
+            'Capacidad: 1728 - 2160 uds/h (bloque hueco)',
+            'Dimensiones: 9350x3200x2900 mm',
+            'Productos: Ladrillo hueco, pavimento, bordillo',
+            'Control: PLC Automático'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1622466479904-8785e4952042?q=80&w=2874&auto=format&fit=crop',
+        imageAlt: 'Máquina bloquera hidráulica',
+        gallery: [
+            'https://images.unsplash.com/photo-1622466479904-8785e4952042?q=80&w=2874&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1565258900984-5f50438a3915?q=80&w=2874&auto=format&fit=crop'
+        ]
     },
 
-    // --- SECCIÓN B: MAQUINARIA DE INGENIERÍA ---
+    // --- SEGMENTO: INGENIERÍA ---
+    {
+        id: 'backhoe-loader',
+        category: 'engineering',
+        categoryLabel: 'Maquinaria Pesada',
+        brand: 'DASWELL',
+        name: 'Retroexcavadora',
+        icon: AnalysisIcon,
+        status: 'disponible',
+        description: 'Máquina multifuncional que integra cargadora frontal y excavadora trasera. Sistema hidráulico con detección de carga (Load Sensing) para ahorro de combustible (hasta 16% en modo eco). Ideal para servicios públicos y zanjas.',
+        shortDescription: 'Cargadora y excavadora combinada.',
+        features: [
+            'Peso operativo: 8200 kg',
+            'Cuchara carga: 1 m³',
+            'Tecnología: Bombas de desplazamiento variable',
+            'Eficiencia: Modo Eco + Bloqueo convertidor'
+        ],
+        imageUrl: 'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop',
+        imageAlt: 'Retroexcavadora Daswell',
+        gallery: [
+            'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1579567761406-4684ee0c75b6?q=80&w=2787&auto=format&fit=crop'
+        ]
+    },
     {
         id: 'crawler-excavator',
         category: 'engineering',
+        categoryLabel: 'Maquinaria Pesada',
         brand: 'DASWELL',
         name: 'Excavadora de Orugas Serie E',
         icon: AnalysisIcon,
-        description: 'Máquina de alto tonelaje diseñada para minería a cielo abierto y excavación masiva. Equipada con motores Isuzu de bajo consumo y un brazo reforzado con acero de alta tensión para soportar ciclos de trabajo severos en roca dura.',
+        status: 'disponible',
+        description: 'Máquina de alto tonelaje diseñada para minería a cielo abierto y excavación masiva. Equipada con motores Isuzu de bajo consumo y un brazo reforzado con acero de alta tensión.',
         shortDescription: 'Excavación pesada y minería.',
         features: [
             'Peso Operativo: 22T - 36T',
             'Capacidad de Cucharón: 1.0 - 1.8 m³',
             'Profundidad de Excavación: 6.5 - 7.5 m',
-            'Cabina: ROPS/FOPS con climatización'
+            'Cabina: ROPS/FOPS'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Excavadora de orugas en operación minera',
-    },
-    {
-        id: 'wheel-loader',
-        category: 'engineering',
-        brand: 'DASWELL',
-        name: 'Cargador Frontal Articulado',
-        icon: ServerStackIcon,
-        description: 'Cargador sobre neumáticos con cinemática en Z para máxima fuerza de arranque. Ideal para plantas de agregados y movimiento de tierras. Su transmisión Powershift asegura ciclos de carga y descarga fluidos y rápidos.',
-        shortDescription: 'Carga eficiente de áridos y graneles.',
-        features: [
-            'Carga Nominal: 3000kg - 6000kg',
-            'Capacidad de Cuchara: 1.8 - 4.5 m³',
-            'Altura de Descarga: > 3100 mm',
-            'Motor: Weichai / Cummins Tier 3'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1579567761406-4684ee0c75b6?q=80&w=2787&auto=format&fit=crop',
-        imageAlt: 'Cargador frontal articulado',
-    },
-    {
-        id: 'backhoe-loader',
-        category: 'engineering',
-        brand: 'DASWELL',
-        name: 'Retroexcavadora 4x4',
-        icon: CubeTransparentIcon,
-        description: 'La máquina más versátil para infraestructura urbana y servicios públicos. Combina la capacidad de carga frontal con la precisión de excavación trasera. Estabilizadores hidráulicos verticales para operación en espacios confinados.',
-        shortDescription: 'Versatilidad urbana: Carga y excavación.',
-        features: [
-            'Potencia: 70kW (95 HP) Turbo',
-            'Tracción: 4WD conectable',
-            'Cuchara Frontal: 1.0 m³ (4 en 1 opcional)',
-            'Profundidad Excavación: 4.4 m'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1519000078018-8f81e3ad8149?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Retroexcavadora en obra civil',
-    },
-    {
-        id: 'mobile-crushing-plant',
-        category: 'engineering',
-        brand: 'DASWELL',
-        name: 'Planta de Trituración Móvil',
-        icon: ServerStackIcon,
-        description: 'Unidad autónoma de trituración y cribado montada sobre orugas o neumáticos. Permite procesar material in-situ, reduciendo costos de transporte en canteras y proyectos de demolición. Configurable con trituradora de mandíbula o cono.',
-        shortDescription: 'Trituración y cribado portátil.',
-        features: [
-            'Capacidad: 80 - 450 TPH',
-            'Configuración: Primaria / Secundaria',
-            'Alimentación: Tolva vibratoria integrada',
-            'Movilidad: Chasis reforzado de transporte'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1599933451563-71452df1575a?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Planta de trituración móvil',
+        imageAlt: 'Excavadora de orugas',
+        gallery: [
+            'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610427956424-6eb905953041?q=80&w=2874&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1578326584285-d852a32c253b?q=80&w=2940&auto=format&fit=crop'
+        ]
     },
 
-    // --- SECCIÓN C: ACEROS Y METALES INDUSTRIALES (MATERIALES AUTORIZADOS) ---
+    // --- SEGMENTO: ACEROS ---
     {
         id: 'hollow-bar-1518',
         category: 'steel',
+        categoryLabel: 'Aceros Especiales',
         brand: 'GRADO MAQUINARIA',
         name: 'Acero 1518 (Barra Hueca)',
         icon: CubeTransparentIcon,
-        description: 'Acero al carbono-manganeso de mecanizado optimizado. Su formato tubular sin costura reduce drásticamente los tiempos de maquinado y el desperdicio de material en la fabricación de piezas cilíndricas. Ofrece excelente soldabilidad y cementación.',
-        shortDescription: 'Barra hueca sin costura para bujes y camisas.',
+        status: 'disponible',
+        description: 'Acero al carbono-manganeso de mecanizado optimizado. Su formato tubular sin costura reduce drásticamente los tiempos de maquinado.',
+        shortDescription: 'Barra hueca sin costura.',
         densityMetric: 7850,
         densityImperial: 490,
         features: [
-            'Grado: SAE 1518 (Bajo Carbono / Alto Manganeso)',
-            'Formato: Barra Hueca sin costura',
-            'Propiedades: Excelente soldabilidad y cementación',
-            'Aplicaciones: Bujes, cilindros, camisas, separadores'
+            'Grado: SAE 1518',
+            'Formato: Barra Hueca',
+            'Soldabilidad: Excelente',
+            'Uso: Bujes, cilindros'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?q=80&w=2836&auto=format&fit=crop',
-        imageAlt: 'Barra hueca de acero 1518',
+        imageAlt: 'Barra hueca de acero',
+        gallery: [
+            'https://images.unsplash.com/photo-1535930749574-1399327ce78f?q=80&w=2836&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1615818451845-93c6ae1636c7?q=80&w=2750&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop'
+        ]
     },
     {
         id: 'carbon-plate-a36',
         category: 'steel',
+        categoryLabel: 'Aceros Especiales',
         brand: 'ACERO AL CARBÓN',
         name: 'Placa Estructural A36',
         icon: ServerStackIcon,
-        description: 'El estándar de oro en la construcción y manufactura general. Placa de acero de bajo carbono con un equilibrio óptimo entre resistencia, conformabilidad y soldabilidad. Ideal para bases de maquinaria, placas de anclaje y estructuras soldadas.',
-        shortDescription: 'Placa estructural estándar para bases y soportes.',
+        status: 'disponible',
+        description: 'Placa de acero de bajo carbono con un equilibrio óptimo entre resistencia, conformabilidad y soldabilidad.',
+        shortDescription: 'Placa estructural estándar.',
         densityMetric: 7850,
         densityImperial: 490,
         features: [
             'Grado: ASTM A36',
-            'Formato: Placa (Lámina caliente)',
-            'Fluencia: 36,000 PSI (mínimo)',
-            'Aplicaciones: Bases de equipos, estructuras, placas base'
+            'Fluencia: 36,000 PSI',
+            'Formato: Placa caliente',
+            'Uso: Estructuras'
         ],
         imageUrl: 'https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Placa de acero A36 industrial',
-    },
-    {
-        id: 'cast-iron-bar',
-        category: 'steel',
-        brand: 'HIERRO COLADO',
-        name: 'Hierro Gris y Nodular',
-        icon: ShieldCheckIcon,
-        description: 'Barras de fundición continua libres de porosidad. El hierro gris (Clase 40) ofrece una maquinabilidad superior y excelente amortiguación de vibraciones. El hierro nodular (65-45-12) aporta mayor ductilidad y resistencia al impacto para componentes sometidos a estrés.',
-        shortDescription: 'Barra sólida de fundición continua.',
-        densityMetric: 7200,
-        densityImperial: 450,
-        features: [
-            'Grados: Hierro Gris Clase 40 / Nodular 65-45-12',
-            'Formato: Barra Sólida',
-            'Ventaja: Estructura densa, grano fino, sin porosidad',
-            'Aplicaciones: Poleas, volantes, guías de deslizamiento'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1615818451845-93c6ae1636c7?q=80&w=2750&auto=format&fit=crop',
-        imageAlt: 'Barra de hierro colado textura',
-    },
-    {
-        id: 'stainless-series-300',
-        category: 'steel',
-        brand: 'INOXIDABLES SERIE 300',
-        name: 'Inoxidables Austeníticos',
-        icon: AnalysisIcon,
-        description: 'Aceros inoxidables no magnéticos de alta resistencia a la corrosión. Ideales para la industria alimentaria, química y marina. Mantenemos stock en grados especializados para maquinabilidad (303), uso general (304) y ambientes corrosivos severos (316L).',
-        shortDescription: 'Barra sólida: 303, 304, 316L.',
-        densityMetric: 7900,
-        densityImperial: 493,
-        features: [
-            '303: Azufre añadido para maquinado rápido (fittings)',
-            '304: El estándar industrial (sanitario/general)',
-            '316L: Bajo carbono con Molibdeno (marino/químico)',
-            'Formato: Barra Sólida (Redonda/Hexagonal)'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1595843477810-53a5666df75f?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Barras de acero inoxidable brillante',
-    },
-    {
-        id: 'stainless-410',
-        category: 'steel',
-        brand: 'INOXIDABLES 410',
-        name: 'Inoxidable 410 (Propósito General)',
-        icon: ShieldCheckIcon,
-        description: 'Acero inoxidable martensítico básico. Endurecible mediante tratamiento térmico. Combina alta resistencia mecánica con resistencia a la corrosión moderada. Es la opción económica para piezas sometidas a estrés en ambientes no severos.',
-        shortDescription: 'Martensítico endurecible de uso general.',
-        densityMetric: 7750,
-        densityImperial: 484,
-        features: [
-            'Grado: AISI 410 (Martensítico)',
-            'Dureza Típica: 38-42 HRC (Temple)',
-            'Resistencia: Atmósferas suaves, vapor y agua dulce',
-            'Aplicaciones: Bombas, ejes, álabes de turbina, tornillería'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1533240366601-57448d3db841?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Componentes industriales de acero 410',
-    },
-    {
-        id: 'stainless-416',
-        category: 'steel',
-        brand: 'INOXIDABLES 416',
-        name: 'Inoxidable 416 (Alta Maquinabilidad)',
-        icon: CubeTransparentIcon,
-        description: 'La versión de "Mecanizado Libre" del 410. La adición de azufre crea inclusiones de sulfuro de manganeso que rompen la viruta, permitiendo velocidades de corte hasta 85% mayores. Ideal para producción en serie en tornos automáticos.',
-        shortDescription: 'El inoxidable de mayor maquinabilidad.',
-        densityMetric: 7750,
-        densityImperial: 484,
-        features: [
-            'Grado: AISI 416 (Martensítico con Azufre)',
-            'Maquinabilidad: 160% (vs 100% del acero 1212)',
-            'Dureza Típica: 35-40 HRC',
-            'Aplicaciones: Tuercas, pernos, engranajes, válvulas'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1565258900984-5f50438a3915?q=80&w=2874&auto=format&fit=crop',
-        imageAlt: 'Piezas torneadas de acero 416',
-    },
-    {
-        id: 'stainless-420',
-        category: 'steel',
-        brand: 'INOXIDABLES 420',
-        name: 'Inoxidable 420 (Grado Moldes)',
-        icon: AnalysisIcon,
-        description: 'Acero martensítico con mayor contenido de carbono que el 410, diseñado para alcanzar alta dureza (50-52 HRC). Ofrece excelente resistencia al desgaste y capacidad de pulido espejo, lo que lo hace el estándar para moldes de inyección de plástico.',
-        shortDescription: 'Alta dureza para moldes y corte.',
-        densityMetric: 7750,
-        densityImperial: 484,
-        features: [
-            'Grado: AISI 420 (Alto Carbono)',
-            'Dureza Máxima: 50-52 HRC',
-            'Acabado: Acepta pulido espejo de alta calidad',
-            'Aplicaciones: Moldes de inyección, cuchillería, ejes de bomba'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1622622288019-2166d1f054ba?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Bloque de acero 420 para moldes',
-    },
-    {
-        id: 'aluminum-6061',
-        category: 'steel',
-        brand: 'ALUMINIO 6061',
-        name: 'Aluminio 6061-T6 (Estructural)',
-        icon: ServerStackIcon,
-        description: 'La aleación de aluminio más versátil del mercado. El temple T6 proporciona una excelente resistencia mecánica y a la corrosión. Es soldable y conformable, convirtiéndolo en el material estándar para estructuras ligeras, marcos de maquinaria y componentes arquitectónicos.',
-        shortDescription: 'Aleación estructural soldable y versátil.',
-        densityMetric: 2700,
-        densityImperial: 169,
-        features: [
-            'Aleación: 6061-T6 (Magnesio y Silicio)',
-            'Dureza: ~95 HB (Brinell)',
-            'Resistencia a la fluencia: 276 MPa (40,000 psi)',
-            'Aplicaciones: Estructuras, bases de máquinas, industria marina'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1622624424933-c216834b6e51?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Placa y barra de aluminio 6061',
-    },
-    {
-        id: 'aluminum-7075',
-        category: 'steel',
-        brand: 'ALUMINIO 7075',
-        name: 'Aluminio 7075-T6 (Aeroespacial)',
-        icon: VisualizationIcon,
-        description: 'Aleación de ultra-alta resistencia (serie Zinc). Ofrece propiedades mecánicas comparables a muchos aceros pero con un tercio del peso. Esencial para aplicaciones donde el ahorro de peso y la resistencia a la fatiga son críticos. No es recomendable para soldadura.',
-        shortDescription: 'Grado aeroespacial de máxima resistencia.',
-        densityMetric: 2810,
-        densityImperial: 175,
-        features: [
-            'Aleación: 7075-T6 (Zinc)',
-            'Dureza: ~150 HB (Brinell)',
-            'Resistencia a la fluencia: 503 MPa (73,000 psi)',
-            'Aplicaciones: Moldes de soplado, aeroespacial, engranajes alta tensión'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1536409597658-5d2729a6f3e1?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Componentes de aluminio 7075 de alta precisión',
-    },
-    {
-        id: 'aluminum-1050',
-        category: 'steel',
-        brand: 'ALUMINIO 1050',
-        name: 'Aluminio 1050 (Alta Pureza)',
-        icon: CubeTransparentIcon,
-        description: 'Aleación de aluminio comercialmente puro con excelente resistencia a la corrosión y alta conductividad térmica y eléctrica. Debido a su alta ductilidad y acabado brillante, es la elección preferida para la industria química, reflectores de iluminación y trabajos de chapa fina.',
-        shortDescription: 'Aluminio puro: alta ductilidad y corrosión.',
-        densityMetric: 2705,
-        densityImperial: 169,
-        features: [
-            'Pureza: 99.5% Al (mínimo)',
-            'Conductividad: 61.5% IACS',
-            'Propiedades: Alta ductilidad, no tratable térmicamente',
-            'Aplicaciones: Industria química, reflectores, señalética'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1595843477810-53a5666df75f?q=80&w=2940&auto=format&fit=crop',
-        imageAlt: 'Lámina de aluminio 1050',
-    },
-    {
-        id: 'non-ferrous-metals',
-        category: 'steel',
-        brand: 'METALES NO FERROSOS',
-        name: 'Bronce, Cobre y Latón',
-        icon: TraceabilityIcon,
-        description: 'Metales rojos y amarillos seleccionados por sus propiedades de conductividad y antifricción. Materiales esenciales para transmisión eléctrica, componentes de desgaste (bujes) y aplicaciones decorativas o de valvulería.',
-        shortDescription: 'Aleaciones de Cobre para conducción y desgaste.',
-        densityMetric: 8800,
-        densityImperial: 550,
-        features: [
-            'Bronce (SAE 660/64): Alta carga, antifricción (bujes)',
-            'Cobre: Electrolítico, alta conductividad térmica/eléctrica',
-            'Latón: Excelente maquinabilidad (fittings/conexiones)',
-            'Formato: Barras Sólidas y Bujes (Bronce)'
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1622340274291-766b96583925?q=80&w=2938&auto=format&fit=crop',
-        imageAlt: 'Barras de cobre y bronce industrial',
-    },
+        imageAlt: 'Placa A36',
+        gallery: [
+            'https://images.unsplash.com/photo-1567119782539-773df644558e?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1533240366601-57448d3db841?q=80&w=2940&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1615818451845-93c6ae1636c7?q=80&w=2750&auto=format&fit=crop'
+        ]
+    }
 ];
 
 export const categoryMetaData = {
     construction: {
-        title: "División Concreto",
+        title: "División Concretos",
         subtitle: "Tecnología de Bombeo y Mezclado",
         heroImage: "https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=2897&auto=format&fit=crop",
-        description: "Soluciones de ingeniería para la producción y colocación de concreto. Desde bombas estáticas de ultra-alta presión hasta plantas móviles todo terreno, nuestros equipos están diseñados para maximizar el uptime en obra.",
+        description: "Soluciones completas para la cadena de valor del concreto. Desde la dosificación precisa en plantas estacionarias hasta el bombeo vertical en rascacielos.",
         stats: [
-            { label: "Presión Máxima", value: "22 MPa" },
-            { label: "Alcance Vertical", value: "200m+" },
+            { label: "Presión Máx", value: "22 MPa" },
+            { label: "Producción", value: "240 m³/h" },
             { label: "Disponibilidad", value: "Inmediata" },
         ]
     },
@@ -394,18 +321,29 @@ export const categoryMetaData = {
         title: "Maquinaria Pesada",
         subtitle: "Movimiento de Tierras y Minería",
         heroImage: "https://images.unsplash.com/photo-1610427956424-6eb905953041?q=80&w=2874&auto=format&fit=crop",
-        description: "Flota de alto rendimiento para los entornos más exigentes. Nuestras excavadoras y cargadores combinan hidráulica japonesa de precisión con estructuras reforzadas para soportar ciclos de trabajo 24/7.",
+        description: "Flota de alto rendimiento para los entornos más exigentes. Nuestras excavadoras y cargadores combinan hidráulica japonesa con estructuras reforzadas.",
         stats: [
-            { label: "Capacidad Cuchara", value: "6.0 m³" },
-            { label: "Peso Operativo", value: "50 Ton" },
+            { label: "Cuchara", value: "6.0 m³" },
+            { label: "Peso Op.", value: "50 Ton" },
             { label: "Motores", value: "Tier 3/4" },
         ]
     },
+    production: {
+        title: "Sistemas de Producción",
+        subtitle: "Bloqueras y Prefabricados",
+        heroImage: "https://images.unsplash.com/photo-1622466479904-8785e4952042?q=80&w=2874&auto=format&fit=crop",
+        description: "Líneas automatizadas para la fabricación de ladrillos y bloques de concreto. Alta densidad y precisión dimensional para materiales de construcción.",
+        stats: [
+            { label: "Ciclo", value: "15s" },
+            { label: "Presión", value: "Alta" },
+            { label: "Control", value: "PLC" },
+        ]
+    },
     steel: {
-        title: "Aceros y Metales",
+        title: "Aceros Industriales",
         subtitle: "Inventario Técnico Selecto",
         heroImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2940&auto=format&fit=crop",
-        description: "En SteelPro no saturamos con catálogos infinitos. Seleccionamos únicamente los materiales que resuelven problemas críticos de ingeniería: resistencia al desgaste, maquinabilidad optimizada y certificaciones estructurales.",
+        description: "Seleccionamos únicamente los materiales que resuelven problemas críticos de ingeniería: resistencia al desgaste, maquinabilidad optimizada y certificaciones.",
         stats: [
             { label: "Grados", value: "Certificados" },
             { label: "Inoxidables", value: "300 / 400" },

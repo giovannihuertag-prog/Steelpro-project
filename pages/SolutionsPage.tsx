@@ -1,15 +1,18 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { solutions, Solution, categoryMetaData } from '../data/solutions';
 import { CheckIcon, XIcon, AnalysisIcon, CubeTransparentIcon, ShareIcon } from '../components/Icons';
 import ContactForm from '../components/ContactForm';
 import Product3DViewer from '../components/Product3DViewer';
 
-const filterCategories = [
-    { id: 'all', name: 'Catálogo Completo' },
-    { id: 'construction', name: 'Construcción' },
-    { id: 'engineering', name: 'Ingeniería' },
-    { id: 'steel', name: 'Aceros' },
-];
+// Dynamically generate filter categories from data
+const getFilterCategories = () => {
+    const uniqueCategories = Array.from(new Set(solutions.map(s => s.category)));
+    const dynamicCats = uniqueCategories.map(cat => ({
+        id: cat,
+        name: categoryMetaData[cat as keyof typeof categoryMetaData]?.title || cat.toUpperCase()
+    }));
+    return [{ id: 'all', name: 'Catálogo Completo' }, ...dynamicCats];
+};
 
 interface SectionProps {
     title: string;
@@ -32,63 +35,60 @@ const SolutionSection: React.FC<SectionProps> = ({ title, description, items, on
                 <p className="mt-2 text-zinc-400 pl-5">{description}</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8">
+            {/* Grid Layout Updated to 4 cols on XL */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
                 {items.map((solution) => (
                     <div 
                         key={solution.id} 
-                        className="group relative bg-zinc-900 border border-white/5 overflow-hidden rounded-sm hover:border-yellow-500/50 transition-all duration-300 flex flex-col sm:flex-row cursor-pointer"
+                        className="group relative bg-zinc-900 border border-white/5 overflow-hidden rounded-sm hover:border-yellow-500/50 transition-all duration-300 flex flex-col cursor-pointer h-full"
                         onClick={() => onSelect(solution)}
                     >
                         {/* Image Container */}
-                        <div className="sm:w-2/5 relative h-64 sm:h-auto overflow-hidden">
+                        <div className="relative h-48 overflow-hidden bg-black">
                             <img 
                                 src={solution.imageUrl} 
                                 alt={solution.imageAlt} 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
                             />
-                            <div className="absolute top-0 left-0 bg-yellow-500 text-black text-xs font-bold px-3 py-1 uppercase tracking-widest">
+                            <div className="absolute top-0 left-0 bg-yellow-500 text-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest">
                                 {solution.brand}
                             </div>
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent sm:bg-gradient-to-r"></div>
+                            {/* Status Badge */}
+                            <div className={`absolute top-0 right-0 px-2 py-1 text-[9px] font-bold uppercase tracking-widest ${
+                                solution.status === 'disponible' ? 'bg-green-500 text-black' : 'bg-zinc-700 text-white'
+                            }`}>
+                                {solution.status === 'disponible' ? 'En Stock' : 'Bajo Pedido'}
+                            </div>
                         </div>
 
                         {/* Content Container */}
-                        <div className="sm:w-3/5 p-6 flex flex-col justify-between">
-                            <div>
-                                <h4 className="text-xl font-bold text-white uppercase leading-tight mb-2 group-hover:text-yellow-500 transition-colors">
-                                    {solution.name}
-                                </h4>
-                                <p className="text-sm text-zinc-400 line-clamp-3 mb-4">
-                                    {solution.shortDescription}
-                                </p>
-                                
-                                <div className="space-y-1 mb-6">
-                                    {solution.features.slice(0, 4).map((feature, i) => (
-                                        <div key={i} className="flex items-center text-xs text-zinc-500">
-                                            <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-2 flex-shrink-0"></span>
-                                            <span className="truncate">{feature}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                        <div className="p-5 flex flex-col flex-grow">
+                            <h4 className="text-sm font-bold text-white uppercase leading-tight mb-2 group-hover:text-yellow-500 transition-colors">
+                                {solution.name}
+                            </h4>
+                            <p className="text-xs text-zinc-400 line-clamp-3 mb-4 flex-grow">
+                                {solution.shortDescription}
+                            </p>
+                            
+                            <div className="space-y-1 mb-4 border-t border-white/5 pt-3">
+                                {solution.features.slice(0, 2).map((feature, i) => (
+                                    <div key={i} className="flex items-center text-[10px] text-zinc-500">
+                                        <span className="w-1 h-1 bg-yellow-500 rounded-full mr-2 flex-shrink-0"></span>
+                                        <span className="truncate">{feature}</span>
+                                    </div>
+                                ))}
                             </div>
 
-                            <div className="flex gap-3 mt-auto">
+                            <div className="mt-auto">
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         onSelect(solution);
                                     }}
-                                    className="flex-1 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold uppercase text-white tracking-wide transition-colors"
+                                    className="w-full py-2 bg-white/5 hover:bg-yellow-500 hover:text-black border border-white/10 text-[10px] font-bold uppercase text-white tracking-widest transition-colors"
                                 >
-                                    Ver Detalles
+                                    Ver Detalle
                                 </button>
-                                <a 
-                                    href="#contact"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="flex-1 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-xs font-bold uppercase text-black tracking-wide text-center transition-colors flex items-center justify-center"
-                                >
-                                    Solicitar Cotización
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,35 @@ const SolutionSection: React.FC<SectionProps> = ({ title, description, items, on
     );
 }
 
+// Dynamic Image Preview Component
+const SegmentPreview: React.FC<{ items: Solution[] }> = ({ items }) => {
+    // Get 3 random images from the items
+    const previewImages = useMemo(() => {
+        if (items.length < 3) return items.slice(0, 3);
+        return [...items].sort(() => 0.5 - Math.random()).slice(0, 3);
+    }, [items]);
+
+    if (items.length === 0) return null;
+
+    return (
+        <div className="grid grid-cols-3 gap-1 h-32 md:h-48 mb-12 opacity-60 hover:opacity-100 transition-opacity duration-500">
+            {previewImages.map((item, idx) => (
+                <div key={idx} className="relative overflow-hidden group bg-black">
+                    <img 
+                        src={item.imageUrl} 
+                        alt="Preview" 
+                        className="w-full h-full object-cover grayscale transition-transform duration-1000 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                </div>
+            ))}
+        </div>
+    );
+};
+
 const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) => {
+    const filterCategories = useMemo(() => getFilterCategories(), []);
+
     const activeFilter = useMemo(() => {
         const hashParts = route.split('/');
         if (hashParts.length > 1 && hashParts[0] === '#solutions') {
@@ -108,7 +136,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
             }
         }
         return 'all';
-    }, [route]);
+    }, [route, filterCategories]);
 
     const isCategoryView = activeFilter !== 'all';
     const categoryInfo = isCategoryView ? categoryMetaData[activeFilter as keyof typeof categoryMetaData] : null;
@@ -119,21 +147,17 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
     const [viewMode, setViewMode] = useState<'image' | '3d'>('image');
     const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
-    // Group solutions by category
-    const groupedSolutions = useMemo(() => {
-        return {
-            construction: solutions.filter(s => s.category === 'construction'),
-            engineering: solutions.filter(s => s.category === 'engineering'),
-            steel: solutions.filter(s => s.category === 'steel')
-        };
-    }, []);
+    // Filter solutions dynamically
+    const currentSolutions = useMemo(() => {
+        if (activeFilter === 'all') return solutions;
+        return solutions.filter(s => s.category === activeFilter);
+    }, [activeFilter]);
 
     useEffect(() => {
         if (selectedSolution) {
             document.body.style.overflow = 'hidden';
-            // Reset the active image to the main one when opening modal
             setActiveImage(selectedSolution.imageUrl);
-            setViewMode('image'); // Reset to image view
+            setViewMode('image');
             setShowCopyFeedback(false);
         } else {
             document.body.style.overflow = 'auto';
@@ -154,38 +178,27 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
 
     const handleShare = async () => {
         if (!selectedSolution) return;
-        
-        // Use current URL since we don't have deep linking logic for specific modals yet
-        // In a real scenario, you'd append ?id=... or similar
         const shareData = {
             title: `STEELPRO - ${selectedSolution.name}`,
             text: selectedSolution.description,
             url: window.location.href 
         };
-
         if (navigator.share) {
-            try {
-                await navigator.share(shareData);
-            } catch (err) {
-                console.error('Error sharing', err);
-            }
+            try { await navigator.share(shareData); } catch (err) { console.error('Error sharing', err); }
         } else {
             try {
                 await navigator.clipboard.writeText(window.location.href);
                 setShowCopyFeedback(true);
                 setTimeout(() => setShowCopyFeedback(false), 2000);
-            } catch (err) {
-                console.error('Error copying', err);
-            }
+            } catch (err) { console.error('Error copying', err); }
         }
     };
 
     return (
         <div className="pt-0 animate-fade-in bg-zinc-950 min-h-screen">
             
-            {/* HERO SECTION: Dynamic based on Category vs All */}
+            {/* HERO SECTION */}
             {!isCategoryView ? (
-                // Standard Catalog Hero
                 <div className="pt-24 sm:pt-32 pb-10">
                      <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-3xl text-center">
@@ -198,7 +211,6 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                     </div>
                 </div>
             ) : (
-                // Specialized Category Hero
                 <div className="relative h-[60vh] min-h-[500px] flex items-center">
                      <div className="absolute inset-0 z-0">
                          <img 
@@ -244,16 +256,16 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                 </div>
             )}
 
-            {/* Sub-Navigation / Breadcrumbs */}
+            {/* Sub-Navigation */}
             <div className={`sticky top-20 z-30 bg-zinc-950/90 backdrop-blur-sm border-b border-white/5 ${isCategoryView ? 'py-2' : 'py-4 mt-8'}`}>
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center justify-between">
-                    <div className="flex flex-wrap items-center gap-2">
-                        {isCategoryView && <span className="text-zinc-500 text-sm font-bold uppercase mr-2 hidden sm:inline">Departamentos:</span>}
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center justify-between overflow-x-auto no-scrollbar">
+                    <div className="flex flex-nowrap items-center gap-2">
+                        {isCategoryView && <span className="text-zinc-500 text-sm font-bold uppercase mr-2 hidden sm:inline whitespace-nowrap">Departamentos:</span>}
                         {filterCategories.map((category) => (
                             <a
                                 key={category.id}
                                 href={category.id === 'all' ? '#solutions' : `#solutions/${category.id}`}
-                                className={`px-4 py-2 text-xs sm:text-sm font-bold uppercase tracking-wide transition-all duration-300 focus:outline-none ${
+                                className={`px-4 py-2 text-xs sm:text-sm font-bold uppercase tracking-wide transition-all duration-300 focus:outline-none whitespace-nowrap ${
                                     activeFilter === category.id
                                     ? 'bg-yellow-500 text-black skew-x-[-10deg]'
                                     : 'text-zinc-400 hover:text-white hover:bg-white/5'
@@ -263,11 +275,6 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                             </a>
                         ))}
                     </div>
-                    {isCategoryView && (
-                         <a href="#contact" className="hidden sm:inline-flex items-center text-xs font-bold text-yellow-500 hover:text-white uppercase transition-colors">
-                            Hablar con un ingeniero <span className="ml-2">→</span>
-                         </a>
-                    )}
                 </div>
             </div>
 
@@ -280,40 +287,31 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                         </div>
                     </div>
                 ) : (
-                    <div className="animate-fade-in space-y-8">
-                        {/* Section A: Construction */}
-                        {(activeFilter === 'all' || activeFilter === 'construction') && (
-                            <SolutionSection 
-                                id="construction"
-                                title={isCategoryView ? "Equipos Disponibles" : "A) Maquinaria para Construcción"} 
-                                description="Soluciones integrales de bombeo, mezcla y plantas de hormigón DASWELL."
-                                items={groupedSolutions.construction} 
-                                onSelect={setSelectedSolution}
-                                showDivider={!isCategoryView}
-                            />
-                        )}
+                    <div className="animate-fade-in">
+                        
+                        {/* Dynamic Preview for Category View */}
+                        {isCategoryView && <SegmentPreview items={currentSolutions} />}
 
-                        {/* Section B: Engineering */}
-                        {(activeFilter === 'all' || activeFilter === 'engineering') && (
+                        {/* If viewing ALL, group by category. If viewing ONE category, show just that list */}
+                        {activeFilter === 'all' ? (
+                            filterCategories.filter(c => c.id !== 'all').map(cat => (
+                                <SolutionSection
+                                    key={cat.id}
+                                    id={cat.id}
+                                    title={`Maquinaria: ${cat.name}`}
+                                    description={categoryMetaData[cat.id as keyof typeof categoryMetaData]?.subtitle || ''}
+                                    items={solutions.filter(s => s.category === cat.id)}
+                                    onSelect={setSelectedSolution}
+                                />
+                            ))
+                        ) : (
                             <SolutionSection 
-                                id="engineering"
-                                title={isCategoryView ? "Equipos Disponibles" : "B) Maquinaria de Ingeniería"} 
-                                description="Equipos pesados de movimiento de tierras y elevación para grandes proyectos."
-                                items={groupedSolutions.engineering} 
+                                id={activeFilter}
+                                title="Equipos Disponibles" 
+                                description={`Listado completo de equipos para ${categoryMetaData[activeFilter as keyof typeof categoryMetaData]?.title}`}
+                                items={currentSolutions} 
                                 onSelect={setSelectedSolution}
-                                showDivider={!isCategoryView}
-                            />
-                        )}
-
-                        {/* Section C: Steel */}
-                        {(activeFilter === 'all' || activeFilter === 'steel') && (
-                            <SolutionSection 
-                                id="steel"
-                                title={isCategoryView ? "Catálogo de Materiales" : "Aceros Industriales"} 
-                                description="Suministro de materiales certificados para manufactura y estructuras."
-                                items={groupedSolutions.steel} 
-                                onSelect={setSelectedSolution}
-                                showDivider={!isCategoryView}
+                                showDivider={false}
                             />
                         )}
                     </div>
@@ -344,38 +342,38 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
               </div>
             </div>
 
-            {/* Details Modal */}
+            {/* LIGHT MODE DETAIL MODAL */}
             {selectedSolution && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in"
                     onClick={() => setSelectedSolution(null)}
                 >
                     <div
-                        className="relative w-full max-w-6xl bg-zinc-900 rounded-sm shadow-2xl border border-yellow-500/30 max-h-[95vh] overflow-y-auto flex flex-col md:flex-row"
+                        className="relative w-full max-w-6xl bg-white rounded-sm shadow-2xl overflow-hidden max-h-[95vh] flex flex-col md:flex-row"
                         onClick={(e) => e.stopPropagation()} 
                     >
                         {/* Modal Image/3D Column */}
-                        <div className="md:w-5/12 bg-black flex flex-col relative group">
+                        <div className="md:w-5/12 bg-zinc-100 flex flex-col relative group border-r border-zinc-200">
                             
                             {/* Toggle Switch */}
-                            <div className="absolute top-4 right-4 z-20 flex bg-zinc-900/90 backdrop-blur rounded-sm border border-white/10 p-1">
+                            <div className="absolute top-4 right-4 z-20 flex bg-white rounded-sm shadow-md border border-zinc-200 p-1">
                                 <button
                                     onClick={() => setViewMode('image')}
-                                    className={`px-3 py-1.5 text-[10px] font-bold uppercase transition-colors ${viewMode === 'image' ? 'bg-white text-black' : 'text-zinc-500 hover:text-white'}`}
+                                    className={`px-3 py-1.5 text-[10px] font-bold uppercase transition-colors ${viewMode === 'image' ? 'bg-zinc-900 text-white' : 'text-zinc-500 hover:text-zinc-900'}`}
                                 >
                                     Fotos
                                 </button>
                                 <button
                                     onClick={() => setViewMode('3d')}
-                                    className={`px-3 py-1.5 text-[10px] font-bold uppercase transition-colors flex items-center gap-1 ${viewMode === '3d' ? 'bg-yellow-500 text-black' : 'text-zinc-500 hover:text-white'}`}
+                                    className={`px-3 py-1.5 text-[10px] font-bold uppercase transition-colors flex items-center gap-1 ${viewMode === '3d' ? 'bg-yellow-500 text-black' : 'text-zinc-500 hover:text-zinc-900'}`}
                                 >
                                     <CubeTransparentIcon className="h-3 w-3" />
                                     3D
                                 </button>
                             </div>
 
-                            {/* Main Content Area (Image or 3D) */}
-                            <div className="relative h-64 md:h-[500px] w-full bg-zinc-950">
+                            {/* Main Content Area */}
+                            <div className="relative h-64 md:h-[500px] w-full bg-zinc-50">
                                 {viewMode === 'image' ? (
                                     <>
                                         <img 
@@ -383,24 +381,23 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                                             alt={selectedSolution.imageAlt} 
                                             className="absolute inset-0 w-full h-full object-cover animate-fade-in"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 pointer-events-none"></div>
-                                        <div className="absolute top-4 left-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 uppercase tracking-widest z-10 pointer-events-none">
+                                        <div className="absolute top-4 left-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 uppercase tracking-widest z-10 shadow-md">
                                             {selectedSolution.brand}
                                         </div>
                                     </>
                                 ) : (
-                                    <div className="w-full h-full animate-fade-in">
-                                         <Product3DViewer category={selectedSolution.category} />
-                                         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur px-3 py-1 rounded-full text-[10px] text-zinc-300 pointer-events-none border border-white/10">
-                                            Click y arrastre para rotar • Scroll para zoom
+                                    <div className="w-full h-full animate-fade-in bg-zinc-200">
+                                         <Product3DViewer category={selectedSolution.category} className="bg-zinc-200" />
+                                         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur px-3 py-1 rounded-full text-[10px] text-zinc-600 pointer-events-none border border-zinc-300 shadow-sm">
+                                            Interactivo 3D
                                          </div>
                                     </div>
                                 )}
                             </div>
                             
-                            {/* Gallery Thumbnails (only if gallery exists AND in image mode) */}
+                            {/* Gallery Thumbnails */}
                             {viewMode === 'image' && selectedSolution.gallery && selectedSolution.gallery.length > 0 && (
-                                <div className="p-4 grid grid-cols-4 gap-2 bg-zinc-950/50 border-t border-white/5">
+                                <div className="p-4 grid grid-cols-4 gap-2 bg-white border-t border-zinc-200">
                                     {selectedSolution.gallery.map((imgUrl, index) => (
                                         <button
                                             key={index}
@@ -414,115 +411,90 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                             )}
                         </div>
 
-                        {/* Modal Content */}
-                        <div className="md:w-7/12 p-8 md:p-12 flex flex-col overflow-y-auto">
+                        {/* Modal Content - LIGHT THEME */}
+                        <div className="md:w-7/12 p-8 md:p-12 flex flex-col overflow-y-auto bg-white text-zinc-900">
                             <div className="flex items-start justify-between gap-x-4 mb-2">
                                 <div className="inline-flex items-center gap-2 mb-2">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-yellow-500 animate-pulse"></span>
+                                    <span className={`h-2 w-2 rounded-full ${selectedSolution.status === 'disponible' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></span>
                                     <span className="text-xs font-bold uppercase tracking-widest text-zinc-500">
-                                        {selectedSolution.category === 'construction' ? 'Maquinaria Pesada' : selectedSolution.category === 'engineering' ? 'Ingeniería Civil' : 'Materiales'}
+                                        {selectedSolution.categoryLabel || selectedSolution.category}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={handleShare}
-                                        className="p-1 text-zinc-400 hover:text-yellow-500 transition-colors focus:outline-none relative group"
-                                        title="Compartir"
-                                    >
+                                    <button onClick={handleShare} className="p-1 text-zinc-400 hover:text-zinc-900 transition-colors relative" title="Compartir">
                                         <ShareIcon className="h-5 w-5" />
                                         {showCopyFeedback && (
-                                             <span className="absolute top-full right-0 mt-1 text-[9px] bg-yellow-500 text-black px-1 rounded whitespace-nowrap font-bold">
-                                                 Link Copiado
-                                             </span>
+                                             <span className="absolute top-full right-0 mt-1 text-[9px] bg-black text-white px-1 rounded font-bold">Copiado</span>
                                         )}
                                     </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setSelectedSolution(null)}
-                                        className="p-1 text-zinc-400 hover:text-white transition-colors focus:outline-none"
-                                    >
+                                    <button onClick={() => setSelectedSolution(null)} className="p-1 text-zinc-400 hover:text-red-500 transition-colors">
                                         <XIcon className="h-6 w-6" />
                                     </button>
                                 </div>
                             </div>
 
-                            <h3 className="text-3xl md:text-4xl font-black tracking-tight text-white uppercase leading-none mb-6">
+                            <h3 className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 uppercase leading-none mb-6">
                                 {selectedSolution.name}
                             </h3>
 
-                            <p className="text-lg text-zinc-300 mb-8 font-light leading-relaxed border-l-2 border-zinc-700 pl-4">
+                            <p className="text-lg text-zinc-600 mb-8 font-normal leading-relaxed border-l-4 border-yellow-500 pl-4 bg-yellow-50 p-4 rounded-r-sm">
                                 {selectedSolution.description}
                             </p>
                             
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-                                <div className="bg-white/5 p-6 rounded-sm border border-white/5">
-                                    <h4 className="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-4 flex items-center">
-                                        <AnalysisIcon className="h-4 w-4 mr-2" />
-                                        Especificaciones Técnicas
+                                <div className="bg-zinc-50 p-6 rounded-sm border border-zinc-200">
+                                    <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-widest mb-4 flex items-center border-b border-zinc-200 pb-2">
+                                        <AnalysisIcon className="h-4 w-4 mr-2 text-yellow-500" />
+                                        Ficha Técnica
                                     </h4>
                                     <ul className="space-y-3">
                                         {selectedSolution.features.map((feature) => (
-                                            <li key={feature} className="flex items-start text-sm text-zinc-300">
-                                                <CheckIcon className="h-5 w-5 text-yellow-500 mr-3 flex-shrink-0" />
+                                            <li key={feature} className="flex items-start text-sm text-zinc-700">
+                                                <CheckIcon className="h-5 w-5 text-green-600 mr-3 flex-shrink-0" />
                                                 {feature}
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
 
-                                {/* Visual Performance Graph (Simulated) */}
-                                <div className="bg-white/5 p-6 rounded-sm border border-white/5">
-                                    <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4">
-                                        Índice de Rendimiento
-                                    </h4>
-                                    <div className="space-y-4">
-                                        <div>
-                                            <div className="flex justify-between text-xs text-zinc-500 mb-1">
-                                                <span>Potencia / Capacidad</span>
-                                                <span>92%</span>
-                                            </div>
-                                            <div className="h-1.5 w-full bg-zinc-700 rounded-full overflow-hidden">
-                                                <div className="h-full bg-yellow-500 w-[92%]"></div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between text-xs text-zinc-500 mb-1">
-                                                <span>Eficiencia Energética</span>
-                                                <span>88%</span>
-                                            </div>
-                                            <div className="h-1.5 w-full bg-zinc-700 rounded-full overflow-hidden">
-                                                <div className="h-full bg-yellow-500 w-[88%]"></div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between text-xs text-zinc-500 mb-1">
-                                                <span>Durabilidad</span>
-                                                <span>98%</span>
-                                            </div>
-                                            <div className="h-1.5 w-full bg-zinc-700 rounded-full overflow-hidden">
-                                                <div className="h-full bg-yellow-500 w-[98%]"></div>
-                                            </div>
-                                        </div>
+                                <div className="bg-zinc-50 p-6 rounded-sm border border-zinc-200 flex flex-col justify-between">
+                                    <div>
+                                        <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-widest mb-4 border-b border-zinc-200 pb-2">
+                                            Documentación
+                                        </h4>
+                                        <p className="text-xs text-zinc-500 mb-4">
+                                            Descargue las especificaciones completas, curvas de rendimiento y planos dimensionales.
+                                        </p>
                                     </div>
-                                    <div className="mt-6 p-3 bg-black/40 text-xs text-zinc-400 border border-white/5">
-                                        <strong className="text-white block mb-1">Nota de Ingeniería:</strong>
-                                        Equipo certificado bajo normas ISO. Mantenimiento preventivo recomendado cada 500 horas.
-                                    </div>
+                                    
+                                    {selectedSolution.pdfUrl ? (
+                                        <a 
+                                            href={selectedSolution.pdfUrl}
+                                            className="flex items-center justify-center gap-2 w-full py-3 border-2 border-zinc-900 text-zinc-900 font-bold uppercase text-xs hover:bg-zinc-900 hover:text-white transition-all"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">picture_as_pdf</span>
+                                            Descargar PDF Técnico
+                                        </a>
+                                    ) : (
+                                        <div className="w-full py-3 bg-zinc-200 text-zinc-400 font-bold uppercase text-xs text-center cursor-not-allowed flex items-center justify-center gap-2">
+                                            <span className="material-symbols-outlined text-lg">pending</span>
+                                            PDF en Preparación
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            <div className="mt-auto flex justify-end gap-4 border-t border-white/10 pt-6">
+                            <div className="mt-auto flex flex-col sm:flex-row justify-end gap-4 border-t border-zinc-200 pt-6">
                                 <button
                                     onClick={() => setSelectedSolution(null)}
-                                    className="px-6 py-3 text-xs font-bold uppercase text-zinc-400 hover:text-white transition-colors"
+                                    className="px-6 py-3 text-xs font-bold uppercase text-zinc-500 hover:text-zinc-900 transition-colors"
                                 >
-                                    Cerrar Ficha
+                                    Cerrar Ventana
                                 </button>
                                 <a
                                     href="#contact"
                                     onClick={() => setSelectedSolution(null)}
-                                    className="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-xs font-bold uppercase text-black tracking-wide transition-colors shadow-lg hover:shadow-yellow-500/20"
+                                    className="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-xs font-bold uppercase text-black tracking-wide transition-colors shadow-lg shadow-yellow-500/30 text-center"
                                 >
                                     Solicitar Cotización Formal
                                 </a>
