@@ -15,15 +15,15 @@ const shuffleArray = (array: Solution[]) => {
     return newArray;
 };
 
-// --- LOCAL COMPONENTS ---
+// --- SIDEBAR CARD COMPONENTS ---
 
-// Tarjeta lateral técnica (Inventario)
-const RecommendationCard: React.FC<{ solution: Solution; onSelect: (s: Solution) => void }> = ({ solution, onSelect }) => (
+// IZQUIERDA: Tarjeta Técnica Compacta (Lista de inventario)
+const TechnicalRowCard: React.FC<{ solution: Solution; onSelect: (s: Solution) => void }> = ({ solution, onSelect }) => (
     <div 
         onClick={() => onSelect(solution)}
-        className="group flex items-start gap-3 p-3 bg-zinc-900/40 border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer last:border-0"
+        className="group flex items-center gap-3 p-2 mb-2 bg-zinc-900/40 border-l-2 border-transparent hover:border-yellow-500 hover:bg-white/5 transition-all cursor-pointer rounded-r-sm"
     >
-        <div className="relative w-12 h-12 shrink-0 bg-black border border-white/10">
+        <div className="h-10 w-10 shrink-0 bg-black border border-white/5 overflow-hidden">
              <img 
                 src={solution.imageUrl} 
                 alt={solution.name} 
@@ -31,35 +31,71 @@ const RecommendationCard: React.FC<{ solution: Solution; onSelect: (s: Solution)
             />
         </div>
         <div className="min-w-0 flex-1">
-            <h5 className="text-[10px] font-bold text-zinc-300 uppercase leading-tight truncate group-hover:text-yellow-500 transition-colors">
+            <h5 className="text-[9px] font-bold text-zinc-300 uppercase leading-tight truncate group-hover:text-yellow-500 transition-colors">
                 {solution.name}
             </h5>
-             <div className="flex items-center gap-2 mt-1">
-                <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-wider">
-                    {solution.brand || 'STEELPRO'}
+            <div className="flex items-center justify-between mt-1">
+                <span className="text-[8px] text-zinc-500 font-mono uppercase tracking-wider truncate">
+                    {solution.categoryLabel || solution.category}
                 </span>
-                {solution.status === 'disponible' && (
-                    <span className="flex items-center gap-1 bg-green-900/20 px-1.5 py-0.5 rounded-sm border border-green-900/30">
-                         <span className="w-1 h-1 bg-green-500 rounded-full"></span>
-                         <span className="text-[8px] text-green-500 font-bold uppercase">Stock</span>
-                    </span>
-                )}
+                <span className="material-symbols-outlined text-[10px] text-zinc-600 group-hover:text-yellow-500 transition-colors">
+                    arrow_forward
+                </span>
             </div>
         </div>
     </div>
 );
 
-const RecommendationColumn: React.FC<{ title: string; items: Solution[]; onSelect: (s: Solution) => void }> = ({ title, items, onSelect }) => {
+// DERECHA: Tarjeta Visual Destacada (Exploración)
+const VisualHighlightCard: React.FC<{ solution: Solution; onSelect: (s: Solution) => void }> = ({ solution, onSelect }) => (
+    <div 
+        onClick={() => onSelect(solution)}
+        className="group relative mb-4 bg-zinc-900 border border-white/5 overflow-hidden rounded-sm hover:border-yellow-500/30 transition-all cursor-pointer"
+    >
+        <div className="relative h-24 w-full bg-black overflow-hidden">
+             <img 
+                src={solution.imageUrl} 
+                alt={solution.name} 
+                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+            />
+            {solution.status === 'disponible' && (
+                <div className="absolute top-2 right-2 bg-green-500 text-black text-[7px] font-black px-1.5 py-0.5 uppercase tracking-wider rounded-sm">
+                    Stock
+                </div>
+            )}
+        </div>
+        <div className="p-3">
+            <h5 className="text-[10px] font-black text-white uppercase leading-tight mb-1 group-hover:text-yellow-500 transition-colors">
+                {solution.name}
+            </h5>
+            <p className="text-[9px] text-zinc-500 line-clamp-2 leading-relaxed">
+                {solution.shortDescription}
+            </p>
+            <div className="mt-2 pt-2 border-t border-white/5 flex items-center gap-1 text-[8px] font-bold text-yellow-600 uppercase tracking-widest opacity-60 group-hover:opacity-100 transition-opacity">
+                <span>Ver Detalles</span>
+            </div>
+        </div>
+    </div>
+);
+
+const SidebarColumn: React.FC<{ 
+    title: string; 
+    items: Solution[]; 
+    onSelect: (s: Solution) => void;
+    type: 'technical' | 'visual' 
+}> = ({ title, items, onSelect, type }) => {
     if (items.length === 0) return null;
     return (
-        <div className="flex flex-col">
-             <div className="flex items-center gap-2 mb-4 border-b border-white/10 pb-2 sticky top-0 bg-zinc-950/95 backdrop-blur z-10 pt-1">
-                <span className="w-1 h-4 bg-yellow-500"></span>
+        <div className="flex flex-col animate-fade-in">
+             <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/5">
+                <span className={`w-1 h-3 ${type === 'technical' ? 'bg-zinc-600' : 'bg-yellow-500'}`}></span>
                 <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{title}</h4>
              </div>
-             <div className="flex flex-col border border-white/5 bg-zinc-950">
+             <div className="flex flex-col">
                  {items.map(item => (
-                     <RecommendationCard key={item.id} solution={item} onSelect={onSelect} />
+                     type === 'technical' 
+                        ? <TechnicalRowCard key={item.id} solution={item} onSelect={onSelect} />
+                        : <VisualHighlightCard key={item.id} solution={item} onSelect={onSelect} />
                  ))}
              </div>
         </div>
@@ -85,68 +121,68 @@ interface SectionProps {
     showDivider?: boolean;
 }
 
-// Tarjeta Central (Ficha Técnica Resumida)
+// Tarjeta Central (Ficha Técnica Resumida - Landscape)
 const SolutionSection: React.FC<SectionProps> = ({ title, description, items, onSelect, id, showDivider = true }) => {
     if (items.length === 0) return null;
 
     return (
         <div id={id} className={`py-6 ${showDivider ? 'border-b border-white/5' : ''} last:border-0`}>
-            <div className="mb-6 flex items-baseline justify-between">
-                <div>
-                    <h3 className="text-lg font-bold text-white uppercase tracking-tight flex items-center gap-2">
-                        <span className="text-yellow-500">/</span> {title}
-                    </h3>
-                    <p className="mt-1 text-xs text-zinc-500 max-w-2xl">{description}</p>
-                </div>
+            <div className="mb-6">
+                <h3 className="text-lg font-bold text-white uppercase tracking-tight flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span> {title}
+                </h3>
+                {description && <p className="mt-1 text-xs text-zinc-500 max-w-3xl ml-4">{description}</p>}
             </div>
             
-            {/* Grid Layout B2B */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+            {/* Grid Layout B2B - Dominante */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {items.map((solution) => (
                     <div 
                         key={solution.id} 
-                        className="group relative bg-zinc-900 border border-white/5 hover:border-yellow-500/50 transition-all duration-300 flex flex-col cursor-pointer overflow-hidden"
+                        className="group relative bg-zinc-900 border border-white/5 hover:border-yellow-500/50 transition-all duration-300 flex flex-col cursor-pointer overflow-hidden rounded-sm"
                         onClick={() => onSelect(solution)}
                     >
-                        <div className="flex h-40">
-                             {/* Imagen Técnica */}
-                            <div className="w-1/3 relative border-r border-white/5 bg-black">
+                        <div className="flex h-44">
+                             {/* Imagen Técnica (35%) */}
+                            <div className="w-[35%] relative border-r border-white/5 bg-black">
                                 <img 
                                     src={solution.imageUrl} 
                                     alt={solution.imageAlt} 
                                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0"
                                 />
-                                <div className="absolute top-0 left-0 bg-yellow-500/90 text-black text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-widest z-10">
-                                    {solution.brand}
+                                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-2">
+                                     <div className="text-[8px] text-zinc-300 font-mono">{solution.brand}</div>
                                 </div>
                             </div>
                             
-                            {/* Datos Técnicos */}
-                            <div className="w-2/3 p-4 flex flex-col justify-between">
+                            {/* Datos Técnicos (65%) */}
+                            <div className="w-[65%] p-4 flex flex-col justify-between relative">
+                                {/* Hover Effect Background */}
+                                <div className="absolute inset-0 bg-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
                                 <div>
-                                    <div className="flex justify-between items-start mb-2">
-                                        <h4 className="text-sm font-bold text-zinc-200 uppercase leading-tight group-hover:text-yellow-500 transition-colors">
+                                    <div className="flex justify-between items-start mb-2 relative z-10">
+                                        <h4 className="text-sm font-bold text-zinc-100 uppercase leading-tight group-hover:text-yellow-500 transition-colors pr-4">
                                             {solution.name}
                                         </h4>
-                                        {solution.status === 'disponible' && (
-                                            <span className="w-2 h-2 bg-green-500 rounded-full shrink-0 mt-1"></span>
-                                        )}
                                     </div>
-                                    <p className="text-[10px] text-zinc-500 line-clamp-2 leading-relaxed mb-3">
+                                    <p className="text-[10px] text-zinc-500 line-clamp-2 leading-relaxed mb-3 relative z-10">
                                         {solution.shortDescription}
                                     </p>
-                                    <div className="space-y-1">
-                                        {solution.features.slice(0, 2).map((feature, i) => (
-                                            <div key={i} className="flex items-center text-[9px] text-zinc-400 font-mono">
-                                                <span className="w-1 h-1 bg-zinc-600 rounded-full mr-2"></span>
+                                    <div className="space-y-1 relative z-10">
+                                        {solution.features.slice(0, 3).map((feature, i) => (
+                                            <div key={i} className="flex items-center text-[9px] text-zinc-400 font-mono border-l-2 border-white/10 pl-2">
                                                 <span className="truncate">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-                                <div className="mt-2 pt-2 border-t border-white/5 flex justify-end">
-                                    <span className="text-[9px] font-bold uppercase text-yellow-500 tracking-wider group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                                        Ficha Técnica <span className="material-symbols-outlined text-[10px]">chevron_right</span>
+                                <div className="mt-2 pt-2 border-t border-white/5 flex justify-between items-center relative z-10">
+                                    <span className={`text-[8px] font-bold uppercase px-1.5 py-0.5 rounded-sm ${solution.status === 'disponible' ? 'bg-green-900/30 text-green-500' : 'bg-zinc-800 text-zinc-500'}`}>
+                                        {solution.status === 'disponible' ? 'Stock Disponible' : 'Bajo Pedido'}
+                                    </span>
+                                    <span className="text-[9px] font-bold uppercase text-yellow-600 group-hover:text-yellow-500 transition-colors flex items-center gap-1">
+                                        Ficha <span className="material-symbols-outlined text-[10px]">arrow_outward</span>
                                     </span>
                                 </div>
                             </div>
@@ -168,7 +204,7 @@ const SegmentPreview: React.FC<{ items: Solution[] }> = ({ items }) => {
     if (items.length === 0) return null;
 
     return (
-        <div className="grid grid-cols-3 gap-1 h-24 mb-8 opacity-50 hover:opacity-100 transition-opacity duration-500 border border-white/5 bg-black">
+        <div className="grid grid-cols-3 gap-1 h-32 mb-8 opacity-60 hover:opacity-100 transition-opacity duration-500 border border-white/5 bg-black">
             {previewImages.map((item, idx) => (
                 <div key={idx} className="relative overflow-hidden group">
                     <img 
@@ -176,6 +212,7 @@ const SegmentPreview: React.FC<{ items: Solution[] }> = ({ items }) => {
                         alt="Preview" 
                         className="w-full h-full object-cover grayscale transition-transform duration-1000 group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                 </div>
             ))}
         </div>
@@ -212,21 +249,33 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
         return solutions.filter(s => s.category === activeFilter);
     }, [activeFilter]);
 
-    // INTELLIGENT RECOMMENDATION ENGINE (No Duplicates)
+    // INTELLIGENT RECOMMENDATION ENGINE (DEDUPLICATION LOGIC)
     const { leftRecommendations, rightRecommendations } = useMemo(() => {
-        // Exclude items currently visible in the main view to avoid duplicates
+        // 1. Identify IDs currently shown in the main center column
         const visibleIds = new Set(currentSolutions.map(s => s.id));
         
-        // Exclude selected solution if any
+        // 2. Also exclude the currently selected solution modal
         if (selectedSolution) visibleIds.add(selectedSolution.id);
 
-        // Get pool of available items
-        const availableForRecs = solutions.filter(s => !visibleIds.has(s.id));
+        // 3. Filter the 'pool' of potential recommendations
+        // If we are in "All" view, almost everything is visible, so we might run out of recommendations.
+        // In that case, we allow duplicates but shuffle them to show "Featured" items.
+        // If we are in "Category" view, we strictly show items NOT in the current category (Cross-selling).
+        
+        let availableForRecs = solutions.filter(s => !visibleIds.has(s.id));
+        
+        if (availableForRecs.length < 5) {
+            // Fallback for "All" view or sparse data: Show random items from the whole catalog as "Highlights"
+            availableForRecs = [...solutions].filter(s => s.id !== selectedSolution?.id);
+        }
+
         const shuffled = shuffleArray(availableForRecs);
         
-        // Provide enough items for the sticky scroll
-        const left = shuffled.slice(0, 8);
-        const right = shuffled.slice(8, 16);
+        // 4. Distribute to columns
+        // Left: More items, compact (Technical list)
+        // Right: Fewer items, visual (Highlights)
+        const left = shuffled.slice(0, 6); 
+        const right = shuffled.slice(6, 10);
         
         return { leftRecommendations: left, rightRecommendations: right };
     }, [currentSolutions, selectedSolution]);
@@ -256,7 +305,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
     return (
         <div className="pt-0 animate-fade-in bg-zinc-950 min-h-screen">
             
-            {/* HERO SECTION - OUTSIDE LAYOUT (Full Width) */}
+            {/* HERO SECTION */}
             {!isCategoryView ? (
                 <div className="pt-24 sm:pt-32 pb-10 bg-zinc-950 border-b border-white/5">
                      <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -300,7 +349,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                 </div>
             )}
 
-            {/* Sub-Navigation - OUTSIDE LAYOUT (Sticky) */}
+            {/* Sub-Navigation */}
             <div className={`sticky top-20 z-30 bg-zinc-950/95 backdrop-blur-md border-b border-white/5 ${isCategoryView ? 'py-2' : 'py-3 mt-0'}`}>
                 <div className="mx-auto max-w-[1920px] px-6 lg:px-8 flex items-center justify-between overflow-x-auto no-scrollbar">
                     <div className="flex flex-nowrap items-center gap-2">
@@ -325,17 +374,19 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
             {/* MAIN LAYOUT IMPLEMENTATION */}
             <LayoutTresColumnas
                 leftSidebar={
-                    <RecommendationColumn 
-                        title="Inventario Relacionado" 
+                    <SidebarColumn 
+                        title="Inventario Técnico" 
                         items={leftRecommendations} 
-                        onSelect={setSelectedSolution} 
+                        onSelect={setSelectedSolution}
+                        type="technical"
                     />
                 }
                 rightSidebar={
-                    <RecommendationColumn 
-                        title="Exploración Cruzada" 
+                    <SidebarColumn 
+                        title="Destacados" 
                         items={rightRecommendations} 
-                        onSelect={setSelectedSolution} 
+                        onSelect={setSelectedSolution}
+                        type="visual"
                     />
                 }
             >
@@ -378,7 +429,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                 )}
             </LayoutTresColumnas>
 
-            {/* Contact Section - OUTSIDE LAYOUT (Footer Pre-area) */}
+            {/* Contact Section */}
             <div id="contact" className="py-16 sm:py-24 px-6 lg:px-8 mt-0 bg-zinc-900 border-t border-white/5">
               <div className="mx-auto max-w-7xl rounded-sm overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2">

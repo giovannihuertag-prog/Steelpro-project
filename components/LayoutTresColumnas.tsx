@@ -14,35 +14,48 @@ const LayoutTresColumnas: React.FC<LayoutTresColumnasProps> = ({
     className = ""
 }) => {
     return (
-        <div className={`mx-auto max-w-[1920px] px-4 lg:px-8 min-h-[600px] py-8 ${className}`}>
+        <div className={`mx-auto max-w-[1920px] px-4 lg:px-6 min-h-[600px] py-8 ${className}`}>
             <style>{`
-                .scrollbar-technical::-webkit-scrollbar { width: 4px; }
-                .scrollbar-technical::-webkit-scrollbar-track { background: #09090b; }
-                .scrollbar-technical::-webkit-scrollbar-thumb { background: #27272a; border-radius: 0; }
-                .scrollbar-technical::-webkit-scrollbar-thumb:hover { background: #eab308; }
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                .fade-mask-y {
+                    mask-image: linear-gradient(to bottom, transparent, black 20px, black 90%, transparent);
+                    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20px, black 90%, transparent);
+                }
             `}</style>
 
-            <div className="flex flex-col xl:flex-row gap-8 relative items-start">
+            <div className="flex flex-col xl:flex-row gap-6 relative items-start">
                 
-                {/* COLUMNA IZQUIERDA: Contexto Técnico */}
-                {/* Sticky posicionada debajo del sub-nav (aprox 140px) */}
-                {leftSidebar && (
-                    <aside className="hidden xl:block w-72 shrink-0 sticky top-36 h-[calc(100vh-10rem)] overflow-y-auto scrollbar-technical border-r border-white/5 pr-4 transition-all duration-300">
-                        {leftSidebar}
-                    </aside>
-                )}
+                {/* COLUMNA IZQUIERDA: Contexto Técnico (18-20%) */}
+                {/* Orden 2 en móvil (debajo del contenido), Orden 1 en Desktop */}
+                <aside className="w-full xl:w-[20%] xl:min-w-[260px] order-2 xl:order-1 flex flex-col gap-4">
+                    {leftSidebar && (
+                        <div className="xl:sticky xl:top-32 xl:max-h-[calc(100vh-140px)] overflow-y-auto scrollbar-hide fade-mask-y py-2 transition-all duration-300">
+                            {leftSidebar}
+                        </div>
+                    )}
+                </aside>
 
-                {/* COLUMNA CENTRAL: Catálogo Activo */}
-                <main className="flex-1 w-full min-w-0 animate-fade-in">
+                {/* COLUMNA CENTRAL: Catálogo Activo (60-64%) */}
+                {/* Orden 1 en móvil (primero), Orden 2 en Desktop */}
+                <main className="flex-1 w-full xl:w-[60%] min-w-0 order-1 xl:order-2 animate-fade-in px-0 xl:px-2">
                     {children}
                 </main>
 
-                {/* COLUMNA DERECHA: Exploración */}
-                {rightSidebar && (
-                    <aside className="hidden xl:block w-72 shrink-0 sticky top-36 h-[calc(100vh-10rem)] overflow-y-auto scrollbar-technical border-l border-white/5 pl-4 transition-all duration-300">
-                        {rightSidebar}
-                    </aside>
-                )}
+                {/* COLUMNA DERECHA: Exploración (18-20%) */}
+                {/* Orden 3 en móvil */}
+                <aside className="w-full xl:w-[20%] xl:min-w-[260px] order-3 flex flex-col gap-4">
+                    {rightSidebar && (
+                        <div className="xl:sticky xl:top-32 xl:max-h-[calc(100vh-140px)] overflow-y-auto scrollbar-hide fade-mask-y py-2 transition-all duration-300">
+                            {rightSidebar}
+                        </div>
+                    )}
+                </aside>
 
             </div>
         </div>
