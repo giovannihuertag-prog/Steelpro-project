@@ -13,79 +13,34 @@ interface Message {
 }
 
 const SYSTEM_INSTRUCTION = `
-Actúas como ASESOR INDUSTRIAL ESPECIALIZADO de STEELPRO – Servicios Industriales Globales.
+Actúas como un ORGANIZADOR TÉCNICO para el catálogo de SteelPro.
 
-Tu función es realizar CÁLCULOS TÉCNICOS INDUSTRIALES de metales y aceros de forma precisa, verificable y profesional, así como brindar información técnica sobre nuestro catálogo.
-
-CONTEXTO DE PRODUCTOS (Referencia técnica):
-${JSON.stringify(solutions.map(s => ({
-    name: s.name,
-    category: s.category,
-    description: s.description,
-    specs: s.features,
-    brand: s.brand
-})))}
+Tu función es recibir la información cruda de maquinaria (nombre, especificaciones, condiciones de operación) y estructurarla en fichas técnicas limpias y estandarizadas para el catálogo.
 
 REGLAS FUNDAMENTALES:
-1. NO inventes datos.  
-2. NO asumas dimensiones, formas ni materiales.  
-3. Si falta información, DETÉN el cálculo y solicita los datos faltantes de manera clara y técnica.
-4. Todas las unidades deben ser confirmadas antes de calcular.
-5. Explica brevemente el procedimiento, sin lenguaje comercial ni fantasía.
+1. Cada ficha técnica debe ubicarse bajo la etiqueta/categoría: "Maquinaria y Especificaciones".
+2. Usa el nombre de la máquina como Encabezado Principal.
+3. Extrae y lista las especificaciones en un formato de lista estándar (Capacidad, Potencia, Dimensiones, Peso, etc.).
+4. ELIMINA todo lenguaje comercial, "fluff" de marketing o adjetivos subjetivos (ej. "innovadora", "excelente", "líder"). Solo mantén los hechos técnicos.
+5. NO inventes datos. Si no está en el texto, no lo pongas.
 
-DATOS OBLIGATORIOS PARA CUALQUIER CÁLCULO:
-- Material específico (ej. A36, 1045, 304, 6061, Cobre Tipo M, Bronce SAE, Latón, etc.)
-- Forma geométrica:
-  • Placa
-  • Barra sólida
-  • Barra hueca / tubo
-- Dimensiones completas:
-  • Largo
-  • Ancho / diámetro exterior
-  • Espesor / diámetro interior
-- Sistema de unidades:
-  • Métrico (mm, m, kg)
-  • Imperial (pulgadas, pies, lb)
-- Cantidad de piezas
+FORMATO DE SALIDA ESPERADO:
 
-DENSIDADES (usar solo si el material está claramente definido):
-- Acero al carbono: ~7,850 kg/m³
-- Acero inoxidable: ~8,000 kg/m³
-- Aluminio: ~2,700 kg/m³
-- Cobre: ~8,960 kg/m³
-- Latón: ~8,400 kg/m³
-- Bronce: ~8,700 kg/m³
+### [Nombre de la Máquina]
+**Categoría:** Maquinaria y Especificaciones
+**Descripción Técnica:** [Resumen objetivo de 2-3 líneas]
+**Especificaciones:**
+- [Propiedad]: [Valor]
+- [Propiedad]: [Valor]
+...
 
-PROCEDIMIENTO:
-1. Verificar que todos los datos estén completos.
-2. Convertir todas las dimensiones a un solo sistema de unidades.
-3. Calcular volumen según la geometría:
-   - Placa: largo × ancho × espesor
-   - Barra sólida: π × (radio²) × largo
-   - Barra hueca: π × (radio exterior² − radio interior²) × largo
-4. Multiplicar volumen × densidad.
-5. Mostrar resultado:
-   - Peso por pieza
-   - Peso total
-   - En kg y lb (si aplica)
-
-FORMATO DE RESPUESTA:
-- Resumen del material
-- Datos utilizados
-- Cálculo paso a paso
-- Resultado final claro y legible
-
-TONO:
-Profesional, técnico, directo.  
-Hablas como ingeniero industrial, no como vendedor ni asistente genérico.
-
-Si el usuario pregunta algo fuera del contexto industrial/maquinaria, responde educadamente que solo puedes asistir en temas técnicos de SteelPro.
+Si recibes un texto con múltiples máquinas, genera una ficha separada para cada una en la misma respuesta.
 `;
 
 const AIChatBot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { role: 'model', text: 'Bienvenido a Ingeniería SteelPro. Soy su Asesor Industrial. ¿Requiere un cálculo de material o información técnica de equipos?' }
+        { role: 'model', text: 'Sistema de Organización Técnico activo. Por favor, ingrese los datos de la maquinaria para generar las fichas técnicas estandarizadas.' }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -107,23 +62,8 @@ const AIChatBot: React.FC = () => {
             const hash = window.location.hash;
             if (hasInteracted) return; // Don't interrupt if already talking
 
-            let promoMessage = '';
-
-            if (hash.includes('construction')) {
-                promoMessage = 'Ingeniería SteelPro en línea. ¿Necesita especificaciones técnicas sobre bombas de concreto?';
-            } else if (hash.includes('engineering')) {
-                promoMessage = 'Sistema listo. ¿Requiere fichas técnicas de maquinaria pesada o excavadoras?';
-            } else if (hash.includes('steel')) {
-                promoMessage = 'Módulo de cálculo activo. ¿Necesita estimar pesos para aceros 1045, 4140 o Inoxidables?';
-            }
-
-            if (promoMessage) {
-                // Small delay to simulate observation
-                setTimeout(() => {
-                    setMessages(prev => [...prev, { role: 'model', text: promoMessage }]);
-                    setIsOpen(true); // Auto open to catch attention
-                }, 2000);
-            }
+            // Logic specifically for catalog admin context
+            // We removed the sales triggers to focus on the technical organizer role
         };
 
         window.addEventListener('hashchange', handleHashChange);
@@ -142,9 +82,6 @@ const AIChatBot: React.FC = () => {
 
         try {
             // Build history for context
-            // Note: In a real prod app, you'd manage history more robustly.
-            // Here we send the last few messages plus the system instruction context.
-            
             const response = await ai.models.generateContent({
                 model: 'gemini-3-pro-preview',
                 contents: [
@@ -156,31 +93,22 @@ const AIChatBot: React.FC = () => {
                     { role: 'user', parts: [{ text: userText }] }
                 ],
                 config: {
-                    tools: [{ googleSearch: {} }], // Search grounding enabled
+                    // Search grounding disabled for this specific task to ensure strict adherence to provided text
+                    temperature: 0.2 // Lower temperature for more deterministic/strict output
                 }
             });
 
             const text = response.text;
-            let groundingUrl = undefined;
             
-            // Extract grounding metadata if available (simple extraction of first link)
-            const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
-            if (chunks) {
-                const webChunk = chunks.find(c => c.web?.uri);
-                if (webChunk) {
-                    groundingUrl = webChunk.web?.uri;
-                }
-            }
-
             if (text) {
-                setMessages(prev => [...prev, { role: 'model', text, groundingUrl }]);
+                setMessages(prev => [...prev, { role: 'model', text }]);
             } else {
-                 setMessages(prev => [...prev, { role: 'model', text: "Lo siento, tuve un problema procesando esa solicitud técnica." }]);
+                 setMessages(prev => [...prev, { role: 'model', text: "No pude procesar la información. Intente nuevamente." }]);
             }
 
         } catch (error) {
             console.error("Chat error:", error);
-            setMessages(prev => [...prev, { role: 'model', text: "Error de conexión con el servidor de IA. Por favor intente más tarde.", isError: true }]);
+            setMessages(prev => [...prev, { role: 'model', text: "Error de procesamiento.", isError: true }]);
         } finally {
             setIsLoading(false);
         }
@@ -190,22 +118,22 @@ const AIChatBot: React.FC = () => {
         <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
             {/* Chat Window */}
             <div 
-                className={`pointer-events-auto bg-zinc-900 border border-yellow-500/50 rounded-sm shadow-2xl w-full max-w-[350px] sm:w-[380px] overflow-hidden transition-all duration-300 origin-bottom-right flex flex-col ${isOpen ? 'opacity-100 scale-100 mb-4 h-[500px]' : 'opacity-0 scale-90 h-0 mb-0'}`}
+                className={`pointer-events-auto bg-zinc-900 border border-yellow-500/50 rounded-sm shadow-2xl w-full max-w-[400px] sm:w-[450px] overflow-hidden transition-all duration-300 origin-bottom-right flex flex-col ${isOpen ? 'opacity-100 scale-100 mb-4 h-[600px]' : 'opacity-0 scale-90 h-0 mb-0'}`}
             >
                 {/* Header */}
                 <div className="bg-zinc-950 p-4 border-b border-white/10 flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <div className="relative">
-                            <div className="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-black">engineering</span>
+                            <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border border-white/10">
+                                <span className="material-symbols-outlined text-yellow-500">inventory_2</span>
                             </div>
                             <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-zinc-950 rounded-full"></span>
                         </div>
                         <div>
-                            <h3 className="text-white font-bold text-sm uppercase">Asesor Industrial</h3>
+                            <h3 className="text-white font-bold text-sm uppercase">Organizador Técnico</h3>
                             <p className="text-zinc-400 text-xs flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[10px] text-yellow-500">calculate</span>
-                                SteelPro Engineering
+                                <span className="material-symbols-outlined text-[10px] text-zinc-500">database</span>
+                                Catalog Manager
                             </p>
                         </div>
                     </div>
@@ -219,24 +147,15 @@ const AIChatBot: React.FC = () => {
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div 
-                                className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed font-mono ${
+                                className={`max-w-[90%] p-3 rounded-lg text-sm leading-relaxed font-mono ${
                                     msg.role === 'user' 
                                     ? 'bg-white/10 text-white rounded-br-none border border-white/5' 
                                     : 'bg-zinc-800 text-zinc-300 rounded-bl-none border border-yellow-500/20'
                                 } ${msg.isError ? 'border-red-500/50 text-red-200' : ''}`}
                             >
-                                <p className="whitespace-pre-wrap">{msg.text}</p>
-                                {msg.groundingUrl && (
-                                    <a 
-                                        href={msg.groundingUrl} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="mt-2 text-xs flex items-center gap-1 text-yellow-500 hover:underline border-t border-white/5 pt-2 font-sans"
-                                    >
-                                        <span className="material-symbols-outlined text-[12px]">google</span>
-                                        Fuente verificada
-                                    </a>
-                                )}
+                                <div className="whitespace-pre-wrap markdown-content">
+                                    {msg.text}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -255,19 +174,18 @@ const AIChatBot: React.FC = () => {
                 {/* Input Area */}
                 <form onSubmit={handleSendMessage} className="p-3 bg-zinc-950 border-t border-white/10">
                     <div className="relative flex items-center">
-                        <input
-                            type="text"
+                        <textarea
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
-                            placeholder="Solicite un cálculo o dato técnico..."
-                            className="w-full bg-zinc-900 text-white text-sm rounded-full pl-4 pr-12 py-3 border border-white/10 focus:border-yellow-500 focus:outline-none focus:ring-1 focus:ring-yellow-500 transition-all placeholder:text-zinc-600 font-mono"
+                            placeholder="Pegue aquí la información de la maquinaria..."
+                            className="w-full bg-zinc-900 text-white text-xs rounded-lg pl-4 pr-12 py-3 border border-white/10 focus:border-yellow-500 focus:outline-none focus:ring-1 focus:ring-yellow-500 transition-all placeholder:text-zinc-600 font-mono resize-none h-14"
                         />
                         <button 
                             type="submit" 
                             disabled={isLoading || !inputValue.trim()}
-                            className="absolute right-1.5 p-1.5 bg-yellow-500 text-black rounded-full hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-yellow-500 text-black rounded-md hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                            <span className="material-symbols-outlined text-xl">send</span>
+                            <span className="material-symbols-outlined text-lg">arrow_upward</span>
                         </button>
                     </div>
                 </form>
@@ -276,17 +194,12 @@ const AIChatBot: React.FC = () => {
             {/* Floating Trigger Button */}
             <button 
                 onClick={() => setIsOpen(!isOpen)}
-                className={`pointer-events-auto shadow-xl transition-all duration-300 group flex items-center justify-center ${isOpen ? 'w-12 h-12 rounded-full bg-zinc-800 text-white border border-white/10' : 'w-16 h-16 rounded-full bg-yellow-500 text-black hover:scale-110'}`}
+                className={`pointer-events-auto shadow-xl transition-all duration-300 group flex items-center justify-center ${isOpen ? 'w-12 h-12 rounded-full bg-zinc-800 text-white border border-white/10' : 'w-16 h-16 rounded-full bg-zinc-800 text-yellow-500 border border-yellow-500/20 hover:scale-110'}`}
             >
                  {isOpen ? (
                      <span className="material-symbols-outlined">expand_more</span>
                  ) : (
-                    <span className="material-symbols-outlined text-3xl">calculate</span>
-                 )}
-                 
-                 {/* Notification Badge if closed */}
-                 {!isOpen && messages.length > 1 && (
-                     <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-zinc-950 animate-pulse"></span>
+                    <span className="material-symbols-outlined text-3xl">inventory_2</span>
                  )}
             </button>
         </div>
