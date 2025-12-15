@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { solutions, Solution, categoryMetaData } from '../data/solutions';
-import { CheckIcon, XIcon, AnalysisIcon, CubeTransparentIcon } from '../components/Icons';
+import { CheckIcon, XIcon, AnalysisIcon, CubeTransparentIcon, ShareIcon } from '../components/Icons';
 import ContactForm from '../components/ContactForm';
 import Product3DViewer from '../components/Product3DViewer';
 
@@ -117,6 +117,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
     const [activeImage, setActiveImage] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
     const [viewMode, setViewMode] = useState<'image' | '3d'>('image');
+    const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
     // Group solutions by category
     const groupedSolutions = useMemo(() => {
@@ -133,6 +134,7 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
             // Reset the active image to the main one when opening modal
             setActiveImage(selectedSolution.imageUrl);
             setViewMode('image'); // Reset to image view
+            setShowCopyFeedback(false);
         } else {
             document.body.style.overflow = 'auto';
         }
@@ -149,6 +151,34 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
         }, 400); 
         return () => clearTimeout(timer);
     }, [activeFilter]);
+
+    const handleShare = async () => {
+        if (!selectedSolution) return;
+        
+        // Use current URL since we don't have deep linking logic for specific modals yet
+        // In a real scenario, you'd append ?id=... or similar
+        const shareData = {
+            title: `STEELPRO - ${selectedSolution.name}`,
+            text: selectedSolution.description,
+            url: window.location.href 
+        };
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {
+                console.error('Error sharing', err);
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                setShowCopyFeedback(true);
+                setTimeout(() => setShowCopyFeedback(false), 2000);
+            } catch (err) {
+                console.error('Error copying', err);
+            }
+        }
+    };
 
     return (
         <div className="pt-0 animate-fade-in bg-zinc-950 min-h-screen">
@@ -393,13 +423,28 @@ const SolutionsPage: React.FC<{ route?: string }> = ({ route = '#solutions' }) =
                                         {selectedSolution.category === 'construction' ? 'Maquinaria Pesada' : selectedSolution.category === 'engineering' ? 'Ingeniería Civil' : 'Materiales'}
                                     </span>
                                 </div>
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedSolution(null)}
-                                    className="p-1 text-zinc-400 hover:text-white transition-colors focus:outline-none"
-                                >
-                                    <XIcon className="h-6 w-6" />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={handleShare}
+                                        className="p-1 text-zinc-400 hover:text-yellow-500 transition-colors focus:outline-none relative group"
+                                        title="Compartir"
+                                    >
+                                        <ShareIcon className="h-5 w-5" />
+                                        {showCopyFeedback && (
+                                             <span className="absolute top-full right-0 mt-1 text-[9px] bg-yellow-500 text-black px-1 rounded whitespace-nowrap font-bold">
+                                                 Link Copiado
+                                             </span>
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedSolution(null)}
+                                        className="p-1 text-zinc-400 hover:text-white transition-colors focus:outline-none"
+                                    >
+                                        <XIcon className="h-6 w-6" />
+                                    </button>
+                                </div>
                             </div>
 
                             <h3 className="text-3xl md:text-4xl font-black tracking-tight text-white uppercase leading-none mb-6">

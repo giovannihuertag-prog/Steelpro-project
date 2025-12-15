@@ -49,8 +49,8 @@ const Hero: React.FC = () => {
             
             <div className="mx-auto max-w-7xl px-6 lg:px-8 py-32 sm:py-48 lg:py-56 relative z-10 text-center sm:text-left">
                 
-                {/* Authority Badge */}
-                <div className="inline-flex items-center gap-x-3 mb-8 animate-fade-in backdrop-blur-md bg-white/5 border border-white/10 px-4 py-1.5 rounded-sm">
+                {/* Authority Badge with Tooltip */}
+                <div className="group relative inline-flex items-center gap-x-3 mb-8 animate-fade-in backdrop-blur-md bg-white/5 border border-white/10 px-4 py-1.5 rounded-sm cursor-help hover:bg-white/10 transition-colors">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
@@ -58,6 +58,19 @@ const Hero: React.FC = () => {
                     <span className="text-xs font-bold uppercase tracking-widest text-yellow-500">
                         Distribuidor Autorizado DASWELL
                     </span>
+
+                    {/* Tooltip Content */}
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-64 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 pointer-events-none z-20">
+                        {/* Arrow */}
+                        <div className="absolute left-1/2 -translate-x-1/2 -top-1.5 border-4 border-transparent border-b-zinc-900"></div>
+                        {/* Box */}
+                        <div className="bg-zinc-900 border border-white/10 p-4 rounded-sm shadow-2xl text-center backdrop-blur-xl">
+                            <p className="text-[10px] text-zinc-400 leading-relaxed font-light">
+                                <strong className="text-white block mb-1 uppercase tracking-wider font-bold">Licencia Oficial OEM</strong>
+                                Acuerdo exclusivo de importación, refaccionamiento directo y garantía de fábrica para maquinaria Daswell en territorio nacional.
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 
                 {/* Main Title - Refined Typography (Premium Industrial) */}
